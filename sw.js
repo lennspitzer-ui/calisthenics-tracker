@@ -3,7 +3,7 @@
 // Version: 1.0 | Strategie: Cache-First für lokale Dateien
 // ============================================================
 
-const CACHE_NAME = 'calisthenics-pro-v2';
+const CACHE_NAME = 'calisthenics-pro-v3';
 
 // NUR lokale Dateien cachen – externe CDN-URLs NICHT hier
 // eintragen (addAll() schlägt fehl, wenn ein einziger Request

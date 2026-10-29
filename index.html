@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Dein persönlicher Calisthenics Workout Tracker – Push, Pull, Beine mit Timer, Satzhaken und Offline-Funktion.">
-    <title>Calisthenics Pro V2.1 Tracker</title>
+    <meta name="description" content="Dein persönlicher Calisthenics Workout Tracker – Push, Pull, Beine mit Timer, Wiederholungs-Tracking, Verlauf und Offline-Funktion.">
+    <title>Calisthenics Pro V3 Tracker</title>
 
     <!-- ============================================================ -->
     <!-- PWA – MANIFEST, THEME COLOR & SERVICE WORKER                 -->
@@ -41,7 +41,7 @@
     <!-- FontAwesome Icons (non-blocking) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-    
+
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -64,7 +64,7 @@
             }
         }
     </script>
-    
+
     <style>
         body {
             background-color: #080c10;
@@ -72,6 +72,20 @@
             font-family: 'Inter', sans-serif;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
+        }
+
+        input, textarea {
+            user-select: text;
+        }
+
+        /* Zahlen-Input: Browser-Spinner entfernen für sauberes Design */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
         }
 
         /* Glassmorphism Styles */
@@ -92,14 +106,13 @@
         .set-btn {
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         .set-btn.active {
             background: linear-gradient(135deg, #10b981, #059669);
             color: #000000;
             font-weight: 800;
             border-color: #34d399;
             box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
-            transform: scale(1.05);
         }
 
         /* Pulse glow animation for timer */
@@ -115,6 +128,29 @@
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Variant-Picker Optionen */
+        .variant-option {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            background: rgba(17, 24, 34, 0.8);
+            border: 1px solid rgba(255,255,255,0.07);
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: left;
+            transition: all 0.2s;
+        }
+        .variant-option:hover { border-color: rgba(16,185,129,0.4); }
+        .variant-active {
+            border-color: #10b981 !important;
+            background: rgba(16,185,129,0.1) !important;
+            color: #34d399 !important;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-28">
@@ -128,17 +164,21 @@
                 </div>
                 <div>
                     <h1 class="text-sm font-black tracking-wider text-white leading-none flex items-center gap-1.5">
-                        CALISTHENICS <span class="text-emerald-400 text-xs px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">V2.1</span>
+                        CALISTHENICS <span class="text-emerald-400 text-xs px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">V3</span>
                     </h1>
                     <p class="text-[10px] text-gray-400 font-semibold tracking-widest uppercase mt-0.5">High Performance Tracker</p>
                 </div>
             </div>
 
-            <!-- Header Quick Timer Trigger -->
-            <button id="openTimerHeaderBtn" onclick="toggleTimerModal()" class="flex items-center gap-2 bg-gray-900/90 border border-gray-800 hover:border-emerald-500/40 px-3 py-1.5 rounded-full text-xs font-bold text-emerald-400 transition-all active:scale-95">
-                <i class="fa-solid fa-stopwatch text-emerald-400"></i>
-                <span id="headerTimerDisplay">Timer</span>
-            </button>
+            <div class="flex items-center gap-2">
+                <button onclick="toggleSettingsModal()" class="w-9 h-9 rounded-full bg-gray-900/90 border border-gray-800 hover:border-emerald-500/40 flex items-center justify-center text-gray-400 hover:text-emerald-400 transition-all active:scale-95">
+                    <i class="fa-solid fa-gear text-xs"></i>
+                </button>
+                <button id="openTimerHeaderBtn" onclick="toggleTimerModal()" class="flex items-center gap-2 bg-gray-900/90 border border-gray-800 hover:border-emerald-500/40 px-3 py-1.5 rounded-full text-xs font-bold text-emerald-400 transition-all active:scale-95">
+                    <i class="fa-solid fa-stopwatch text-emerald-400"></i>
+                    <span id="headerTimerDisplay">Timer</span>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -172,13 +212,14 @@
 
     <!-- Main App Container -->
     <main class="flex-1 px-4 max-w-md mx-auto w-full mt-4">
-        
+
         <!-- Day Banner Info & Overall Progress -->
         <div class="glass-card rounded-2xl p-4 mb-4 relative overflow-hidden border-l-4 border-l-emerald-500">
             <div class="flex items-start justify-between">
                 <div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2 flex-wrap">
                         <span id="dayBadge" class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Fokus</span>
+                        <span id="todayBadge" class="hidden text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">🔥 Heute dran</span>
                     </div>
                     <h2 id="dayTitle" class="text-base font-black text-white mt-1 tracking-wide">Push 1</h2>
                     <p id="daySubtitle" class="text-xs text-gray-400 mt-0.5">Pike Push-ups & Skill Fokus</p>
@@ -233,7 +274,7 @@
     <!-- Rest Timer Modal Sheet -->
     <div id="timerModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-end sm:items-center justify-center hidden opacity-0 transition-opacity duration-300">
         <div class="glass-panel border-t border-gray-800 w-full max-w-md p-6 rounded-t-3xl sm:rounded-3xl shadow-2xl transition-all transform translate-y-10 sm:translate-y-0 bg-[#0d131a]">
-            
+
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
@@ -278,6 +319,65 @@
         </div>
     </div>
 
+    <!-- Übung-Ersetzen Modal -->
+    <div id="variantModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-end sm:items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-panel border-t border-gray-800 w-full max-w-md p-6 rounded-t-3xl sm:rounded-3xl shadow-2xl transition-all transform translate-y-10 sm:translate-y-0 bg-[#0d131a]">
+            <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-white">Übung ersetzen</h3>
+                        <p id="variantModalTitle" class="text-[11px] text-emerald-400 mt-0.5"></p>
+                    </div>
+                </div>
+                <button onclick="toggleVariantModal()" class="w-8 h-8 rounded-full bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            </div>
+            <div id="variantOptionsContainer" class="space-y-2"></div>
+        </div>
+    </div>
+
+    <!-- Einstellungen Modal -->
+    <div id="settingsModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-end sm:items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-panel border-t border-gray-800 w-full max-w-md p-6 rounded-t-3xl sm:rounded-3xl shadow-2xl transition-all transform translate-y-10 sm:translate-y-0 bg-[#0d131a]">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                        <i class="fa-solid fa-gear"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-white">Einstellungen</h3>
+                        <p class="text-[10px] text-gray-400">Daten sichern & verwalten</p>
+                    </div>
+                </div>
+                <button onclick="toggleSettingsModal()" class="w-8 h-8 rounded-full bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <button onclick="exportData()" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+                    <i class="fa-solid fa-download"></i> Daten exportieren (JSON)
+                </button>
+                <button onclick="document.getElementById('importFileInput').click()" class="w-full py-3 rounded-xl bg-gray-900 border border-gray-800 hover:border-cyan-500/40 text-cyan-400 font-bold text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+                    <i class="fa-solid fa-upload"></i> Daten importieren
+                </button>
+                <input type="file" id="importFileInput" accept="application/json" class="hidden" onchange="importDataFile(this)">
+                <div class="h-px bg-gray-800 my-2"></div>
+                <button onclick="resetAllData()" class="w-full py-3 rounded-xl bg-gray-900 border border-red-900/40 hover:border-red-500/50 text-red-400 font-bold text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+                    <i class="fa-solid fa-trash"></i> Alle Daten löschen
+                </button>
+            </div>
+
+            <p class="text-[10px] text-gray-500 mt-5 text-center leading-relaxed">
+                Calisthenics Pro V3 · Daten liegen nur auf diesem Gerät.<br>Exportiere regelmäßig, um nichts zu verlieren.
+            </p>
+        </div>
+    </div>
+
     <!-- Notification Toast Container -->
     <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 transform -translate-y-4">
         <div class="glass-panel px-4 py-2 rounded-full text-xs font-bold text-emerald-400 border border-emerald-500/40 shadow-xl flex items-center gap-2">
@@ -288,19 +388,24 @@
 
     <!-- Embedded JavaScript Logic -->
     <script>
-        
-        // Workout Data Schema V2.1
+
+        // ============================================================
+        // WORKOUT-DATEN V3
+        // Neu: unit (reps/sec), range (für Progressions-Hinweis),
+        // defaultReps (Startwert), alternatives (Ring-Ersatzübungen)
+        // ============================================================
         const WORKOUT_DATA = {
             push1: {
                 title: "Push 1 (Schulter & Skill)",
                 subtitle: "Pike Push-ups, Dips & Tuck L-Sit",
                 badge: "Schulter-Fokus",
                 exercises: [
-                    { id: "p1_1", name: "Elevated Pike Push-ups", target: "3 Sätze × 6-10 Wdh.", sets: 3, note: "Füße auf Stuhl/Sofa. Fokus Schultern & HSPU-Kraft." },
-                    { id: "p1_2", name: "Bar Dips (Dip-Barren)", target: "3 Sätze × 8-12 Wdh.", sets: 3, note: "Tiefe Bewegung, 1 Sekunde unten pausieren." },
-                    { id: "p1_3", name: "Deficit Push-ups", target: "3 Sätze × 8-12 Wdh.", sets: 3, note: "Auf Parallettes für maximalen Brust-Stretch." },
-                    { id: "p1_4", name: "Diamond Push-ups", target: "2 Sätze × Max Wdh.", sets: 2, note: "Burnout am Boden für Trizeps & Brust." },
-                    { id: "p1_5", name: "Tuck L-Sit Hold", target: "3 Sätze × 10-20 Sek.", sets: 3, note: "Auf Parallettes. Knie anziehen, Rumpf fest." }
+                    { id: "p1_1", name: "Elevated Pike Push-ups", target: "3 Sätze × 6-10 Wdh.", sets: 3, unit: "reps", range: [6, 10], defaultReps: 6, note: "Füße auf Stuhl/Sofa. Fokus Schultern & HSPU-Kraft." },
+                    { id: "p1_2", name: "Bar Dips (Dip-Barren)", target: "3 Sätze × 8-12 Wdh.", sets: 3, unit: "reps", range: [8, 12], defaultReps: 8, note: "Tiefe Bewegung, 1 Sekunde unten pausieren." },
+                    { id: "p1_3", name: "Deficit Push-ups", target: "3 Sätze × 8-12 Wdh.", sets: 3, unit: "reps", range: [8, 12], defaultReps: 8, note: "Auf Parallettes für maximalen Brust-Stretch." },
+                    { id: "p1_4", name: "Diamond Push-ups", target: "2 Sätze × Max Wdh.", sets: 2, unit: "reps", range: null, defaultReps: 0, note: "Burnout am Boden für Trizeps & Brust.",
+                      alternatives: [ { id: "p1_4_alt", name: "Diamond Push-ups (Knie)", note: "Erleichterte Variante auf den Knien – gleiche Handposition, weniger Hebel." } ] },
+                    { id: "p1_5", name: "Tuck L-Sit Hold", target: "3 Sätze × 10-20 Sek.", sets: 3, unit: "sec", range: [10, 20], defaultReps: 10, note: "Auf Parallettes. Knie anziehen, Rumpf fest." }
                 ]
             },
             pull1: {
@@ -308,10 +413,12 @@
                 subtitle: "Explosive Pull-ups & Ring Rows",
                 badge: "Muscle-Up Prep",
                 exercises: [
-                    { id: "l1_1", name: "Explosive Pull-ups", target: "4 Sätze × 3-5 Wdh.", sets: 4, note: "An der Stange; maximal schnell hochziehen." },
-                    { id: "l1_2", name: "Slow Negative Pull-ups", target: "3 Sätze × 4-6 Wdh.", sets: 3, note: "An der Stange; 5 Sekunden kontrolliert ablassen." },
-                    { id: "l1_3", name: "Ring Australian Rows", target: "3 Sätze × 8-12 Wdh.", sets: 3, note: "Ringe auf Bauchhöhe – alternativ: Stangen-Rows unter Pull-up-Stange." },
-                    { id: "l1_4", name: "Ring Inverted Biceps Curls", target: "3 Sätze × 8-12 Wdh.", sets: 3, note: "Alternativ mit Widerstandsband an der Stange." }
+                    { id: "l1_1", name: "Explosive Pull-ups", target: "4 Sätze × 3-5 Wdh.", sets: 4, unit: "reps", range: [3, 5], defaultReps: 3, note: "An der Stange; maximal schnell hochziehen." },
+                    { id: "l1_2", name: "Slow Negative Pull-ups", target: "3 Sätze × 4-6 Wdh.", sets: 3, unit: "reps", range: [4, 6], defaultReps: 4, note: "An der Stange; 5 Sekunden kontrolliert ablassen." },
+                    { id: "l1_3", name: "Ring Australian Rows", target: "3 Sätze × 8-12 Wdh.", sets: 3, unit: "reps", range: [8, 12], defaultReps: 8, note: "Ringe auf Bauchhöhe.",
+                      alternatives: [ { id: "l1_3_alt", name: "Stangen-Rows (Ring-Ersatz)", note: "Unter der Pull-up-Stange liegen, Körper gerade, zur Stange ziehen. 1:1-Ersatz ohne Ringe." } ] },
+                    { id: "l1_4", name: "Ring Inverted Biceps Curls", target: "3 Sätze × 8-12 Wdh.", sets: 3, unit: "reps", range: [8, 12], defaultReps: 8, note: "An den Ringen hängend Curls ausführen.",
+                      alternatives: [ { id: "l1_4_alt", name: "Banded Biceps Curls (Ring-Ersatz)", note: "Loop-Band an der Stange befestigen, liegend Curls ausführen. 1:1-Ersatz ohne Ringe." } ] }
                 ]
             },
             beine: {
@@ -319,10 +426,11 @@
                 subtitle: "Single-leg Strength & Explosivität",
                 badge: "Unterkörper",
                 exercises: [
-                    { id: "b1_1", name: "Bulgarian Split Squats", target: "3 Sätze × 8-12 Wdh.", sets: 3, note: "Pro Bein; hinterer Fuß auf Stuhl/Couch." },
-                    { id: "b1_2", name: "Walking Lunges", target: "3 Sätze × 12 Wdh.", sets: 3, note: "Pro Seite; dynamisch und aufrecht bleiben." },
-                    { id: "b1_3", name: "Single-Leg Calf Raises", target: "3 Sätze × 15 Wdh.", sets: 3, note: "Wadenheben an einer Stufe mit voller Dehnung." },
-                    { id: "b1_4", name: "Tuck Jumps", target: "2 Sätze × 10 Wdh.", sets: 2, note: "Explosive Sprünge, Knie hoch zur Brust." }
+                    { id: "b1_1", name: "Bulgarian Split Squats", target: "3 Sätze × 8-12 Wdh.", sets: 3, unit: "reps", range: [8, 12], defaultReps: 8, note: "Pro Bein; hinterer Fuß auf Stuhl/Couch.",
+                      alternatives: [ { id: "b1_1_alt", name: "Reverse Lunges", note: "Falls kein erhöhter Punkt verfügbar ist – gleiche Muskelgruppen, ohne Fuß-Erhöhung." } ] },
+                    { id: "b1_2", name: "Walking Lunges", target: "3 Sätze × 12 Wdh.", sets: 3, unit: "reps", range: null, defaultReps: 12, note: "Pro Seite; dynamisch und aufrecht bleiben." },
+                    { id: "b1_3", name: "Single-Leg Calf Raises", target: "3 Sätze × 15 Wdh.", sets: 3, unit: "reps", range: null, defaultReps: 15, note: "Wadenheben an einer Stufe mit voller Dehnung." },
+                    { id: "b1_4", name: "Tuck Jumps", target: "2 Sätze × 10 Wdh.", sets: 2, unit: "reps", range: null, defaultReps: 10, note: "Explosive Sprünge, Knie hoch zur Brust." }
                 ]
             },
             push2: {
@@ -330,11 +438,12 @@
                 subtitle: "Bar Dips, Pseudo Planche & Hollow Hold",
                 badge: "Brust-Fokus",
                 exercises: [
-                    { id: "p2_1", name: "Bar Dips (Dip-Barren)", target: "3 Sätze × 8-12 Wdh.", sets: 3, note: "Erste Hauptübung; tief und sauber absenken." },
-                    { id: "p2_2", name: "Pseudo Planche Push-ups", target: "3 Sätze × 6-10 Wdh.", sets: 3, note: "Schultern weit vor die Hände verlagern!" },
-                    { id: "p2_3", name: "Diamond Push-ups", target: "3 Sätze × 8-12 Wdh.", sets: 3, note: "Kontrollierte Wiederholungen für den Trizeps." },
-                    { id: "p2_4", name: "Pike Push-ups", target: "2 Sätze × Max Wdh.", sets: 2, note: "Schulter-Burnout am Boden zum Schluss." },
-                    { id: "p2_5", name: "Hollow Body Hold", target: "3 Sätze × 30-45 Sek.", sets: 3, note: "Unterer Rücken bleibt fest am Boden gepresst." }
+                    { id: "p2_1", name: "Bar Dips (Dip-Barren)", target: "3 Sätze × 8-12 Wdh.", sets: 3, unit: "reps", range: [8, 12], defaultReps: 8, note: "Erste Hauptübung; tief und sauber absenken." },
+                    { id: "p2_2", name: "Pseudo Planche Push-ups", target: "3 Sätze × 6-10 Wdh.", sets: 3, unit: "reps", range: [6, 10], defaultReps: 6, note: "Schultern weit vor die Hände verlagern!" },
+                    { id: "p2_3", name: "Diamond Push-ups", target: "3 Sätze × 8-12 Wdh.", sets: 3, unit: "reps", range: [8, 12], defaultReps: 8, note: "Kontrollierte Wiederholungen für den Trizeps.",
+                      alternatives: [ { id: "p2_3_alt", name: "Diamond Push-ups (Knie)", note: "Erleichterte Variante auf den Knien." } ] },
+                    { id: "p2_4", name: "Pike Push-ups", target: "2 Sätze × Max Wdh.", sets: 2, unit: "reps", range: null, defaultReps: 0, note: "Schulter-Burnout am Boden zum Schluss." },
+                    { id: "p2_5", name: "Hollow Body Hold", target: "3 Sätze × 30-45 Sek.", sets: 3, unit: "sec", range: [30, 45], defaultReps: 30, note: "Unterer Rücken bleibt fest am Boden gepresst." }
                 ]
             },
             pull2: {
@@ -342,270 +451,583 @@
                 subtitle: "Chin-ups, Ring Rows & Face Pulls",
                 badge: "V-Shape Build",
                 exercises: [
-                    { id: "l2_1", name: "Chin-ups (Untergriff)", target: "3 Sätze × 5-8 Wdh.", sets: 3, note: "An Stange; volle Distanz (Dead Hang bis Kinn über Stange)." },
-                    { id: "l2_2", name: "Ring Rows (Untergriff)", target: "4 Sätze × 8-12 Wdh.", sets: 4, note: "Alternativ: Stangen-Rows mit Untergriff unter Pull-up-Stange." },
-                    { id: "l2_3", name: "Wide Grip Negative Pull-ups", target: "3 Sätze × 4-6 Wdh.", sets: 3, note: "An Stange; breiter Griff für den oberen Latissimus." },
-                    { id: "l2_4", name: "Ring Face Pulls", target: "3 Sätze × 10-12 Wdh.", sets: 3, note: "Alternativ: Face Pulls mit Loop-Band an der Stange auf Stirnhöhe." }
+                    { id: "l2_1", name: "Chin-ups (Untergriff)", target: "3 Sätze × 5-8 Wdh.", sets: 3, unit: "reps", range: [5, 8], defaultReps: 5, note: "An Stange; volle Distanz (Dead Hang bis Kinn über Stange)." },
+                    { id: "l2_2", name: "Ring Rows (Untergriff)", target: "4 Sätze × 8-12 Wdh.", sets: 4, unit: "reps", range: [8, 12], defaultReps: 8, note: "An Ringen mit Untergriff rudern.",
+                      alternatives: [ { id: "l2_2_alt", name: "Stangen-Rows Untergriff (Ring-Ersatz)", note: "Wie Ring Rows, aber unter der Pull-up-Stange mit Untergriff. 1:1-Ersatz ohne Ringe." } ] },
+                    { id: "l2_3", name: "Wide Grip Negative Pull-ups", target: "3 Sätze × 4-6 Wdh.", sets: 3, unit: "reps", range: [4, 6], defaultReps: 4, note: "An Stange; breiter Griff für den oberen Latissimus." },
+                    { id: "l2_4", name: "Ring Face Pulls", target: "3 Sätze × 10-12 Wdh.", sets: 3, unit: "reps", range: [10, 12], defaultReps: 10, note: "An Ringen auf Stirnhöhe ziehen.",
+                      alternatives: [ { id: "l2_4_alt", name: "Band Face Pulls (Ring-Ersatz)", note: "Loop-Band auf Stirnhöhe an der Stange, zum Gesicht ziehen, Ellbogen hoch. 1:1-Ersatz ohne Ringe." } ] }
                 ]
             }
         };
 
-        // App State
+        const DAY_ORDER = ['push1', 'pull1', 'beine', 'push2', 'pull2'];
+
+        // ============================================================
+        // APP STATE
+        // ============================================================
         let currentDay = 'push1';
-        let userState = {};
+        let userState = {};   // { days: { dayId: { exId: { sets:[{reps,done}] } } }, variants: { exId: altId } }
+        let history = {};     // { exId: [ { date:'YYYY-MM-DD', reps:[...] } ] }
+        let appMeta = {};     // { lastCompletedDay, lastCompletedDate }
 
-        // Rest Timer State
-        let timerSecondsLeft = 0;
-        let timerTotalDuration = 90;
-        let timerInterval = null;
-        let isTimerRunning = false;
+        const STORAGE_KEY = 'calisthenics_v3_state';
+        const OLD_STORAGE_KEY = 'calisthenics_v2_1_state';
+        const TIMER_STORAGE_KEY = 'calisthenics_timer_state';
 
-
-        // Load persisted state from LocalStorage
+        // ============================================================
+        // PERSISTENZ
+        // ============================================================
         function loadSavedState() {
             try {
-                const saved = localStorage.getItem('calisthenics_v2_1_state');
+                const saved = localStorage.getItem(STORAGE_KEY);
                 if (saved) {
-                    userState = JSON.parse(saved);
+                    const parsed = JSON.parse(saved);
+                    userState = parsed.userState || {};
+                    history = parsed.history || {};
+                    appMeta = parsed.appMeta || {};
                 }
             } catch (e) {
-                console.error("Failed to load local storage state", e);
+                console.error('Load error', e);
             }
         }
 
-        // Save current state to LocalStorage
         function saveState() {
             try {
-                localStorage.setItem('calisthenics_v2_1_state', JSON.stringify(userState));
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({ userState, history, appMeta }));
             } catch (e) {
-                console.error("Failed to save state", e);
+                console.error('Save error', e);
             }
         }
 
-        // Initialize state structure if empty
-        function ensureStateStructure(dayId, exerciseId, setTotal) {
-            if (!userState[dayId]) userState[dayId] = {};
-            if (!userState[dayId][exerciseId]) {
-                userState[dayId][exerciseId] = new Array(setTotal).fill(false);
+        // Migration: alte V2.1-Daten (reine true/false-Arrays) automatisch übernehmen
+        function migrateFromV2IfNeeded() {
+            if ((userState.days && Object.keys(userState.days).length > 0)) return;
+            try {
+                const old = localStorage.getItem(OLD_STORAGE_KEY);
+                if (!old) return;
+                const oldState = JSON.parse(old);
+                userState.days = userState.days || {};
+                Object.keys(oldState).forEach(dayId => {
+                    if (!WORKOUT_DATA[dayId]) return;
+                    userState.days[dayId] = userState.days[dayId] || {};
+                    Object.keys(oldState[dayId]).forEach(exId => {
+                        const exMeta = getBaseExercise(dayId, exId);
+                        if (!exMeta) return;
+                        const oldSets = oldState[dayId][exId];
+                        userState.days[dayId][exId] = {
+                            sets: oldSets.map(done => ({ reps: done ? exMeta.defaultReps : 0, done: !!done }))
+                        };
+                    });
+                });
+                saveState();
+                showToast('Alte Daten aus V2.1 übernommen ✓');
+            } catch (e) {
+                console.error('Migration error', e);
             }
         }
 
+        // ============================================================
+        // DATEN-HELFER
+        // ============================================================
+        function getBaseExercise(dayId, exId) {
+            const day = WORKOUT_DATA[dayId];
+            if (!day) return null;
+            return day.exercises.find(e => e.id === exId) || null;
+        }
 
-        // Render current active tab content
+        function getActiveExercise(dayId, exId) {
+            const base = getBaseExercise(dayId, exId);
+            if (!base) return null;
+            const variantId = userState.variants ? userState.variants[exId] : null;
+            if (variantId && base.alternatives) {
+                const alt = base.alternatives.find(a => a.id === variantId);
+                if (alt) return Object.assign({}, base, { name: alt.name, note: alt.note, isAlt: true });
+            }
+            return Object.assign({}, base, { isAlt: false });
+        }
+
+        function ensureStateStructure(dayId, exId) {
+            const exMeta = getBaseExercise(dayId, exId);
+            if (!exMeta) return;
+            if (!userState.days) userState.days = {};
+            if (!userState.days[dayId]) userState.days[dayId] = {};
+            if (!userState.days[dayId][exId]) {
+                userState.days[dayId][exId] = {
+                    sets: Array.from({ length: exMeta.sets }, () => ({ reps: exMeta.defaultReps, done: false }))
+                };
+            }
+        }
+
+        function computeSuggestedDay() {
+            if (!appMeta.lastCompletedDay) return DAY_ORDER[0];
+            const idx = DAY_ORDER.indexOf(appMeta.lastCompletedDay);
+            if (idx === -1) return DAY_ORDER[0];
+            return DAY_ORDER[(idx + 1) % DAY_ORDER.length];
+        }
+
+        // ============================================================
+        // VERLAUF & PROGRESSION
+        // ============================================================
+        function todayStr() {
+            return new Date().toISOString().slice(0, 10);
+        }
+
+        function logHistory(dayId, exId) {
+            const sets = userState.days[dayId][exId].sets;
+            const repsArr = sets.map(s => s.reps);
+            if (!history[exId]) history[exId] = [];
+            const today = todayStr();
+            const todayEntry = history[exId].find(h => h.date === today);
+            if (todayEntry) {
+                todayEntry.reps = repsArr;
+            } else {
+                history[exId].push({ date: today, reps: repsArr });
+                if (history[exId].length > 8) history[exId] = history[exId].slice(-8);
+            }
+            saveState();
+        }
+
+        function checkProgression(dayId, exId) {
+            const exMeta = getBaseExercise(dayId, exId);
+            if (!exMeta || !exMeta.range) return false;
+            const entries = history[exId];
+            if (!entries || entries.length === 0) return false;
+            const latest = entries[entries.length - 1];
+            const [min, max] = exMeta.range;
+            if (min === max) return false;
+            return latest.reps.length > 0 && latest.reps.every(r => r >= max);
+        }
+
+        function getHistoryPreview(exId) {
+            if (!history[exId] || history[exId].length === 0) return null;
+            const entries = history[exId].slice(-2).reverse();
+            return entries.map(h => {
+                const d = new Date(h.date + 'T00:00:00');
+                const dd = d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' });
+                return dd + ': ' + h.reps.join(',');
+            }).join('  ·  ');
+        }
+
+        // ============================================================
+        // RENDERING
+        // ============================================================
         function renderDay() {
             const dayData = WORKOUT_DATA[currentDay];
             if (!dayData) return;
 
-            // Update Tab UI
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('bg-gradient-to-r', 'from-emerald-500', 'to-teal-500', 'text-black', 'border-emerald-400');
                 btn.classList.add('bg-gray-900', 'text-gray-400');
             });
-            const activeTab = document.getElementById(`tab-${currentDay}`);
+            const activeTab = document.getElementById('tab-' + currentDay);
             if (activeTab) {
                 activeTab.classList.remove('bg-gray-900', 'text-gray-400');
                 activeTab.classList.add('bg-gradient-to-r', 'from-emerald-500', 'to-teal-500', 'text-black', 'border-emerald-400');
             }
 
-            // Update Header Information
             document.getElementById('dayTitle').innerText = dayData.title;
             document.getElementById('daySubtitle').innerText = dayData.subtitle;
             document.getElementById('dayBadge').innerText = dayData.badge;
 
-            // Render Exercise Cards
+            const todayBadge = document.getElementById('todayBadge');
+            if (computeSuggestedDay() === currentDay) {
+                todayBadge.classList.remove('hidden');
+            } else {
+                todayBadge.classList.add('hidden');
+            }
+
             const container = document.getElementById('exercisesContainer');
             container.innerHTML = '';
 
-            let totalSetsInDay = 0;
-            let completedSetsInDay = 0;
+            let totalSets = 0, completedSets = 0;
 
-            dayData.exercises.forEach((ex, exIdx) => {
-                ensureStateStructure(currentDay, ex.id, ex.sets);
-                const exSets = userState[currentDay][ex.id];
-                totalSetsInDay += ex.sets;
+            dayData.exercises.forEach(ex => {
+                ensureStateStructure(currentDay, ex.id);
+                const active = getActiveExercise(currentDay, ex.id);
+                const stateSets = userState.days[currentDay][ex.id].sets;
+                totalSets += ex.sets;
+                const doneCount = stateSets.filter(s => s.done).length;
+                completedSets += doneCount;
+                const allDone = doneCount === ex.sets;
+                const showProgress = checkProgression(currentDay, ex.id);
+                const historyPreview = getHistoryPreview(ex.id);
 
-                const completedCount = exSets.filter(Boolean).length;
-                completedSetsInDay += completedCount;
-                const isAllDone = completedCount === ex.sets;
-
-                // Exercise Card HTML
                 const card = document.createElement('div');
-                card.className = `glass-card rounded-2xl p-4 transition-all duration-300 ${isAllDone ? 'border-emerald-500/40 bg-emerald-950/10' : ''}`;
+                card.className = 'glass-card rounded-2xl p-4 transition-all duration-300 ' + (allDone ? 'border-emerald-500/40 bg-emerald-950/10' : '');
 
-                let setButtonsHtml = '';
-                for (let s = 0; s < ex.sets; s++) {
-                    const isChecked = exSets[s];
-                    setButtonsHtml += `
-                        <button onclick="toggleSet('${ex.id}', ${s})" 
-                                class="set-btn flex-1 py-2.5 rounded-xl border border-gray-800 text-xs font-bold text-gray-400 bg-gray-900/80 hover:border-emerald-500/50 flex flex-col items-center justify-center gap-0.5 ${isChecked ? 'active' : ''}">
-                            <span>Satz ${s + 1}</span>
-                            <i class="fa-solid ${isChecked ? 'fa-check' : 'fa-plus'} text-[10px] opacity-80"></i>
-                        </button>
-                    `;
-                }
+                let setsHtml = '';
+                stateSets.forEach((s, idx) => {
+                    const unitChar = ex.unit === 'sec' ? 'Sek' : 'Wdh';
+                    setsHtml += '' +
+                        '<div class="flex items-center gap-1.5">' +
+                            '<span class="text-[10px] font-bold text-gray-500 w-6 shrink-0">S' + (idx + 1) + '</span>' +
+                            '<button onclick="adjustReps(\'' + currentDay + '\',\'' + ex.id + '\',' + idx + ',-1)" class="w-7 h-7 rounded-lg bg-gray-900 border border-gray-800 text-gray-400 text-sm font-bold flex items-center justify-center active:scale-90 shrink-0">−</button>' +
+                            '<input type="number" inputmode="numeric" value="' + s.reps + '" onchange="setRepsDirect(\'' + currentDay + '\',\'' + ex.id + '\',' + idx + ', this.value)" class="w-10 text-center bg-gray-950/60 border border-gray-800 rounded-lg text-xs font-bold text-white py-1.5 shrink-0">' +
+                            '<button onclick="adjustReps(\'' + currentDay + '\',\'' + ex.id + '\',' + idx + ',1)" class="w-7 h-7 rounded-lg bg-gray-900 border border-gray-800 text-gray-400 text-sm font-bold flex items-center justify-center active:scale-90 shrink-0">+</button>' +
+                            '<span class="text-[8px] text-gray-600 w-6 shrink-0">' + unitChar + '</span>' +
+                            '<button onclick="toggleSetDone(\'' + currentDay + '\',\'' + ex.id + '\',' + idx + ')" class="set-btn flex-1 py-1.5 rounded-lg border border-gray-800 text-[10px] font-bold text-gray-400 bg-gray-900/80 hover:border-emerald-500/50 flex items-center justify-center gap-1 ' + (s.done ? 'active' : '') + '">' +
+                                '<i class="fa-solid ' + (s.done ? 'fa-check' : 'fa-circle') + ' text-[9px]"></i>' + (s.done ? ' Fertig' : '') +
+                            '</button>' +
+                        '</div>';
+                });
 
-                card.innerHTML = `
-                    <div class="flex items-start justify-between gap-3 mb-2">
-                        <div>
-                            <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                                ${ex.name}
-                                ${isAllDone ? '<i class="fa-solid fa-circle-check text-emerald-400 text-xs"></i>' : ''}
-                            </h3>
-                            <p class="text-[11px] font-semibold text-emerald-400 mt-0.5">${ex.target}</p>
-                        </div>
-                        <button onclick="toggleAllSetsForExercise('${ex.id}', ${ex.sets})" class="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-gray-900 border border-gray-800 text-gray-400 hover:text-emerald-400 hover:border-emerald-500/30 transition-all">
-                            ${isAllDone ? 'Reset' : 'Alle ✔'}
-                        </button>
-                    </div>
-
-                    <p class="text-[11px] text-gray-400 mb-3.5 leading-relaxed bg-gray-950/40 p-2 rounded-lg border border-gray-900">
-                        <i class="fa-solid fa-lightbulb text-amber-400/80 mr-1"></i> ${ex.note}
-                    </p>
-
-                    <div class="flex gap-2">
-                        ${setButtonsHtml}
-                    </div>
-                `;
+                card.innerHTML =
+                    '<div class="flex items-start justify-between gap-2 mb-2">' +
+                        '<div class="flex-1 min-w-0">' +
+                            '<h3 class="text-sm font-bold text-white flex items-center gap-1.5 flex-wrap">' +
+                                '<span>' + active.name + '</span>' +
+                                (active.isAlt ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-bold">ALT</span>' : '') +
+                                (allDone ? '<i class="fa-solid fa-circle-check text-emerald-400 text-xs"></i>' : '') +
+                                (showProgress ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold">🔥 Steigern!</span>' : '') +
+                            '</h3>' +
+                            '<p class="text-[11px] font-semibold text-emerald-400 mt-0.5">' + ex.target + '</p>' +
+                        '</div>' +
+                        '<div class="flex items-center gap-1.5 shrink-0">' +
+                            (ex.alternatives && ex.alternatives.length ? '<button onclick="openVariantModal(\'' + currentDay + '\',\'' + ex.id + '\')" class="w-7 h-7 rounded-lg bg-gray-900 border border-gray-800 text-gray-400 hover:text-cyan-400 hover:border-cyan-500/30 flex items-center justify-center text-[11px]"><i class="fa-solid fa-arrows-rotate"></i></button>' : '') +
+                            '<button onclick="toggleAllSetsForExercise(\'' + currentDay + '\',\'' + ex.id + '\')" class="text-[10px] font-bold px-2.5 py-1.5 rounded-lg bg-gray-900 border border-gray-800 text-gray-400 hover:text-emerald-400 hover:border-emerald-500/30 whitespace-nowrap">' +
+                                (allDone ? 'Reset' : 'Alle ✔') +
+                            '</button>' +
+                        '</div>' +
+                    '</div>' +
+                    '<p class="text-[11px] text-gray-400 mb-3 leading-relaxed bg-gray-950/40 p-2 rounded-lg border border-gray-900">' +
+                        '<i class="fa-solid fa-lightbulb text-amber-400/80 mr-1"></i> ' + active.note +
+                    '</p>' +
+                    '<div class="space-y-2 mb-2">' + setsHtml + '</div>' +
+                    (historyPreview ? '<p class="text-[9px] text-gray-600 mt-2 flex items-center gap-1"><i class="fa-solid fa-chart-line"></i> ' + historyPreview + '</p>' : '');
 
                 container.appendChild(card);
             });
 
-            // Update Day Progress Bar
-            const percent = totalSetsInDay > 0 ? Math.round((completedSetsInDay / totalSetsInDay) * 100) : 0;
-            document.getElementById('dayProgressPercent').innerText = `${percent}%`;
-            document.getElementById('dayProgressText').innerText = `${completedSetsInDay} / ${totalSetsInDay} Sätze`;
-            document.getElementById('progressBar').style.width = `${percent}%`;
+            const percent = totalSets > 0 ? Math.round((completedSets / totalSets) * 100) : 0;
+            document.getElementById('dayProgressPercent').innerText = percent + '%';
+            document.getElementById('dayProgressText').innerText = completedSets + ' / ' + totalSets + ' Sätze';
+            document.getElementById('progressBar').style.width = percent + '%';
         }
 
-        // Switch Tabs
         function switchTab(dayId) {
             currentDay = dayId;
             renderDay();
         }
 
-        // Toggle Individual Set
-        function toggleSet(exerciseId, setIdx) {
-            const exSets = userState[currentDay][exerciseId];
-            const newState = !exSets[setIdx];
-            exSets[setIdx] = newState;
-
+        // ============================================================
+        // SATZ-AKTIONEN
+        // ============================================================
+        function adjustReps(dayId, exId, setIdx, delta) {
+            const exMeta = getBaseExercise(dayId, exId);
+            const step = exMeta.unit === 'sec' ? 5 : 1;
+            const set = userState.days[dayId][exId].sets[setIdx];
+            set.reps = Math.max(0, Math.min(999, set.reps + delta * step));
             saveState();
             renderDay();
+        }
 
-            if (newState) {
+        function setRepsDirect(dayId, exId, setIdx, value) {
+            const num = Math.max(0, Math.min(999, parseInt(value, 10) || 0));
+            userState.days[dayId][exId].sets[setIdx].reps = num;
+            saveState();
+            renderDay();
+        }
+
+        function toggleSetDone(dayId, exId, setIdx) {
+            const exMeta = getBaseExercise(dayId, exId);
+            const set = userState.days[dayId][exId].sets[setIdx];
+            set.done = !set.done;
+            saveState();
+            logHistory(dayId, exId);
+            renderDay();
+            if (set.done) {
                 triggerQuickRestTimer(90);
-                showToast("Satz abgeschlossen! Pausen-Timer gestartet.");
+                const unitLabel = exMeta.unit === 'sec' ? ' Sek.' : ' Wdh.';
+                showToast('Satz gespeichert – ' + set.reps + unitLabel);
                 if (navigator.vibrate) navigator.vibrate(40);
             }
         }
 
-        // Toggle All Sets for an Exercise
-        function toggleAllSetsForExercise(exerciseId, totalSets) {
-            const exSets = userState[currentDay][exerciseId];
-            const allChecked = exSets.every(Boolean);
-
-            userState[currentDay][exerciseId] = new Array(totalSets).fill(!allChecked);
+        function toggleAllSetsForExercise(dayId, exId) {
+            const exMeta = getBaseExercise(dayId, exId);
+            const sets = userState.days[dayId][exId].sets;
+            const allDone = sets.every(s => s.done);
+            sets.forEach(s => {
+                s.done = !allDone;
+                if (!allDone && s.reps === 0) s.reps = exMeta.defaultReps;
+            });
             saveState();
+            logHistory(dayId, exId);
             renderDay();
-
-            if (!allChecked) {
-                showToast("Übung komplett abgehakt! 🔥");
+            if (!allDone) {
+                showToast('Übung komplett abgehakt! 🔥');
                 triggerQuickRestTimer(90);
                 if (navigator.vibrate) navigator.vibrate([40, 50, 40]);
             }
         }
 
-        // Complete whole current day
         function checkAllCurrentDay() {
             const dayData = WORKOUT_DATA[currentDay];
             dayData.exercises.forEach(ex => {
-                userState[currentDay][ex.id] = new Array(ex.sets).fill(true);
+                ensureStateStructure(currentDay, ex.id);
+                const exMeta = getBaseExercise(currentDay, ex.id);
+                userState.days[currentDay][ex.id].sets.forEach(s => {
+                    if (s.reps === 0) s.reps = exMeta.defaultReps;
+                    s.done = true;
+                });
+                logHistory(currentDay, ex.id);
             });
+            appMeta.lastCompletedDay = currentDay;
+            appMeta.lastCompletedDate = todayStr();
             saveState();
             renderDay();
-            showToast("Tag komplett gemeistert! Stark 💪");
+            showToast('Tag komplett gemeistert! Stark 💪');
             if (navigator.vibrate) navigator.vibrate([60, 100, 60]);
         }
 
-        // Reset current day
         function resetCurrentDay() {
             const dayData = WORKOUT_DATA[currentDay];
             dayData.exercises.forEach(ex => {
-                userState[currentDay][ex.id] = new Array(ex.sets).fill(false);
+                const exMeta = getBaseExercise(currentDay, ex.id);
+                userState.days[currentDay][ex.id] = {
+                    sets: Array.from({ length: exMeta.sets }, () => ({ reps: exMeta.defaultReps, done: false }))
+                };
             });
             saveState();
             renderDay();
-            showToast("Tag zurückgesetzt.");
+            showToast('Tag zurückgesetzt.');
         }
 
+        // ============================================================
+        // ÜBUNG ERSETZEN (Variant-Picker)
+        // ============================================================
+        function openVariantModal(dayId, exId) {
+            const base = getBaseExercise(dayId, exId);
+            const currentVariant = userState.variants ? userState.variants[exId] : null;
+            let html = '<button onclick="selectVariant(\'' + exId + '\',\'default\')" class="variant-option ' + (!currentVariant ? 'variant-active' : '') + '">' +
+                '<span>' + base.name + '</span><span class="text-[10px] opacity-70">Original</span></button>';
+            (base.alternatives || []).forEach(alt => {
+                html += '<button onclick="selectVariant(\'' + exId + '\',\'' + alt.id + '\')" class="variant-option ' + (currentVariant === alt.id ? 'variant-active' : '') + '">' +
+                    '<span>' + alt.name + '</span><span class="text-[10px] opacity-70">Alternative</span></button>';
+            });
+            document.getElementById('variantModalTitle').innerText = base.name;
+            document.getElementById('variantOptionsContainer').innerHTML = html;
+            const modal = document.getElementById('variantModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
 
-        // Rest Timer Functions
+        function selectVariant(exId, variantId) {
+            if (!userState.variants) userState.variants = {};
+            if (variantId === 'default') delete userState.variants[exId];
+            else userState.variants[exId] = variantId;
+            saveState();
+            renderDay();
+            toggleVariantModal();
+            showToast('Übung gewechselt');
+        }
+
+        function toggleVariantModal() {
+            const modal = document.getElementById('variantModal');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            } else {
+                modal.classList.add('opacity-0');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        }
+
+        // ============================================================
+        // EINSTELLUNGEN MODAL
+        // ============================================================
+        function toggleSettingsModal() {
+            const modal = document.getElementById('settingsModal');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            } else {
+                modal.classList.add('opacity-0');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        }
+
+        function exportData() {
+            const payload = {
+                app: 'Calisthenics Pro',
+                version: 'v3',
+                exportedAt: new Date().toISOString(),
+                userState, history, appMeta
+            };
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'calisthenics-backup-' + todayStr() + '.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Daten exportiert ✓');
+        }
+
+        function importDataFile(inputEl) {
+            const file = inputEl.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (!data.userState) throw new Error('Ungültiges Format');
+                    userState = data.userState || {};
+                    history = data.history || {};
+                    appMeta = data.appMeta || {};
+                    saveState();
+                    renderDay();
+                    showToast('Daten importiert ✓');
+                    toggleSettingsModal();
+                } catch (err) {
+                    console.error(err);
+                    showToast('Import fehlgeschlagen – Datei prüfen');
+                }
+            };
+            reader.readAsText(file);
+            inputEl.value = '';
+        }
+
+        function resetAllData() {
+            if (!confirm('Wirklich ALLE Daten löschen? Das kann nicht rückgängig gemacht werden.\\n\\nTipp: Vorher exportieren!')) return;
+            localStorage.removeItem(STORAGE_KEY);
+            userState = {};
+            history = {};
+            appMeta = {};
+            saveState();
+            renderDay();
+            showToast('Alle Daten gelöscht');
+            toggleSettingsModal();
+        }
+
+        // ============================================================
+        // REST TIMER (zeitbasiert mit Date.now() – übersteht Hintergrund/Sperrbildschirm)
+        // ============================================================
+        let timerRemainingSeconds = 90;   // statischer Wert, wenn Timer NICHT läuft
+        let timerEndTimestamp = null;     // Zielzeitpunkt, wenn Timer LÄUFT
+        let timerTotalDuration = 90;      // zuletzt gewähltes Preset
+        let timerInterval = null;
+        let isTimerRunning = false;
+
         function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            const s = Math.max(0, Math.round(seconds));
+            const mins = Math.floor(s / 60);
+            const secs = s % 60;
+            return String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+        }
+
+        function currentDisplaySeconds() {
+            if (isTimerRunning && timerEndTimestamp) {
+                return Math.max(0, Math.ceil((timerEndTimestamp - Date.now()) / 1000));
+            }
+            return timerRemainingSeconds;
         }
 
         function updateTimerUI() {
-            const formatted = formatTime(timerSecondsLeft);
+            const remaining = currentDisplaySeconds();
+            const formatted = formatTime(remaining);
             document.getElementById('modalTimerDisplay').innerText = formatted;
             document.getElementById('floatingTimerDisplay').innerText = formatted;
             document.getElementById('headerTimerDisplay').innerText = isTimerRunning ? formatted : 'Timer';
 
             const startBtn = document.getElementById('modalStartPauseBtn');
-            const floatPlayBtn = document.getElementById('floatingPlayPauseBtn');
+            const floatBtn = document.getElementById('floatingPlayPauseBtn');
 
             if (isTimerRunning) {
                 startBtn.innerHTML = '<i class="fa-solid fa-pause"></i> Pause';
-                floatPlayBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                floatBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
                 document.getElementById('timerStateLabel').innerText = 'Pause läuft...';
                 document.getElementById('floatingTimerWidget').classList.remove('hidden');
             } else {
                 startBtn.innerHTML = '<i class="fa-solid fa-play"></i> Start';
-                floatPlayBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-                document.getElementById('timerStateLabel').innerText = timerSecondsLeft > 0 ? 'Pausiert' : 'Bereit';
+                floatBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+                document.getElementById('timerStateLabel').innerText = (remaining > 0 && remaining < timerTotalDuration) ? 'Pausiert' : 'Bereit';
+                if (remaining <= 0) document.getElementById('floatingTimerWidget').classList.add('hidden');
             }
+        }
+
+        function saveTimerState() {
+            try {
+                localStorage.setItem(TIMER_STORAGE_KEY, JSON.stringify({
+                    endTimestamp: timerEndTimestamp,
+                    remaining: timerRemainingSeconds,
+                    total: timerTotalDuration,
+                    running: isTimerRunning
+                }));
+            } catch (e) {}
+        }
+
+        function restoreTimerState() {
+            try {
+                const saved = localStorage.getItem(TIMER_STORAGE_KEY);
+                if (!saved) return;
+                const data = JSON.parse(saved);
+                timerTotalDuration = data.total || 90;
+                if (data.running && data.endTimestamp && data.endTimestamp > Date.now()) {
+                    timerEndTimestamp = data.endTimestamp;
+                    isTimerRunning = true;
+                    runTimerLoop();
+                    requestWakeLock();
+                } else {
+                    timerRemainingSeconds = (data.running && data.endTimestamp) ? 0 : (data.remaining != null ? data.remaining : timerTotalDuration);
+                    isTimerRunning = false;
+                    timerEndTimestamp = null;
+                }
+            } catch (e) {}
+        }
+
+        function runTimerLoop() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const remaining = currentDisplaySeconds();
+                updateTimerUI();
+                if (remaining <= 0) {
+                    finishTimer();
+                }
+            }, 250);
+        }
+
+        function finishTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            isTimerRunning = false;
+            timerEndTimestamp = null;
+            timerRemainingSeconds = 0;
+            saveTimerState();
+            updateTimerUI();
+            playCompletionBeep();
+            showToast('Pause vorbei! Nächster Satz 🔥');
+            if (navigator.vibrate) navigator.vibrate([100, 100, 100]);
+            releaseWakeLock();
         }
 
         function triggerQuickRestTimer(secs) {
             timerTotalDuration = secs;
-            timerSecondsLeft = secs;
-            startTimer();
+            timerEndTimestamp = Date.now() + secs * 1000;
+            isTimerRunning = true;
+            saveTimerState();
+            runTimerLoop();
+            updateTimerUI();
+            requestWakeLock();
         }
 
         function setTimerSeconds(secs) {
             stopTimer();
             timerTotalDuration = secs;
-            timerSecondsLeft = secs;
+            timerRemainingSeconds = secs;
+            saveTimerState();
             updateTimerUI();
         }
 
         function addTimerTime(secs) {
-            timerSecondsLeft += secs;
-            updateTimerUI();
-        }
-
-        function startTimer() {
-            if (timerInterval) clearInterval(timerInterval);
-            isTimerRunning = true;
-            updateTimerUI();
-
-            timerInterval = setInterval(() => {
-                if (timerSecondsLeft > 0) {
-                    timerSecondsLeft--;
-                    updateTimerUI();
-                } else {
-                    stopTimer();
-                    playCompletionBeep();
-                    showToast("Pause vorbei! Nächster Satz 🔥");
-                    if (navigator.vibrate) navigator.vibrate([100, 100, 100]);
-                }
-            }, 1000);
-        }
-
-        function pauseTimer() {
-            if (timerInterval) clearInterval(timerInterval);
-            isTimerRunning = false;
+            if (isTimerRunning && timerEndTimestamp) {
+                timerEndTimestamp += secs * 1000;
+            } else {
+                timerRemainingSeconds += secs;
+            }
+            saveTimerState();
             updateTimerUI();
         }
 
@@ -613,61 +1035,121 @@
             if (isTimerRunning) {
                 pauseTimer();
             } else {
-                if (timerSecondsLeft <= 0) timerSecondsLeft = 90;
-                startTimer();
+                const secs = timerRemainingSeconds > 0 ? timerRemainingSeconds : timerTotalDuration;
+                timerEndTimestamp = Date.now() + secs * 1000;
+                isTimerRunning = true;
+                saveTimerState();
+                runTimerLoop();
+                updateTimerUI();
+                requestWakeLock();
             }
+        }
+
+        function pauseTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerRemainingSeconds = currentDisplaySeconds();
+            isTimerRunning = false;
+            timerEndTimestamp = null;
+            saveTimerState();
+            updateTimerUI();
+            releaseWakeLock();
         }
 
         function stopTimer() {
             if (timerInterval) clearInterval(timerInterval);
             isTimerRunning = false;
-            timerSecondsLeft = 0;
+            timerEndTimestamp = null;
+            timerRemainingSeconds = timerTotalDuration;
+            saveTimerState();
             updateTimerUI();
             document.getElementById('floatingTimerWidget').classList.add('hidden');
             document.getElementById('headerTimerDisplay').innerText = 'Timer';
+            releaseWakeLock();
         }
 
         function toggleTimerModal() {
             const modal = document.getElementById('timerModal');
             if (modal.classList.contains('hidden')) {
                 modal.classList.remove('hidden');
-                setTimeout(() => {
-                    modal.classList.remove('opacity-0');
-                }, 10);
+                setTimeout(() => modal.classList.remove('opacity-0'), 10);
             } else {
                 modal.classList.add('opacity-0');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                }, 300);
+                setTimeout(() => modal.classList.add('hidden'), 300);
             }
         }
 
-        // Web Audio API Audio Completion Beep
+        // ============================================================
+        // WAKE LOCK – Bildschirm während Pause wach halten (Android Chrome)
+        // ============================================================
+        let wakeLock = null;
+
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                }
+            } catch (e) {
+                console.log('[WakeLock]', e.message);
+            }
+        }
+
+        function releaseWakeLock() {
+            if (wakeLock) {
+                wakeLock.release().catch(() => {});
+                wakeLock = null;
+            }
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && isTimerRunning) {
+                requestWakeLock();
+            }
+        });
+
+        // ============================================================
+        // AUDIO – AudioContext beim ersten Antippen vorbereiten
+        // (verhindert Blockierung durch Autoplay-Richtlinien)
+        // ============================================================
+        let audioCtx = null;
+
+        function initAudioOnce() {
+            if (!audioCtx) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {}
+            }
+        }
+        document.addEventListener('pointerdown', initAudioOnce, { once: true });
+
         function playCompletionBeep() {
             try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
+                if (!audioCtx) initAudioOnce();
+                if (!audioCtx) return;
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
 
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.3);
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.3);
 
-                gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
 
                 osc.connect(gain);
-                gain.connect(ctx.destination);
+                gain.connect(audioCtx.destination);
 
                 osc.start();
-                osc.stop(ctx.currentTime + 0.5);
+                osc.stop(audioCtx.currentTime + 0.5);
             } catch (e) {
-                console.log('Audio Context error', e);
+                console.log('Audio error', e);
             }
         }
 
-
-        // Toast Notification System
+        // ============================================================
+        // TOAST NOTIFICATIONS
+        // ============================================================
         let toastTimeout;
         function showToast(msg) {
             const toast = document.getElementById('toast');
@@ -683,9 +1165,14 @@
             }, 2500);
         }
 
-        // App Initialization
+        // ============================================================
+        // APP INITIALISIERUNG
+        // ============================================================
         window.addEventListener('DOMContentLoaded', () => {
             loadSavedState();
+            migrateFromV2IfNeeded();
+            currentDay = computeSuggestedDay();
+            restoreTimerState();
             renderDay();
             updateTimerUI();
         });
