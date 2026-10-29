@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dein persönlicher Calisthenics Workout Tracker – Push, Pull, Beine mit Timer, Satzhaken und Offline-Funktion.">
     <title>Calisthenics Pro V2.1 Tracker</title>
 
     <!-- ============================================================ -->
@@ -27,12 +28,19 @@
     </script>
     <!-- ============================================================ -->
 
+    <!-- Preconnect für schnelleres CDN-Laden -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter (font-display=swap verhindert unsichtbaren Text während des Ladens) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
+    <!-- FontAwesome Icons (non-blocking) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     
     <script>
         tailwind.config = {
@@ -140,23 +148,23 @@
             <div class="flex gap-2 overflow-x-auto no-scrollbar py-0.5" id="tabsContainer">
                 <button onclick="switchTab('push1')" id="tab-push1" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border border-transparent bg-gray-900 text-gray-400 hover:text-white flex flex-col items-center">
                     <span>PUSH 1</span>
-                    <span class="text-[9px] font-normal opacity-60">Schulter/Skill</span>
+                    <span class="text-[10px] font-normal text-gray-500">Schulter/Skill</span>
                 </button>
                 <button onclick="switchTab('pull1')" id="tab-pull1" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border border-transparent bg-gray-900 text-gray-400 hover:text-white flex flex-col items-center">
                     <span>PULL 1</span>
-                    <span class="text-[9px] font-normal opacity-60">Vertikal</span>
+                    <span class="text-[10px] font-normal text-gray-500">Vertikal</span>
                 </button>
                 <button onclick="switchTab('beine')" id="tab-beine" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border border-transparent bg-gray-900 text-gray-400 hover:text-white flex flex-col items-center">
                     <span>BEINE</span>
-                    <span class="text-[9px] font-normal opacity-60">Unterkörper</span>
+                    <span class="text-[10px] font-normal text-gray-500">Unterkörper</span>
                 </button>
                 <button onclick="switchTab('push2')" id="tab-push2" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border border-transparent bg-gray-900 text-gray-400 hover:text-white flex flex-col items-center">
                     <span>PUSH 2</span>
-                    <span class="text-[9px] font-normal opacity-60">Brust/Trizeps</span>
+                    <span class="text-[10px] font-normal text-gray-500">Brust/Trizeps</span>
                 </button>
                 <button onclick="switchTab('pull2')" id="tab-pull2" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border border-transparent bg-gray-900 text-gray-400 hover:text-white flex flex-col items-center">
                     <span>PULL 2</span>
-                    <span class="text-[9px] font-normal opacity-60">Horizontal/V-Shape</span>
+                    <span class="text-[10px] font-normal text-gray-500">Horizontal/V-Shape</span>
                 </button>
             </div>
         </div>
