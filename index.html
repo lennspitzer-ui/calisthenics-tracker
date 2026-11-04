@@ -11,7 +11,15 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Calisthenics Pro">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <script>if('serviceWorker'in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').then(r=>console.log('[SW] ok',r.scope)).catch(e=>console.warn('[SW] err',e));});}</script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(r => console.log('[SW] ok', r.scope))
+                    .catch(e => console.warn('[SW] err', e));
+            });
+        }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -20,7 +28,1194 @@
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-    <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { fontFamily: { sans: ['Inter','sans-serif'] } } }
+        }
+    </script>
+    <style>
+        body { background:#080c10; color:#f1f5f9; font-family:'Inter',sans-serif; -webkit-tap-highlight-color:transparent; user-select:none; }
+        input,textarea { user-select:text; }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:0; }
+        input[type=number] { -moz-appearance:textfield; }
+
+        .glass-panel { background:rgba(17,24,34,0.85); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.07); }
+        .glass-card { background:linear-gradient(145deg,rgba(18,26,38,0.9),rgba(12,17,25,0.95)); border:1px solid rgba(255,255,255,0.06); box-shadow:0 10px 30px -10px rgba(0,0,0,0.5); }
+
+        .set-btn { transition:all 0.2s cubic-bezier(0.4,0,0.2,1); }
+        .set-btn.active { background:linear-gradient(135deg,#10b981,#059669); color:#000; font-weight:800; border-color:#34d399; box-shadow:0 0 15px rgba(16,185,129,0.4); }
+
+        @keyframes timer-pulse { 0%,100%{box-shadow:0 0 15px rgba(16,185,129,0.2)} 50%{box-shadow:0 0 25px rgba(16,185,129,0.6)} }
+        .timer-running { animation:timer-pulse 2s infinite; border-color:#10b981 !important; }
+        @keyframes timer-pulse-ex { 0%,100%{box-shadow:0 0 15px rgba(245,158,11,0.2)} 50%{box-shadow:0 0 28px rgba(245,158,11,0.7)} }
+        .timer-exercise { animation:timer-pulse-ex 2s infinite; border-color:#f59e0b !important; }
+
+        @keyframes slideUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+        .slide-up { animation:slideUp 0.25s ease both; }
+
+        .no-scrollbar::-webkit-scrollbar { display:none; }
+        .no-scrollbar { -ms-overflow-style:none; scrollbar-width:none; }
+
+        .variant-option { width:100%; display:flex; justify-content:space-between; align-items:center; padding:0.75rem 1rem; border-radius:0.75rem; background:rgba(17,24,34,0.8); border:1px solid rgba(255,255,255,0.07); color:#e2e8f0; font-size:0.8rem; font-weight:600; text-align:left; transition:all 0.2s; }
+        .variant-option:hover { border-color:rgba(16,185,129,0.4); }
+        .variant-active { border-color:#10b981 !important; background:rgba(16,185,129,0.1) !important; color:#34d399 !important; }
+
+        .timer-preset-btn { transition:all 0.2s; }
+        .timer-preset-btn.selected { border-color:#10b981 !important; color:#10b981 !important; background:rgba(16,185,129,0.08); }
+
+        /* Note textarea */
+        .day-note-area { background:rgba(12,17,25,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:0.75rem; color:#94a3b8; font-size:0.75rem; padding:0.625rem 0.75rem; width:100%; resize:none; font-family:inherit; transition:border-color 0.2s; }
+        .day-note-area:focus { outline:none; border-color:rgba(16,185,129,0.3); color:#e2e8f0; }
+        .day-note-area::placeholder { color:#374151; }
+
+        /* Confetti canvas */
+        #confettiCanvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999; }
+
+        /* ▼ V4: Difficulty Slider (RPE 1-10) */
+        .rpe-slider { -webkit-appearance:none; width:100%; height:8px; border-radius:9999px; outline:none; cursor:pointer; transition:all 0.3s; }
+        .rpe-slider::-webkit-slider-thumb { -webkit-appearance:none; width:26px; height:26px; border-radius:50%; cursor:pointer; border:3px solid; transition:all 0.2s; box-shadow:0 2px 8px rgba(0,0,0,0.4); }
+        .rpe-slider::-moz-range-thumb { width:26px; height:26px; border-radius:50%; cursor:pointer; border:3px solid; transition:all 0.2s; box-shadow:0 2px 8px rgba(0,0,0,0.4); }
+        @keyframes fire-glow { 0%,100%{filter:drop-shadow(0 0 4px rgba(239,68,68,0.3))} 50%{filter:drop-shadow(0 0 12px rgba(239,68,68,0.8))} }
+        .rpe-fire { animation:fire-glow 1s infinite; }
+        @keyframes fire-shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-1px)} 75%{transform:translateX(1px)} }
+        .rpe-shake { animation:fire-shake 0.3s infinite; }
+    </style>
 </head>
-<body><!-- V4 pushed via GitHub API - full file on local disk --></body>
+<body class="min-h-screen flex flex-col pb-28">
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║          APP HEADER          ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<header class="sticky top-0 z-40 bg-[#080c10]/90 backdrop-blur-md border-b border-gray-800/80 px-4 py-3">
+    <div class="max-w-md mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400 flex items-center justify-center text-black font-black text-lg shadow-lg shadow-emerald-500/20">C</div>
+            <div>
+                <h1 class="text-sm font-black tracking-wider text-white leading-none flex items-center gap-1.5">
+                    CALISTHENICS <span class="text-emerald-400 text-xs px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">V4</span>
+                </h1>
+                <p class="text-[10px] text-gray-400 font-semibold tracking-widest uppercase mt-0.5">High Performance Tracker</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="toggleSettingsModal()" class="w-9 h-9 rounded-full bg-gray-900/90 border border-gray-800 hover:border-emerald-500/40 flex items-center justify-center text-gray-400 hover:text-emerald-400 transition-all active:scale-95" title="Einstellungen">
+                <i class="fa-solid fa-gear text-xs"></i>
+            </button>
+            <button onclick="toggleTimerModal()" class="flex items-center gap-2 bg-gray-900/90 border border-gray-800 hover:border-emerald-500/40 px-3 py-1.5 rounded-full text-xs font-bold text-emerald-400 transition-all active:scale-95">
+                <i class="fa-solid fa-stopwatch"></i>
+                <span id="headerTimerDisplay">Timer</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║        NAV TABS              ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<nav class="sticky top-[57px] z-30 bg-[#080c10]/95 border-b border-gray-800/50 py-2.5 px-4">
+    <div class="max-w-md mx-auto">
+        <div class="flex gap-2 overflow-x-auto no-scrollbar py-0.5" id="tabsContainer">
+            <button onclick="switchTab('push1')" id="tab-push1" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border border-transparent bg-gray-900 text-gray-400 hover:text-white flex flex-col items-center">
+                <span>PUSH 1</span><span class="text-[10px] font-normal text-gray-500">Schulter/Skill</span>
+            </button>
+            <button onclick="switchTab('pull1')" id="tab-pull1" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border border-transparent bg-gray-900 text-gray-400 hover:text-white flex flex-col items-center">
+                <span>PULL 1</span><span class="text-[10px] font-normal text-gray-500">Vertikal</span>
+            </button>
+            <button onclick="switchTab('beine')" id="tab-beine" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border border-transparent bg-gray-900 text-gray-400 hover:text-white flex flex-col items-center">
+                <span>BEINE</span><span class="text-[10px] font-normal text-gray-500">Unterkörper</span>
+            </button>
+            <button onclick="switchTab('push2')" id="tab-push2" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border border-transparent bg-gray-900 text-gray-400 hover:text-white flex flex-col items-center">
+                <span>PUSH 2</span><span class="text-[10px] font-normal text-gray-500">Brust/Trizeps</span>
+            </button>
+            <button onclick="switchTab('pull2')" id="tab-pull2" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border border-transparent bg-gray-900 text-gray-400 hover:text-white flex flex-col items-center">
+                <span>PULL 2</span><span class="text-[10px] font-normal text-gray-500">Horizontal/V-Shape</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║           MAIN               ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<main class="flex-1 px-4 max-w-md mx-auto w-full mt-4">
+
+    <!-- Day Banner -->
+    <div class="glass-card rounded-2xl p-4 mb-3 border-l-4 border-l-emerald-500">
+        <div class="flex items-start justify-between">
+            <div>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span id="dayBadge" class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Fokus</span>
+                    <span id="todayBadge" class="hidden text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">🔥 Heute dran</span>
+                </div>
+                <h2 id="dayTitle" class="text-base font-black text-white mt-1 tracking-wide">Push 1</h2>
+                <p id="daySubtitle" class="text-xs text-gray-400 mt-0.5">Pike Push-ups & Skill Fokus</p>
+            </div>
+            <div class="text-right">
+                <span id="dayProgressPercent" class="text-lg font-black text-emerald-400">0%</span>
+                <p id="dayProgressText" class="text-[10px] text-gray-400 font-semibold">0 / 0 Sätze</p>
+            </div>
+        </div>
+        <div class="w-full bg-gray-900/90 h-2 rounded-full mt-3.5 overflow-hidden p-0.5 border border-gray-800">
+            <div id="progressBar" class="bg-gradient-to-r from-emerald-500 to-cyan-400 h-full rounded-full transition-all duration-500 ease-out w-0"></div>
+        </div>
+        <!-- ▼ V4: Difficulty Slider -->
+        <div class="mt-3.5 glass-card rounded-xl p-3" id="rpeSection">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Schwierigkeit heute</span>
+                <div class="flex items-center gap-1.5" id="rpeDisplay">
+                    <span id="rpeEmoji" class="text-lg leading-none">💪</span>
+                    <span id="rpeValue" class="text-xl font-black text-white leading-none">5</span>
+                    <span class="text-[9px] text-gray-500 font-semibold">/10</span>
+                </div>
+            </div>
+            <input type="range" min="1" max="10" value="5" class="rpe-slider" id="rpeSlider" oninput="updateRPEVisual(this.value); saveRPE(this.value)">
+            <div class="flex justify-between mt-1">
+                <span class="text-[8px] text-gray-600">Easy</span>
+                <span class="text-[8px] text-gray-600">Moderat</span>
+                <span class="text-[8px] text-gray-600">Maximum</span>
+            </div>
+        </div>
+        <!-- ▼ V3.1: Tages-Notiz -->
+        <div class="mt-3" id="noteSection">
+            <button onclick="toggleNoteField()" id="noteToggleBtn" class="flex items-center gap-1.5 text-[10px] font-semibold text-gray-500 hover:text-emerald-400 transition-colors">
+                <i class="fa-solid fa-pen-to-square text-[9px]"></i>
+                <span id="noteToggleLabel">Trainingsnotiz hinzufügen</span>
+            </button>
+            <div id="noteFieldWrapper" class="hidden mt-2 slide-up">
+                <textarea id="dayNoteInput" class="day-note-area" rows="2" placeholder="Wie lief's heute? Energie, Schmerzen, Fortschritte..." oninput="saveDayNote(this.value)" maxlength="200"></textarea>
+                <p class="text-[9px] text-gray-600 mt-0.5 text-right" id="noteCharCount">0 / 200</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exercise Cards -->
+    <div id="exercisesContainer" class="space-y-3.5"></div>
+
+    <!-- Day Actions -->
+    <div class="mt-6 flex items-center gap-3">
+        <button onclick="checkAllCurrentDay()" class="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-black font-extrabold py-3.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all active:scale-[0.98]">
+            <i class="fa-solid fa-check-double text-sm"></i> Tag Abschließen
+        </button>
+        <button onclick="resetCurrentDay()" class="bg-gray-900 border border-gray-800 hover:border-red-500/40 text-gray-400 hover:text-red-400 font-bold py-3.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+            <i class="fa-solid fa-rotate-right"></i> Reset
+        </button>
+    </div>
+</main>
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║     FLOATING TIMER WIDGET   ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<div id="floatingTimerWidget" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 hidden">
+    <div class="glass-panel px-4 py-2.5 rounded-full flex items-center gap-3 border border-emerald-500/40 shadow-2xl timer-running bg-[#080c10]/95">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="toggleTimerModal()">
+            <i class="fa-solid fa-stopwatch text-emerald-400 animate-pulse"></i>
+            <span id="floatingTimerDisplay" class="font-mono font-black text-emerald-400 text-sm tracking-wider">01:30</span>
+        </div>
+        <div class="h-4 w-px bg-gray-800"></div>
+        <button onclick="pauseTimer()" id="floatingPlayPauseBtn" class="text-gray-300 hover:text-white text-xs p-1"><i class="fa-solid fa-pause"></i></button>
+        <button onclick="stopTimer()" class="text-gray-400 hover:text-red-400 text-xs p-1"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+</div>
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║        TIMER MODAL          ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<div id="timerModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-end sm:items-center justify-center hidden opacity-0 transition-opacity duration-300">
+    <div class="glass-panel border-t border-gray-800 w-full max-w-md p-6 rounded-t-3xl sm:rounded-3xl shadow-2xl bg-[#0d131a]">
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400"><i class="fa-solid fa-stopwatch"></i></div>
+                <div><h3 class="text-sm font-bold text-white">Pausen-Timer</h3><p class="text-[10px] text-gray-400">Regeneration für maximale Power</p></div>
+            </div>
+            <button onclick="toggleTimerModal()" class="w-8 h-8 rounded-full bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xs"></i></button>
+        </div>
+        <div class="text-center my-6 py-4 rounded-2xl bg-gray-950/80 border border-gray-800/80">
+            <span id="modalTimerDisplay" class="font-mono text-5xl font-black tracking-widest text-emerald-400 drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]">01:30</span>
+            <p id="timerStateLabel" class="text-[10px] uppercase font-bold text-gray-500 mt-2 tracking-widest">Bereit</p>
+        </div>
+        <div class="grid grid-cols-4 gap-2 mb-6" id="timerPresets">
+            <button onclick="setTimerSeconds(60)"  class="timer-preset-btn py-2.5 rounded-xl bg-gray-900 border border-gray-800 text-xs font-bold text-gray-300 transition-all" data-secs="60">60s</button>
+            <button onclick="setTimerSeconds(90)"  class="timer-preset-btn py-2.5 rounded-xl bg-gray-900 border border-gray-800 text-xs font-bold text-gray-300 transition-all" data-secs="90">90s</button>
+            <button onclick="setTimerSeconds(120)" class="timer-preset-btn py-2.5 rounded-xl bg-gray-900 border border-gray-800 text-xs font-bold text-gray-300 transition-all" data-secs="120">2m</button>
+            <button onclick="setTimerSeconds(180)" class="timer-preset-btn py-2.5 rounded-xl bg-gray-900 border border-gray-800 text-xs font-bold text-gray-300 transition-all" data-secs="180">3m</button>
+        </div>
+        <div class="flex items-center gap-3">
+            <button onclick="addTimerTime(30)" class="flex-1 py-3 rounded-xl bg-gray-900 border border-gray-800 text-xs font-bold text-gray-300">+30s</button>
+            <button id="modalStartPauseBtn" onclick="toggleTimerStartPause()" class="flex-[2] py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
+                <i class="fa-solid fa-play"></i> Start
+            </button>
+            <button onclick="stopTimer()" class="flex-1 py-3 rounded-xl bg-gray-900 border border-gray-800 text-xs font-bold text-gray-400 hover:text-red-400">Reset</button>
+        </div>
+    </div>
+</div>
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║      VARIANT MODAL          ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<div id="variantModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-end sm:items-center justify-center hidden opacity-0 transition-opacity duration-300">
+    <div class="glass-panel border-t border-gray-800 w-full max-w-md p-6 rounded-t-3xl sm:rounded-3xl shadow-2xl bg-[#0d131a]">
+        <div class="flex items-center justify-between mb-5">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400"><i class="fa-solid fa-arrows-rotate"></i></div>
+                <div><h3 class="text-sm font-bold text-white">Übung ersetzen</h3><p id="variantModalTitle" class="text-[11px] text-emerald-400 mt-0.5"></p></div>
+            </div>
+            <button onclick="toggleVariantModal()" class="w-8 h-8 rounded-full bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xs"></i></button>
+        </div>
+        <div id="variantOptionsContainer" class="space-y-2"></div>
+    </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║  NEU V3.1: HISTORY MODAL MIT CHART      ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
+<div id="historyModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-end sm:items-center justify-center hidden opacity-0 transition-opacity duration-300">
+    <div class="glass-panel border-t border-gray-800 w-full max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl bg-[#0d131a] flex flex-col" style="max-height:90vh">
+        <div class="flex items-center justify-between p-6 pb-4 shrink-0">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400"><i class="fa-solid fa-chart-line text-xs"></i></div>
+                <div><h3 class="text-sm font-bold text-white">Verlauf</h3><p id="historyModalTitle" class="text-[11px] text-emerald-400 mt-0.5"></p></div>
+            </div>
+            <button onclick="closeHistoryModal()" class="w-8 h-8 rounded-full bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xs"></i></button>
+        </div>
+        <!-- SVG Chart -->
+        <div class="px-6 pb-4 shrink-0">
+            <div class="bg-gray-950/60 rounded-xl border border-gray-800 p-3">
+                <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-2">Ø Wiederholungen pro Einheit</p>
+                <svg id="historyChartSvg" viewBox="0 0 280 70" class="w-full" preserveAspectRatio="none" style="height:70px"></svg>
+                <div id="historyChartLabels" class="flex justify-between mt-1"></div>
+            </div>
+        </div>
+        <!-- Table -->
+        <div class="overflow-y-auto px-6 pb-6 flex-1">
+            <div id="historyTableContainer" class="space-y-2"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║     EINSTELLUNGEN MODAL     ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<div id="settingsModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-end sm:items-center justify-center hidden opacity-0 transition-opacity duration-300">
+    <div class="glass-panel border-t border-gray-800 w-full max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl bg-[#0d131a] flex flex-col" style="max-height:90vh">
+        <div class="flex items-center justify-between p-6 pb-4 shrink-0">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400"><i class="fa-solid fa-gear"></i></div>
+                <div><h3 class="text-sm font-bold text-white">Einstellungen</h3><p class="text-[10px] text-gray-400">Daten & Konfiguration</p></div>
+            </div>
+            <button onclick="toggleSettingsModal()" class="w-8 h-8 rounded-full bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xs"></i></button>
+        </div>
+        <div class="overflow-y-auto px-6 pb-6 flex-1 space-y-5">
+
+            <!-- NEU V3.1: Statistiken -->
+            <div>
+                <p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest mb-2">📈 Trainingsstatistik</p>
+                <div id="statsGrid" class="grid grid-cols-2 gap-2">
+                    <!-- filled by JS -->
+                </div>
+            </div>
+
+            <div class="h-px bg-gray-800"></div>
+
+            <!-- V3.2: Zwei-Timer-Konfiguration -->
+            <div>
+                <p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest mb-3">⏱ Pausen-Konfiguration</p>
+                <p class="text-[11px] text-gray-300 font-semibold mb-1">Zwischen Sätzen <span class="text-gray-600 font-normal">(gleiche Übung)</span></p>
+                <div class="grid grid-cols-5 gap-2 mb-4">
+                    <button onclick="setSetTimer(30)"  data-secs="30"  class="set-timer-btn py-2 rounded-lg bg-gray-900 border border-gray-800 text-[11px] font-bold text-gray-300 transition-all">30s</button>
+                    <button onclick="setSetTimer(60)"  data-secs="60"  class="set-timer-btn py-2 rounded-lg bg-gray-900 border border-gray-800 text-[11px] font-bold text-gray-300 transition-all">60s</button>
+                    <button onclick="setSetTimer(90)"  data-secs="90"  class="set-timer-btn py-2 rounded-lg bg-gray-900 border border-gray-800 text-[11px] font-bold text-gray-300 transition-all">90s</button>
+                    <button onclick="setSetTimer(120)" data-secs="120" class="set-timer-btn py-2 rounded-lg bg-gray-900 border border-gray-800 text-[11px] font-bold text-gray-300 transition-all">2m</button>
+                    <button onclick="setSetTimer(180)" data-secs="180" class="set-timer-btn py-2 rounded-lg bg-gray-900 border border-gray-800 text-[11px] font-bold text-gray-300 transition-all">3m</button>
+                </div>
+                <p class="text-[11px] text-gray-300 font-semibold mb-1">Zwischen Übungen <span class="text-gray-600 font-normal">(letzter Satz)</span></p>
+                <div class="grid grid-cols-5 gap-2">
+                    <button onclick="setExerciseTimer(60)"  data-secs="60"  class="ex-timer-btn py-2 rounded-lg bg-gray-900 border border-gray-800 text-[11px] font-bold text-gray-300 transition-all">60s</button>
+                    <button onclick="setExerciseTimer(90)"  data-secs="90"  class="ex-timer-btn py-2 rounded-lg bg-gray-900 border border-gray-800 text-[11px] font-bold text-gray-300 transition-all">90s</button>
+                    <button onclick="setExerciseTimer(120)" data-secs="120" class="ex-timer-btn py-2 rounded-lg bg-gray-900 border border-gray-800 text-[11px] font-bold text-gray-300 transition-all">2m</button>
+                    <button onclick="setExerciseTimer(180)" data-secs="180" class="ex-timer-btn py-2 rounded-lg bg-gray-900 border border-gray-800 text-[11px] font-bold text-gray-300 transition-all">3m</button>
+                    <button onclick="setExerciseTimer(240)" data-secs="240" class="ex-timer-btn py-2 rounded-lg bg-gray-900 border border-gray-800 text-[11px] font-bold text-gray-300 transition-all">4m</button>
+                </div>
+            </div>
+
+            <div class="h-px bg-gray-800"></div>
+
+            <!-- Daten -->
+            <div>
+                <p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest mb-2">💾 Daten</p>
+                <div class="space-y-2">
+                    <button onclick="exportData()" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+                        <i class="fa-solid fa-download"></i> Daten exportieren (JSON)
+                    </button>
+                    <button onclick="document.getElementById('importFileInput').click()" class="w-full py-3 rounded-xl bg-gray-900 border border-gray-800 hover:border-cyan-500/40 text-cyan-400 font-bold text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+                        <i class="fa-solid fa-upload"></i> Daten importieren
+                    </button>
+                    <input type="file" id="importFileInput" accept="application/json" class="hidden" onchange="importDataFile(this)">
+                    <button onclick="resetAllData()" class="w-full py-3 rounded-xl bg-gray-900 border border-red-900/40 hover:border-red-500/50 text-red-400 font-bold text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+                        <i class="fa-solid fa-trash"></i> Alle Daten löschen
+                    </button>
+                </div>
+            </div>
+
+            <p class="text-[9px] text-gray-600 text-center leading-relaxed">Calisthenics Pro V4 · Alle Daten liegen nur auf diesem Gerät.<br>Exportiere regelmäßig!</p>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 transform -translate-y-4">
+    <div class="glass-panel px-4 py-2 rounded-full text-xs font-bold text-emerald-400 border border-emerald-500/40 shadow-xl flex items-center gap-2">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toastMessage">Satz gespeichert!</span>
+    </div>
+</div>
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║         JAVASCRIPT          ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<script>
+// ================================================================
+// WORKOUT DATA
+// ================================================================
+const WORKOUT_DATA = {
+    push1: {
+        title:"Push 1 (Schulter, Skill & Core)", subtitle:"Pike Push-ups, Dips, L-Sit & Ab Wheel", badge:"Schulter+Core",
+        exercises:[
+            {id:"p1_1",name:"Pike Push-ups (Boden)",       target:"3 Sätze × 8-12 Wdh.", sets:3,unit:"reps",range:[8,12], defaultReps:8,  note:"Am Boden, Hände schulterbreit. Progression: Deficit Pikes (Hände auf Griffen).", alternatives:[{id:"p1_1_alt",name:"Deficit Pike Push-ups",note:"Hände auf Push-up-Griffen für mehr Range. Härter als Boden-Version."}]},
+            {id:"p1_2",name:"Bar Dips",                    target:"3 Sätze × 8-12 Wdh.", sets:3,unit:"reps",range:[8,12], defaultReps:8,  note:"Tiefe Bewegung, 1 Sek. unten pausieren."},
+            {id:"p1_3",name:"Deficit Push-ups",              target:"3 Sätze × 8-12 Wdh.", sets:3,unit:"reps",range:[8,12], defaultReps:8,  note:"Auf Parallettes für mehr Brust-Stretch."},
+            {id:"p1_4",name:"Diamond Push-ups",              target:"2 Sätze × Max Wdh.",  sets:2,unit:"reps",range:null,   defaultReps:0,  note:"AUF PUSH-UP-GRIFFEN wegen Handgelenk! Burnout für Trizeps & Brust.", alternatives:[{id:"p1_4_alt",name:"Diamond Push-ups (Knie)",note:"Erleichtert auf den Knien – gleiche Handposition, weniger Hebel."}]},
+            {id:"p1_5",name:"Advanced Tuck L-Sit",           target:"3 Sätze × 10-20 Sek.",sets:3,unit:"sec", range:[10,20],defaultReps:10, note:"Auf Parallettes. Beine leicht strecken (nicht voll tucked). Progression: Beine weiter raus."},
+            {id:"p1_6",name:"Ab Wheel Rollouts (Knie)",      target:"3 Sätze × 3-8 Wdh.",  sets:3,unit:"reps",range:[3,8],  defaultReps:3,  note:"NEU. Auf Knien, so weit raus wie kontrollierbar. Unterer Rücken darf NICHT durchhängen! Skoliose-freundlich."}
+        ]
+    },
+    pull1: {
+        title:"Pull 1 (Vertikal & Schultergesundheit)", subtitle:"Explosive Pull-ups, Negatives & Band Work", badge:"Muscle-Up+Schulter",
+        exercises:[
+            {id:"l1_1",name:"Explosive Pull-ups",         target:"4 Sätze × 3-5 Wdh.", sets:4,unit:"reps",range:[3,5], defaultReps:3, note:"An der Stange; maximal schnell hochziehen."},
+            {id:"l1_2",name:"Slow Negative Pull-ups",     target:"3 Sätze × 5-7 Wdh.", sets:3,unit:"reps",range:[5,7], defaultReps:5, note:"5 Sek. kontrolliert ablassen. Range erhöht (vorher 4-6)."},
+            {id:"l1_3",name:"Australian Rows (erhöht)",    target:"3 Sätze × 10-15 Wdh.",sets:3,unit:"reps",range:[10,15],defaultReps:10, note:"Füße auf Stuhl erhöhen ODER 3 Sek. exzentrisch. Schwerer als vorher!", alternatives:[{id:"l1_3_alt",name:"Stangen-Rows (normal)",note:"Unter der Pull-up-Stange, Körper gerade. Einfachere Variante ohne Erhöhung."}]},
+            {id:"l1_4",name:"Banded Biceps Curls",         target:"3 Sätze × 10-12 Wdh.",sets:3,unit:"reps",range:[10,12],defaultReps:10, note:"Loop-Band an der Stange befestigen."},
+            {id:"l1_5",name:"Band Pull-Aparts",            target:"3 Sätze × 15 Wdh.",   sets:3,unit:"reps",range:null,  defaultReps:15, note:"NEU. Band auf Brusthöhe, Arme gestreckt auseinanderziehen. Schultergesundheit + hintere Schulter. Gegen Impingement!"}
+        ]
+    },
+    beine: {
+        title:"Beine (Unterkörper & Athletik)", subtitle:"Jumps, Squats, Glutes, Hamstrings & Calves", badge:"Unterkörper",
+        exercises:[
+            {id:"b1_4",name:"Tuck Jumps",                target:"2 Sätze × 10 Wdh.",       sets:2,unit:"reps",range:null,  defaultReps:10, note:"JETZT AN POSITION 1! Explosive Kraft braucht frisches ZNS. Knie hoch zur Brust."},
+            {id:"b1_1",name:"Bulgarian Split Squats",    target:"3 Sätze × 10-14 Wdh.",   sets:3,unit:"reps",range:[10,14],defaultReps:10, note:"Pro Bein. Progression: Rucksack mit Gewicht. Range erhöht (vorher 8-12).", alternatives:[{id:"b1_1_alt",name:"Reverse Lunges",note:"Ohne Erhöhung – gleiche Muskeln, einfacher."}]},
+            {id:"b1_6",name:"Reverse Deficit Lunges",    target:"3 Sätze × 10 Wdh./Seite",sets:3,unit:"reps",range:null,  defaultReps:10, note:"ERSETZT Walking Lunges (zu leicht). Fuß tritt nach hinten auf Erhöhung. Langsam, 2 Sek. runter."},
+            {id:"b1_5",name:"Single-Leg Glute Bridges",  target:"3 Sätze × 10 Wdh./Seite",sets:3,unit:"reps",range:null,  defaultReps:10, note:"Hüfte explosiv hoch, oben 1 Sek. halten. Cramping = normal, Imbalance wird bearbeitet."},
+            {id:"b1_7",name:"Nordic Curl Negatives",      target:"3 Sätze × 3-5 Wdh.",    sets:3,unit:"reps",range:[3,5], defaultReps:3,  note:"NEU. Füße unter Dip-Bar klemmen, auf Knien langsam nach vorne fallen (3-5 Sek.), mit Händen abfangen. DAS Hamstring-Exercise!"},
+            {id:"b1_3",name:"Single-Leg Calf Raises",    target:"3 Sätze × 15-20 Wdh.",   sets:3,unit:"reps",range:[15,20],defaultReps:15, note:"An einer Stufe mit voller Dehnung. Range erhöht."}
+        ]
+    },
+    push2: {
+        title:"Push 2 (Brust, Trizeps & Core)", subtitle:"Tempo Dips, Pseudo Planche, Hollow Body & Ab Wheel", badge:"Brust+Core",
+        exercises:[
+            {id:"p2_1",name:"Tempo Bar Dips",             target:"3 Sätze × 8-10 Wdh.", sets:3,unit:"reps",range:[8,10], defaultReps:8,  note:"3 Sek. runter, 1 Sek. Pause unten, explosiv hoch. Schwerer als normale Dips!", alternatives:[{id:"p2_1_alt",name:"Bar Dips (normal)",note:"Normale Geschwindigkeit, tief absenken. Einfachere Variante."}]},
+            {id:"p2_2",name:"Pseudo Planche Push-ups",    target:"3 Sätze × 6-10 Wdh.", sets:3,unit:"reps",range:[6,10], defaultReps:6,  note:"Schultern weit vor die Hände verlagern!"},
+            {id:"p2_3",name:"Diamond Push-ups",           target:"3 Sätze × 8-12 Wdh.", sets:3,unit:"reps",range:[8,12], defaultReps:8,  note:"AUF PUSH-UP-GRIFFEN wegen Handgelenk! Kontrollierte Wdh.", alternatives:[{id:"p2_3_alt",name:"Diamond Push-ups (Knie)",note:"Erleichtert auf den Knien."}]},
+            {id:"p2_4",name:"Pike Push-ups",              target:"2 Sätze × Max Wdh.",  sets:2,unit:"reps",range:null,   defaultReps:0,  note:"Schulter-Burnout am Ende."},
+            {id:"p2_5",name:"Hollow Body Hold (Arme gestreckt)",target:"3 Sätze × 30-45 Sek.",sets:3,unit:"sec",range:[30,45],defaultReps:30, note:"Arme HINTER DEN KOPF strecken für mehr Hebel (schwerer als vorher). Unterer Rücken fest am Boden."},
+            {id:"p2_6",name:"Ab Wheel Rollouts (Knie)",   target:"2 Sätze × 3-8 Wdh.",  sets:2,unit:"reps",range:[3,8],  defaultReps:3,  note:"Zweite Core-Session der Woche. Langsam und kontrolliert."}
+        ]
+    },
+    pull2: {
+        title:"Pull 2 (Horizontal, V-Shape & Anti-Rotation)", subtitle:"Chin-ups, Elevated Rows, Face Pulls & Dead Bugs", badge:"V-Shape+Core",
+        exercises:[
+            {id:"l2_1",name:"Chin-ups (Untergriff)",          target:"3 Sätze × 6-10 Wdh.", sets:3,unit:"reps",range:[6,10], defaultReps:6,  note:"Range erhöht (vorher 5-8). Volle Distanz: Dead Hang bis Kinn über Stange."},
+            {id:"l2_2",name:"Elevated Stangen-Rows",          target:"4 Sätze × 10-15 Wdh.",sets:4,unit:"reps",range:[10,15],defaultReps:10, note:"Füße auf Stuhl für mehr Widerstand, oder 3 Sek. exzentrisch.", alternatives:[{id:"l2_2_alt",name:"Stangen-Rows (normal)",note:"Füße am Boden. Einfachere Variante."}]},
+            {id:"l2_3",name:"Wide Grip Negative Pull-ups",    target:"3 Sätze × 4-6 Wdh.", sets:3,unit:"reps",range:[4,6],  defaultReps:4,  note:"Breiter Griff, 5 Sek. ablassen. Oberer Latissimus."},
+            {id:"l2_4",name:"Band Face Pulls",                target:"3 Sätze × 12-15 Wdh.",sets:3,unit:"reps",range:[12,15],defaultReps:12, note:"Loop-Band auf Stirnhöhe, Ellbogen hoch. Schultergesundheit."},
+            {id:"l2_5",name:"Dead Bugs",                      target:"3 Sätze × 8 Wdh./Seite",sets:3,unit:"reps",range:null, defaultReps:8,  note:"NEU. Rücken flach am Boden, gegenüberliegend Arm+Bein strecken. Anti-Rotation = direkt gut für Skoliose!"}
+        ]
+    }
+};
+const DAY_ORDER = ['push1','pull1','beine','push2','pull2'];
+
+// ================================================================
+// STATE
+// ================================================================
+let currentDay = 'push1';
+let userState = {};   // { days, variants }
+let history   = {};   // { exId: [{date, reps}] }
+let appMeta   = {};   // { lastCompletedDay, lastCompletedDate, defaultTimerSecs, dayNotes:{dayId:{date:str}} }
+
+const STORAGE_KEY       = 'calisthenics_v3_state';
+const OLD_STORAGE_KEY   = 'calisthenics_v2_1_state';
+const TIMER_STORAGE_KEY = 'calisthenics_timer_state';
+
+// ================================================================
+// PERSISTENZ
+// ================================================================
+function loadSavedState() {
+    try {
+        const s = localStorage.getItem(STORAGE_KEY);
+        if (s) { const p=JSON.parse(s); userState=p.userState||{}; history=p.history||{}; appMeta=p.appMeta||{}; }
+    } catch(e) { console.error('load',e); }
+}
+function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({userState,history,appMeta})); } catch(e){}
+}
+
+function migrateFromV2IfNeeded() {
+    if (userState.days && Object.keys(userState.days).length>0) return;
+    try {
+        const old = localStorage.getItem(OLD_STORAGE_KEY);
+        if (!old) return;
+        const o = JSON.parse(old);
+        userState.days = {};
+        Object.keys(o).forEach(dayId => {
+            if (!WORKOUT_DATA[dayId]) return;
+            userState.days[dayId] = {};
+            Object.keys(o[dayId]).forEach(exId => {
+                const m = getBaseExercise(dayId,exId); if(!m) return;
+                userState.days[dayId][exId] = { sets: o[dayId][exId].map(done=>({reps:done?m.defaultReps:0,done:!!done})) };
+            });
+        });
+        saveState();
+        showToast('V2.1-Daten übernommen ✓');
+    } catch(e) { console.error('migrate',e); }
+}
+
+// ================================================================
+// HELPERS
+// ================================================================
+function getBaseExercise(dayId, exId) {
+    return WORKOUT_DATA[dayId]?.exercises.find(e=>e.id===exId) || null;
+}
+function getActiveExercise(dayId, exId) {
+    const base = getBaseExercise(dayId,exId); if(!base) return null;
+    const vid = userState.variants?.[exId];
+    if (vid && base.alternatives) {
+        const alt = base.alternatives.find(a=>a.id===vid);
+        if (alt) return {...base, name:alt.name, note:alt.note, isAlt:true};
+    }
+    return {...base, isAlt:false};
+}
+function ensureStateStructure(dayId, exId) {
+    const m = getBaseExercise(dayId,exId); if(!m) return;
+    if (!userState.days) userState.days={};
+    if (!userState.days[dayId]) userState.days[dayId]={};
+    if (!userState.days[dayId][exId]) userState.days[dayId][exId]={sets:Array.from({length:m.sets},()=>({reps:m.defaultReps,done:false}))};
+}
+function computeSuggestedDay() {
+    if (!appMeta.lastCompletedDay) return DAY_ORDER[0];
+    const i = DAY_ORDER.indexOf(appMeta.lastCompletedDay);
+    return DAY_ORDER[(i+1)%DAY_ORDER.length];
+}
+function todayStr() { return new Date().toISOString().slice(0,10); }
+function fmtDate(str) {
+    const d = new Date(str+'T00:00:00');
+    return d.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit'});
+}
+function getSetTimerSecs()      { return appMeta.setTimerSecs      ?? 90;  }
+function getExerciseTimerSecs() { return appMeta.exerciseTimerSecs ?? 180; }
+
+// ================================================================
+// VERLAUF & PROGRESSION
+// ================================================================
+function logHistory(dayId, exId) {
+    const sets = userState.days[dayId][exId].sets;
+    const reps = sets.map(s=>s.reps);
+    if (!history[exId]) history[exId]=[];
+    const today = todayStr();
+    const idx = history[exId].findIndex(h=>h.date===today);
+    if (idx>=0) history[exId][idx].reps=reps;
+    else { history[exId].push({date:today,reps}); if(history[exId].length>8) history[exId]=history[exId].slice(-8); }
+    saveState();
+}
+function checkProgression(dayId, exId) {
+    const m = getBaseExercise(dayId,exId);
+    if (!m?.range) return false;
+    const e = history[exId];
+    if (!e?.length) return false;
+    const [,max] = m.range;
+    return e[e.length-1].reps.length>0 && e[e.length-1].reps.every(r=>r>=max);
+}
+function getHistoryPreview(exId) {
+    const e = history[exId]; if (!e?.length) return null;
+    return e.slice(-2).reverse().map(h=>fmtDate(h.date)+': '+h.reps.join(',')).join('  ·  ');
+}
+
+// ================================================================
+// RPE DIFFICULTY SLIDER (V4)
+// ================================================================
+const RPE_CONFIG = [
+    null, // index 0 unused
+    {emoji:'😴',label:'Aufwärmen',     c:'#10b981',bg:'linear-gradient(90deg,#10b981,#10b981)'},
+    {emoji:'😴',label:'Sehr leicht',   c:'#10b981',bg:'linear-gradient(90deg,#10b981,#34d399)'},
+    {emoji:'😊',label:'Leicht',         c:'#34d399',bg:'linear-gradient(90deg,#10b981,#34d399)'},
+    {emoji:'😊',label:'Warm',           c:'#a3e635',bg:'linear-gradient(90deg,#10b981,#a3e635)'},
+    {emoji:'💪',label:'Mittel',         c:'#eab308',bg:'linear-gradient(90deg,#10b981,#eab308)'},
+    {emoji:'💪',label:'Fordernd',       c:'#f59e0b',bg:'linear-gradient(90deg,#10b981,#f59e0b)'},
+    {emoji:'🔥',label:'Hart',           c:'#f97316',bg:'linear-gradient(90deg,#10b981,#f97316)'},
+    {emoji:'🔥',label:'Sehr hart',      c:'#ef4444',bg:'linear-gradient(90deg,#10b981,#ef4444)'},
+    {emoji:'🥵',label:'Fast am Limit',  c:'#dc2626',bg:'linear-gradient(90deg,#10b981,#dc2626)'},
+    {emoji:'☠️', label:'ABSOLUTES MAX', c:'#991b1b',bg:'linear-gradient(90deg,#10b981,#dc2626,#991b1b)'}
+];
+
+function updateRPEVisual(val) {
+    val = parseInt(val);
+    const cfg = RPE_CONFIG[val];
+    const slider = document.getElementById('rpeSlider');
+    const emoji  = document.getElementById('rpeEmoji');
+    const value  = document.getElementById('rpeValue');
+    const display= document.getElementById('rpeDisplay');
+    const section= document.getElementById('rpeSection');
+    
+    // Slider track gradient
+    const pct = ((val-1)/9)*100;
+    slider.style.background = `linear-gradient(90deg, #10b981 0%, ${cfg.c} ${pct}%, #1e293b ${pct}%, #1e293b 100%)`;
+    // Thumb color
+    slider.style.setProperty('--thumb-color', cfg.c);
+    const thumbStyle = `background:${cfg.c};border-color:${cfg.c}`;
+    // Webkit thumb via dynamic style
+    let dynStyle = document.getElementById('rpe-dyn-style');
+    if(!dynStyle){ dynStyle=document.createElement('style'); dynStyle.id='rpe-dyn-style'; document.head.appendChild(dynStyle); }
+    dynStyle.textContent = `.rpe-slider::-webkit-slider-thumb{background:${cfg.c};border-color:${cfg.c}} .rpe-slider::-moz-range-thumb{background:${cfg.c};border-color:${cfg.c}}`;
+    
+    // Value + Emoji
+    emoji.textContent = cfg.emoji;
+    value.textContent = val;
+    value.style.color = cfg.c;
+    
+    // Fire effects for 8+
+    const isHot = val >= 8;
+    const isMax = val >= 10;
+    emoji.classList.toggle('rpe-fire', isHot);
+    emoji.classList.toggle('rpe-shake', isMax);
+    display.classList.toggle('rpe-fire', isHot);
+    
+    // Glow on section border
+    if(isHot) {
+        section.style.borderColor = cfg.c;
+        section.style.boxShadow = `0 0 ${isMax?20:10}px ${cfg.c}40`;
+    } else {
+        section.style.borderColor = '';
+        section.style.boxShadow = '';
+    }
+}
+
+function saveRPE(val) {
+    if (!appMeta.dayRatings) appMeta.dayRatings={};
+    if (!appMeta.dayRatings[currentDay]) appMeta.dayRatings[currentDay]={};
+    appMeta.dayRatings[currentDay][todayStr()] = parseInt(val);
+    saveState();
+}
+
+function loadRPE() {
+    const val = appMeta.dayRatings?.[currentDay]?.[todayStr()] || 5;
+    const slider = document.getElementById('rpeSlider');
+    if(slider) { slider.value = val; updateRPEVisual(val); }
+}
+
+// ================================================================
+// TAGES-NOTIZ (V3.1)
+// ================================================================
+function saveDayNote(text) {
+    if (!appMeta.dayNotes) appMeta.dayNotes={};
+    if (!appMeta.dayNotes[currentDay]) appMeta.dayNotes[currentDay]={};
+    appMeta.dayNotes[currentDay][todayStr()] = text;
+    const counter = document.getElementById('noteCharCount');
+    if (counter) counter.innerText = text.length+' / 200';
+    saveState();
+}
+function loadDayNote() {
+    const text = appMeta.dayNotes?.[currentDay]?.[todayStr()] || '';
+    const textarea = document.getElementById('dayNoteInput');
+    if (textarea) {
+        textarea.value = text;
+        const counter = document.getElementById('noteCharCount');
+        if (counter) counter.innerText = text.length+' / 200';
+    }
+    const label = document.getElementById('noteToggleLabel');
+    const wrapper = document.getElementById('noteFieldWrapper');
+    if (text) {
+        if (label) label.innerText = 'Trainingsnotiz (heute)';
+        if (wrapper) { wrapper.classList.remove('hidden'); }
+    } else {
+        if (label) label.innerText = 'Trainingsnotiz hinzufügen';
+        if (wrapper) { wrapper.classList.add('hidden'); }
+    }
+}
+function toggleNoteField() {
+    const wrapper = document.getElementById('noteFieldWrapper');
+    const label = document.getElementById('noteToggleLabel');
+    if (wrapper.classList.contains('hidden')) {
+        wrapper.classList.remove('hidden');
+        wrapper.classList.add('slide-up');
+        document.getElementById('dayNoteInput')?.focus();
+        if (label) label.innerText = 'Notiz ausblenden';
+    } else {
+        wrapper.classList.add('hidden');
+        const text = document.getElementById('dayNoteInput')?.value||'';
+        if (label) label.innerText = text ? 'Trainingsnotiz (heute)' : 'Trainingsnotiz hinzufügen';
+    }
+}
+
+// ================================================================
+// STATISTIKEN (V3.1)
+// ================================================================
+function getStats() {
+    let totalSets=0, totalDays=0;
+    const datesSet = new Set();
+    Object.values(history).forEach(entries=>{
+        entries.forEach(e=>{ datesSet.add(e.date); totalSets += e.reps.length; });
+    });
+    totalDays = datesSet.size;
+    const sortedDates = [...datesSet].sort();
+    const lastDate = sortedDates.length ? fmtDate(sortedDates[sortedDates.length-1]) : '–';
+    // Streak: konsekutive Trainingswochen (vereinfacht: aufeinanderfolgende Tage max 2 Tage Gap)
+    let streak = 0;
+    if (sortedDates.length) {
+        streak = 1;
+        for (let i=sortedDates.length-1; i>0; i--) {
+            const d1 = new Date(sortedDates[i]+'T00:00:00');
+            const d2 = new Date(sortedDates[i-1]+'T00:00:00');
+            const diff = (d1-d2)/(86400000);
+            if (diff<=3) streak++; else break;
+        }
+    }
+    return {totalSets, totalDays, lastDate, streak};
+}
+function renderStats() {
+    const s = getStats();
+    const grid = document.getElementById('statsGrid'); if(!grid) return;
+    const items = [
+        {icon:'fa-calendar-check', label:'Trainingstage', value:s.totalDays},
+        {icon:'fa-fire',           label:'Tage in Folge', value:s.streak},
+        {icon:'fa-layer-group',    label:'Sätze gesamt',  value:s.totalSets},
+        {icon:'fa-clock-rotate-left',label:'Zuletzt',     value:s.lastDate},
+    ];
+    grid.innerHTML = items.map(it=>`
+        <div class="glass-card rounded-xl p-3 text-center">
+            <i class="fa-solid ${it.icon} text-emerald-400 text-sm mb-1"></i>
+            <p class="text-base font-black text-white">${it.value}</p>
+            <p class="text-[9px] text-gray-500 font-semibold uppercase tracking-wider">${it.label}</p>
+        </div>`).join('');
+}
+function renderTimerButtons() {
+    const curSet=getSetTimerSecs(), curEx=getExerciseTimerSecs();
+    document.querySelectorAll('.set-timer-btn').forEach(b=>{
+        const s=parseInt(b.dataset.secs);
+        b.classList.toggle('border-emerald-500',s===curSet);
+        b.classList.toggle('text-emerald-400',s===curSet);
+        b.classList.toggle('bg-emerald-500\/10',s===curSet);
+    });
+    document.querySelectorAll('.ex-timer-btn').forEach(b=>{
+        const s=parseInt(b.dataset.secs);
+        b.classList.toggle('border-amber-500',s===curEx);
+        b.classList.toggle('text-amber-400',s===curEx);
+        b.classList.toggle('bg-amber-500\/10',s===curEx);
+    });
+}
+function setSetTimer(secs) {
+    appMeta.setTimerSecs=secs; saveState(); renderTimerButtons();
+    showToast('Satzpause: '+formatTime(secs));
+}
+function setExerciseTimer(secs) {
+    appMeta.exerciseTimerSecs=secs; saveState(); renderTimerButtons();
+    showToast('Übungspause: '+formatTime(secs));
+}
+
+// ================================================================
+// HISTORY MODAL MIT CHART (V3.1)
+// ================================================================
+function openHistoryModal(exId) {
+    const ex = (() => {
+        for (const dayId of DAY_ORDER) {
+            const e = getBaseExercise(dayId, exId);
+            if (e) return e;
+        }
+        return null;
+    })();
+    if (!ex) return;
+    const entries = history[exId] || [];
+    document.getElementById('historyModalTitle').innerText = ex.name;
+
+    // SVG Sparkline Chart
+    const svg = document.getElementById('historyChartSvg');
+    const labels = document.getElementById('historyChartLabels');
+    svg.innerHTML=''; labels.innerHTML='';
+    if (entries.length >= 2) {
+        const avgs = entries.map(e=> e.reps.length ? e.reps.reduce((a,b)=>a+b,0)/e.reps.length : 0);
+        const maxV = Math.max(...avgs, 1);
+        const minV = Math.min(...avgs);
+        const W=280, H=60, pad=6;
+        const pts = avgs.map((v,i)=>{
+            const x = pad + i*(W-pad*2)/(Math.max(avgs.length-1,1));
+            const y = H - pad - (v-minV)/(maxV-minV+0.001)*(H-pad*2);
+            return {x,y,v};
+        });
+        // Area fill
+        const areaPath = `M${pts[0].x},${H} ` + pts.map(p=>`L${p.x},${p.y}`).join(' ') + ` L${pts[pts.length-1].x},${H} Z`;
+        const fillEl = document.createElementNS('http://www.w3.org/2000/svg','path');
+        fillEl.setAttribute('d', areaPath);
+        fillEl.setAttribute('fill','url(#chartGrad)'); svg.appendChild(fillEl);
+        // Gradient def
+        const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+        defs.innerHTML=`<linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10b981" stop-opacity="0.25"/><stop offset="100%" stop-color="#10b981" stop-opacity="0"/></linearGradient>`;
+        svg.insertBefore(defs, svg.firstChild);
+        // Line
+        const polyEl = document.createElementNS('http://www.w3.org/2000/svg','polyline');
+        polyEl.setAttribute('points', pts.map(p=>`${p.x},${p.y}`).join(' '));
+        polyEl.setAttribute('fill','none'); polyEl.setAttribute('stroke','#10b981'); polyEl.setAttribute('stroke-width','2'); polyEl.setAttribute('stroke-linejoin','round');
+        svg.appendChild(polyEl);
+        // Dots
+        pts.forEach(p=>{
+            const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
+            dot.setAttribute('cx',p.x); dot.setAttribute('cy',p.y); dot.setAttribute('r','3.5');
+            dot.setAttribute('fill','#10b981'); dot.setAttribute('stroke','#080c10'); dot.setAttribute('stroke-width','2');
+            svg.appendChild(dot);
+            // Value labels
+            const txt=document.createElementNS('http://www.w3.org/2000/svg','text');
+            txt.setAttribute('x',p.x); txt.setAttribute('y',p.y-7); txt.setAttribute('text-anchor','middle');
+            txt.setAttribute('fill','#34d399'); txt.setAttribute('font-size','8'); txt.setAttribute('font-weight','700');
+            txt.textContent = p.v.toFixed(1);
+            svg.appendChild(txt);
+        });
+        // X-axis labels
+        labels.innerHTML = entries.map(e=>`<span class="text-[8px] text-gray-600">${fmtDate(e.date)}</span>`).join('');
+    } else {
+        svg.innerHTML='<text x="50%" y="50%" text-anchor="middle" fill="#374151" font-size="10">Noch nicht genug Daten für einen Chart</text>';
+    }
+
+    // Table
+    const table = document.getElementById('historyTableContainer');
+    if (entries.length===0) {
+        table.innerHTML='<p class="text-xs text-gray-500 text-center py-4">Noch keine Einheiten aufgezeichnet.</p>';
+    } else {
+        const unitLabel = ex.unit==='sec' ? 'Sek' : 'Wdh';
+        table.innerHTML = [...entries].reverse().map(e=>`
+            <div class="glass-card rounded-xl p-3 flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-white">${fmtDate(e.date)}</p>
+                    <p class="text-[10px] text-gray-400 mt-0.5">Sätze: ${e.reps.map((r,i)=>'S'+(i+1)+':'+r).join('  ')}</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-black text-emerald-400">${e.reps.reduce((a,b)=>a+b,0)}</p>
+                    <p class="text-[9px] text-gray-500">Ges. ${unitLabel}</p>
+                </div>
+            </div>`).join('');
+    }
+    const modal=document.getElementById('historyModal');
+    modal.classList.remove('hidden'); setTimeout(()=>modal.classList.remove('opacity-0'),10);
+}
+function closeHistoryModal() {
+    const modal=document.getElementById('historyModal');
+    modal.classList.add('opacity-0'); setTimeout(()=>modal.classList.add('hidden'),300);
+}
+
+// ================================================================
+// KONFETTI (V3.1)
+// ================================================================
+function launchConfetti() {
+    const existing = document.getElementById('confettiCanvas');
+    if (existing) existing.remove();
+    const canvas = document.createElement('canvas');
+    canvas.id = 'confettiCanvas';
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    const colors = ['#10b981','#34d399','#06b6d4','#f59e0b','#ffffff','#a7f3d0','#67e8f9'];
+    const particles = Array.from({length:90},()=>({
+        x: Math.random()*canvas.width, y: -20-Math.random()*100,
+        vx:(Math.random()-0.5)*4, vy:Math.random()*4+2,
+        r:Math.random()*5+2, rot:Math.random()*Math.PI*2, vrot:(Math.random()-0.5)*0.3,
+        color:colors[Math.floor(Math.random()*colors.length)], aspect:Math.random()*0.5+0.3
+    }));
+    let t0=null; const DUR=3200;
+    function frame(ts) {
+        if(!t0) t0=ts;
+        const elapsed=ts-t0;
+        const alpha=Math.max(0,1-(elapsed-2000)/1200);
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.rot+=p.vrot; p.vy+=0.07;
+            ctx.save(); ctx.globalAlpha=alpha; ctx.fillStyle=p.color;
+            ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+            ctx.fillRect(-p.r,-p.r*p.aspect,p.r*2,p.r*2*p.aspect);
+            ctx.restore();
+        });
+        if(elapsed<DUR) requestAnimationFrame(frame); else canvas.remove();
+    }
+    requestAnimationFrame(frame);
+}
+
+// ================================================================
+// RENDERING
+// ================================================================
+function renderDay() {
+    const dayData=WORKOUT_DATA[currentDay]; if(!dayData) return;
+    // Tabs
+    document.querySelectorAll('.tab-btn').forEach(b=>{
+        b.classList.remove('bg-gradient-to-r','from-emerald-500','to-teal-500','text-black','border-emerald-400');
+        b.classList.add('bg-gray-900','text-gray-400');
+    });
+    const at=document.getElementById('tab-'+currentDay);
+    if(at){ at.classList.remove('bg-gray-900','text-gray-400'); at.classList.add('bg-gradient-to-r','from-emerald-500','to-teal-500','text-black','border-emerald-400'); }
+    // Banner
+    document.getElementById('dayTitle').innerText=dayData.title;
+    document.getElementById('daySubtitle').innerText=dayData.subtitle;
+    document.getElementById('dayBadge').innerText=dayData.badge;
+    document.getElementById('todayBadge').classList.toggle('hidden', computeSuggestedDay()!==currentDay);
+    // Notiz + RPE laden
+    loadDayNote();
+    loadRPE();
+    // Exercises
+    const container=document.getElementById('exercisesContainer'); container.innerHTML='';
+    let totalSets=0, completedSets=0;
+    dayData.exercises.forEach(ex=>{
+        ensureStateStructure(currentDay,ex.id);
+        const active=getActiveExercise(currentDay,ex.id);
+        const stateSets=userState.days[currentDay][ex.id].sets;
+        totalSets+=ex.sets;
+        const doneCount=stateSets.filter(s=>s.done).length;
+        completedSets+=doneCount;
+        const allDone=doneCount===ex.sets;
+        const showProg=checkProgression(currentDay,ex.id);
+        const histPrev=getHistoryPreview(ex.id);
+        const hasHistory=(history[ex.id]?.length||0)>0;
+        const card=document.createElement('div');
+        card.className='glass-card rounded-2xl p-4 transition-all duration-300'+(allDone?' border-emerald-500/40 bg-emerald-950/10':'');
+        let setsHtml='';
+        stateSets.forEach((s,idx)=>{
+            const uc=ex.unit==='sec'?'Sek':'Wdh';
+            const inputId='ri-'+currentDay+'-'+ex.id+'-'+idx;
+            setsHtml+=`<div class="flex items-center gap-1.5">
+                <span class="text-[10px] font-bold text-gray-500 w-6 shrink-0">S${idx+1}</span>
+                <button onclick="adjustReps('${currentDay}','${ex.id}',${idx},-1)" class="w-7 h-7 rounded-lg bg-gray-900 border border-gray-800 text-gray-400 text-sm font-bold flex items-center justify-center active:scale-90 shrink-0">−</button>
+                <input id="${inputId}" type="number" inputmode="numeric" value="${s.reps}" oninput="updateRepsSilent('${currentDay}','${ex.id}',${idx},this.value)" onkeydown="if(event.key==='Enter')this.blur()" class="w-10 text-center bg-gray-950/60 border border-gray-800 rounded-lg text-xs font-bold text-white py-1.5 shrink-0">
+                <button onclick="adjustReps('${currentDay}','${ex.id}',${idx},1)" class="w-7 h-7 rounded-lg bg-gray-900 border border-gray-800 text-gray-400 text-sm font-bold flex items-center justify-center active:scale-90 shrink-0">+</button>
+                <span class="text-[8px] text-gray-600 w-6 shrink-0">${uc}</span>
+                <button onclick="toggleSetDone('${currentDay}','${ex.id}',${idx})" class="set-btn flex-1 py-1.5 rounded-lg border border-gray-800 text-[10px] font-bold text-gray-400 bg-gray-900/80 hover:border-emerald-500/50 flex items-center justify-center gap-1 ${s.done?'active':''}">
+                    <i class="fa-solid ${s.done?'fa-check':'fa-circle'} text-[9px]"></i>${s.done?' Fertig':''}
+                </button></div>`;
+        });
+        card.innerHTML=`
+            <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-1.5 flex-wrap">
+                        <span>${active.name}</span>
+                        ${active.isAlt?'<span class="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-bold">ALT</span>':''}
+                        ${allDone?'<i class="fa-solid fa-circle-check text-emerald-400 text-xs"></i>':''}
+                        ${showProg?'<span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold">🔥 Steigern!</span>':''}
+                    </h3>
+                    <p class="text-[11px] font-semibold text-emerald-400 mt-0.5">${ex.target}</p>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                    ${ex.alternatives?.length?`<button onclick="openVariantModal('${currentDay}','${ex.id}')" class="w-7 h-7 rounded-lg bg-gray-900 border border-gray-800 text-gray-400 hover:text-cyan-400 hover:border-cyan-500/30 flex items-center justify-center text-[11px]" title="Übung ersetzen"><i class="fa-solid fa-arrows-rotate"></i></button>`:''}
+                    <button onclick="toggleAllSetsForExercise('${currentDay}','${ex.id}')" class="text-[10px] font-bold px-2.5 py-1.5 rounded-lg bg-gray-900 border border-gray-800 text-gray-400 hover:text-emerald-400 hover:border-emerald-500/30 whitespace-nowrap">${allDone?'Reset':'Alle ✔'}</button>
+                </div>
+            </div>
+            <p class="text-[11px] text-gray-400 mb-3 leading-relaxed bg-gray-950/40 p-2 rounded-lg border border-gray-900">
+                <i class="fa-solid fa-lightbulb text-amber-400/80 mr-1"></i> ${active.note}
+            </p>
+            <div class="space-y-2 mb-2">${setsHtml}</div>
+            ${histPrev?`<button onclick="openHistoryModal('${ex.id}')" class="w-full text-left text-[9px] text-gray-600 mt-2 flex items-center gap-1 hover:text-emerald-400 transition-colors">
+                <i class="fa-solid fa-chart-line"></i> <span>${histPrev}</span>
+                ${hasHistory?'<i class="fa-solid fa-arrow-up-right-from-square text-[8px] ml-auto opacity-60"></i>':''}</button>`:''}
+        `;
+        container.appendChild(card);
+    });
+    // Progress
+    const pct=totalSets>0?Math.round(completedSets/totalSets*100):0;
+    document.getElementById('dayProgressPercent').innerText=pct+'%';
+    document.getElementById('dayProgressText').innerText=completedSets+' / '+totalSets+' Sätze';
+    document.getElementById('progressBar').style.width=pct+'%';
+    updateTabDots();
+}
+
+// Tab-Vervollständigungs-Punkte
+function isDayHasDoneSets(dayId) {
+    const ds=userState.days?.[dayId]; if(!ds) return false;
+    return WORKOUT_DATA[dayId].exercises.some(ex=>ds[ex.id]?.sets?.some(s=>s.done));
+}
+function updateTabDots() {
+    DAY_ORDER.forEach(dayId=>{
+        const tab=document.getElementById('tab-'+dayId); if(!tab) return;
+        const hasDone=isDayHasDoneSets(dayId);
+        let dot=tab.querySelector('.tab-dot');
+        if(hasDone&&!dot){
+            dot=document.createElement('span');
+            dot.className='tab-dot block w-1.5 h-1.5 rounded-full bg-emerald-400 mx-auto mt-0.5 shadow-[0_0_4px_rgba(16,185,129,0.7)]';
+            tab.appendChild(dot);
+        } else if(!hasDone&&dot) dot.remove();
+    });
+}
+
+function switchTab(dayId) { currentDay=dayId; renderDay(); }
+function adjustReps(dayId,exId,setIdx,delta) {
+    const m=getBaseExercise(dayId,exId);
+    const step=m.unit==='sec'?5:1;
+    const s=userState.days[dayId][exId].sets[setIdx];
+    s.reps=Math.max(0,Math.min(999,s.reps+delta*step));
+    saveState(); renderDay();
+}
+function setRepsDirect(dayId,exId,setIdx,value) {
+    userState.days[dayId][exId].sets[setIdx].reps=Math.max(0,Math.min(999,parseInt(value,10)||0));
+    saveState(); renderDay();
+}
+// Stilles Speichern (kein Re-Render) – für oninput in Satz-Feldern
+function updateRepsSilent(dayId,exId,setIdx,value) {
+    if(!userState.days?.[dayId]?.[exId]?.sets) return;
+    userState.days[dayId][exId].sets[setIdx].reps=Math.max(0,Math.min(999,parseInt(value,10)||0));
+    saveState();
+}
+function toggleSetDone(dayId,exId,setIdx) {
+    const m=getBaseExercise(dayId,exId);
+    const sets=userState.days[dayId][exId].sets;
+    // Sync any unsaved input value directly from DOM before toggling
+    const inputEl=document.getElementById('ri-'+dayId+'-'+exId+'-'+setIdx);
+    if(inputEl) sets[setIdx].reps=Math.max(0,Math.min(999,parseInt(inputEl.value,10)||0));
+    const s=sets[setIdx];
+    s.done=!s.done;
+    saveState(); logHistory(dayId,exId); renderDay();
+    if(s.done){
+        const allNowDone=sets.every(st=>st.done);
+        if(allNowDone){
+            triggerQuickRestTimer(getExerciseTimerSecs(),'exercise');
+            showToast('Übung fertig! Große Pause läuft 💪');
+            if(navigator.vibrate)navigator.vibrate([40,30,40,30,40]);
+        } else {
+            triggerQuickRestTimer(getSetTimerSecs(),'set');
+            showToast('Satz '+(setIdx+1)+' – '+s.reps+(m.unit==='sec'?' Sek.':' Wdh.'));
+            if(navigator.vibrate)navigator.vibrate(40);
+        }
+    }
+}
+function toggleAllSetsForExercise(dayId,exId) {
+    const m=getBaseExercise(dayId,exId);
+    const sets=userState.days[dayId][exId].sets;
+    const all=sets.every(s=>s.done);
+    sets.forEach(s=>{ s.done=!all; if(!all&&s.reps===0) s.reps=m.defaultReps; });
+    saveState(); logHistory(dayId,exId); renderDay();
+    if (!all) { showToast('Übung komplett! 🔥'); triggerQuickRestTimer(getExerciseTimerSecs(),'exercise'); if(navigator.vibrate)navigator.vibrate([40,50,40]); }
+}
+function checkAllCurrentDay() {
+    WORKOUT_DATA[currentDay].exercises.forEach(ex=>{
+        ensureStateStructure(currentDay,ex.id);
+        const m=getBaseExercise(currentDay,ex.id);
+        userState.days[currentDay][ex.id].sets.forEach(s=>{ if(s.reps===0)s.reps=m.defaultReps; s.done=true; });
+        logHistory(currentDay,ex.id);
+    });
+    appMeta.lastCompletedDay=currentDay; appMeta.lastCompletedDate=todayStr();
+    saveState(); renderDay();
+    launchConfetti();
+    showToast('Tag komplett gemeistert! Stark 💪');
+    if(navigator.vibrate)navigator.vibrate([60,100,60]);
+}
+function resetCurrentDay() {
+    WORKOUT_DATA[currentDay].exercises.forEach(ex=>{
+        const m=getBaseExercise(currentDay,ex.id);
+        userState.days[currentDay][ex.id]={sets:Array.from({length:m.sets},()=>({reps:m.defaultReps,done:false}))};
+    });
+    saveState(); renderDay(); showToast('Tag zurückgesetzt.');
+}
+
+// ================================================================
+// VARIANT-PICKER
+// ================================================================
+function openVariantModal(dayId,exId) {
+    const base=getBaseExercise(dayId,exId);
+    const cur=userState.variants?.[exId];
+    let html=`<button onclick="selectVariant('${exId}','default')" class="variant-option ${!cur?'variant-active':''}"><span>${base.name}</span><span class="text-[10px] opacity-70">Original</span></button>`;
+    (base.alternatives||[]).forEach(a=>{
+        html+=`<button onclick="selectVariant('${exId}','${a.id}')" class="variant-option ${cur===a.id?'variant-active':''}"><span>${a.name}</span><span class="text-[10px] opacity-70">Alternative</span></button>`;
+    });
+    document.getElementById('variantModalTitle').innerText=base.name;
+    document.getElementById('variantOptionsContainer').innerHTML=html;
+    const m=document.getElementById('variantModal'); m.classList.remove('hidden'); setTimeout(()=>m.classList.remove('opacity-0'),10);
+}
+function selectVariant(exId,variantId) {
+    if (!userState.variants) userState.variants={};
+    if (variantId==='default') delete userState.variants[exId]; else userState.variants[exId]=variantId;
+    saveState(); renderDay(); toggleVariantModal(); showToast('Übung gewechselt');
+}
+function toggleVariantModal() {
+    const m=document.getElementById('variantModal');
+    if(m.classList.contains('hidden')){ m.classList.remove('hidden'); setTimeout(()=>m.classList.remove('opacity-0'),10); }
+    else { m.classList.add('opacity-0'); setTimeout(()=>m.classList.add('hidden'),300); }
+}
+
+// ================================================================
+// EINSTELLUNGEN
+// ================================================================
+function toggleSettingsModal() {
+    const m=document.getElementById('settingsModal');
+    if(m.classList.contains('hidden')){ renderStats(); renderTimerButtons(); m.classList.remove('hidden'); setTimeout(()=>m.classList.remove('opacity-0'),10); }
+    else { m.classList.add('opacity-0'); setTimeout(()=>m.classList.add('hidden'),300); }
+}
+function exportData() {
+    const blob=new Blob([JSON.stringify({app:'Calisthenics Pro',version:'v3.1',exportedAt:new Date().toISOString(),userState,history,appMeta},null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a'); a.href=url; a.download='calisthenics-backup-'+todayStr()+'.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    showToast('Daten exportiert ✓');
+}
+function importDataFile(input) {
+    const file=input.files[0]; if(!file) return;
+    const r=new FileReader();
+    r.onload=e=>{ try {
+        const d=JSON.parse(e.target.result);
+        if(!d.userState) throw new Error('bad');
+        userState=d.userState||{}; history=d.history||{}; appMeta=d.appMeta||{};
+        saveState(); renderDay(); showToast('Daten importiert ✓'); toggleSettingsModal();
+    } catch(err){ showToast('Import fehlgeschlagen'); } };
+    r.readAsText(file); input.value='';
+}
+function resetAllData() {
+    if(!confirm('Wirklich ALLE Daten löschen?\nTipp: Vorher exportieren!')) return;
+    localStorage.removeItem(STORAGE_KEY); userState={}; history={}; appMeta={};
+    saveState(); renderDay(); showToast('Alles gelöscht'); toggleSettingsModal();
+}
+
+// ================================================================
+// TIMER (zeitbasiert)
+// ================================================================
+let timerRemSecs=90, timerEndTs=null, timerTotalDur=90, timerInterval=null, isTimerRunning=false;
+
+function formatTime(s) { s=Math.max(0,Math.round(s)); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+function curTimerSecs() { return isTimerRunning&&timerEndTs ? Math.max(0,Math.ceil((timerEndTs-Date.now())/1000)) : timerRemSecs; }
+
+function updateTimerUI() {
+    const rem=curTimerSecs(), fmt=formatTime(rem);
+    document.getElementById('modalTimerDisplay').innerText=fmt;
+    document.getElementById('floatingTimerDisplay').innerText=fmt;
+    document.getElementById('headerTimerDisplay').innerText=isTimerRunning?fmt:'Timer';
+    const sb=document.getElementById('modalStartPauseBtn'), fb=document.getElementById('floatingPlayPauseBtn');
+    if(isTimerRunning){
+        sb.innerHTML='<i class="fa-solid fa-pause"></i> Pause'; fb.innerHTML='<i class="fa-solid fa-pause"></i>';
+        document.getElementById('timerStateLabel').innerText='Pause läuft...';
+        document.getElementById('floatingTimerWidget').classList.remove('hidden');
+    } else {
+        sb.innerHTML='<i class="fa-solid fa-play"></i> Start'; fb.innerHTML='<i class="fa-solid fa-play"></i>';
+        document.getElementById('timerStateLabel').innerText=(rem>0&&rem<timerTotalDur)?'Pausiert':'Bereit';
+        if(rem<=0) document.getElementById('floatingTimerWidget').classList.add('hidden');
+    }
+    // Highlight active preset
+    document.querySelectorAll('.timer-preset-btn').forEach(b=>{
+        b.classList.toggle('selected', parseInt(b.dataset.secs)===timerTotalDur);
+    });
+}
+function saveTimerState() {
+    try { localStorage.setItem(TIMER_STORAGE_KEY,JSON.stringify({endTimestamp:timerEndTs,remaining:timerRemSecs,total:timerTotalDur,running:isTimerRunning})); } catch(e){}
+}
+function restoreTimerState() {
+    try {
+        const d=JSON.parse(localStorage.getItem(TIMER_STORAGE_KEY)||'null'); if(!d) return;
+        timerTotalDur=d.total||90;
+        if(d.running&&d.endTimestamp&&d.endTimestamp>Date.now()){ timerEndTs=d.endTimestamp; isTimerRunning=true; runTimerLoop(); requestWakeLock(); }
+        else { timerRemSecs=(d.running&&d.endTimestamp)?0:(d.remaining??timerTotalDur); isTimerRunning=false; timerEndTs=null; }
+    } catch(e){}
+}
+function runTimerLoop() {
+    if(timerInterval) clearInterval(timerInterval);
+    timerInterval=setInterval(()=>{ updateTimerUI(); if(curTimerSecs()<=0) finishTimer(); },250);
+}
+function finishTimer() {
+    clearInterval(timerInterval); isTimerRunning=false; timerEndTs=null; timerRemSecs=0;
+    saveTimerState(); updateTimerUI(); playBeep();
+    showToast('Pause vorbei! Nächster Satz 🔥');
+    if(navigator.vibrate)navigator.vibrate([100,100,100]);
+    releaseWakeLock();
+}
+function triggerQuickRestTimer(secs, type='set') {
+    timerTotalDur=secs; timerEndTs=Date.now()+secs*1000; isTimerRunning=true;
+    // Floating Widget Farbe: Amber = Pause zwischen Übungen, Emerald = zwischen Sätzen
+    const fw=document.getElementById('floatingTimerWidget')?.querySelector('div');
+    if(fw){
+        fw.classList.toggle('timer-running',  type==='set');
+        fw.classList.toggle('timer-exercise', type==='exercise');
+        const icon=fw.querySelector('i.fa-stopwatch');
+        if(icon){
+            icon.classList.toggle('text-emerald-400', type==='set');
+            icon.classList.toggle('text-amber-400',   type==='exercise');
+        }
+        const disp=fw.querySelector('#floatingTimerDisplay');
+        if(disp){
+            disp.classList.toggle('text-emerald-400', type==='set');
+            disp.classList.toggle('text-amber-400',   type==='exercise');
+        }
+    }
+    saveTimerState(); runTimerLoop(); updateTimerUI(); requestWakeLock();
+}
+function setTimerSeconds(secs) { stopTimer(); timerTotalDur=secs; timerRemSecs=secs; saveTimerState(); updateTimerUI(); }
+function addTimerTime(secs) { if(isTimerRunning&&timerEndTs) timerEndTs+=secs*1000; else timerRemSecs+=secs; saveTimerState(); updateTimerUI(); }
+function toggleTimerStartPause() {
+    if(isTimerRunning){ pauseTimer(); return; }
+    const s=timerRemSecs>0?timerRemSecs:timerTotalDur;
+    timerEndTs=Date.now()+s*1000; isTimerRunning=true; saveTimerState(); runTimerLoop(); updateTimerUI(); requestWakeLock();
+}
+function pauseTimer() {
+    clearInterval(timerInterval); timerRemSecs=curTimerSecs(); isTimerRunning=false; timerEndTs=null;
+    saveTimerState(); updateTimerUI(); releaseWakeLock();
+}
+function stopTimer() {
+    clearInterval(timerInterval); isTimerRunning=false; timerEndTs=null; timerRemSecs=timerTotalDur;
+    saveTimerState(); updateTimerUI();
+    document.getElementById('floatingTimerWidget').classList.add('hidden');
+    document.getElementById('headerTimerDisplay').innerText='Timer';
+    releaseWakeLock();
+}
+function toggleTimerModal() {
+    const m=document.getElementById('timerModal');
+    if(m.classList.contains('hidden')){ m.classList.remove('hidden'); setTimeout(()=>m.classList.remove('opacity-0'),10); }
+    else { m.classList.add('opacity-0'); setTimeout(()=>m.classList.add('hidden'),300); }
+}
+
+// ================================================================
+// WAKE LOCK
+// ================================================================
+let wakeLock=null;
+async function requestWakeLock() { try { if('wakeLock'in navigator) wakeLock=await navigator.wakeLock.request('screen'); } catch(e){} }
+function releaseWakeLock() { wakeLock?.release().catch(()=>{}); wakeLock=null; }
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&isTimerRunning)requestWakeLock(); });
+
+// ================================================================
+// AUDIO
+// ================================================================
+let audioCtx=null;
+function initAudio(){ if(!audioCtx) try{ audioCtx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
+document.addEventListener('pointerdown',initAudio,{once:true});
+function playBeep() {
+    try {
+        if(!audioCtx) initAudio(); if(!audioCtx) return;
+        if(audioCtx.state==='suspended') audioCtx.resume();
+        const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
+        osc.type='sine'; osc.frequency.setValueAtTime(587.33,audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880,audioCtx.currentTime+0.3);
+        gain.gain.setValueAtTime(0.3,audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+0.5);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime+0.5);
+    } catch(e){}
+}
+
+// ================================================================
+// TOAST
+// ================================================================
+let toastTid;
+function showToast(msg) {
+    const t=document.getElementById('toast');
+    document.getElementById('toastMessage').innerText=msg;
+    t.classList.remove('opacity-0','-translate-y-4'); t.classList.add('opacity-100','translate-y-0');
+    clearTimeout(toastTid); toastTid=setTimeout(()=>{ t.classList.remove('opacity-100','translate-y-0'); t.classList.add('opacity-0','-translate-y-4'); },2500);
+}
+
+// ================================================================
+// INIT
+// ================================================================
+window.addEventListener('DOMContentLoaded',()=>{
+    loadSavedState();
+    migrateFromV2IfNeeded();
+    currentDay=computeSuggestedDay();
+    restoreTimerState();
+    renderDay();
+    updateTimerUI();
+});
+</script>
+</body>
 </html>
