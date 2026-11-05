@@ -1,93 +1,65 @@
 // ============================================================
-// Service Worker – Calisthenics Pro (Offline-Caching)
-// Version: 1.1 | Strategie: Cache-First für lokale Dateien
+// Service Worker – Calisthenics Pro V5
+// HTML: Network-First (neue Versionen kommen sofort an, offline → Cache)
+// Rest: Stale-While-Revalidate (schnell + im Hintergrund aktualisiert)
 // ============================================================
+const CACHE_NAME = 'calisthenics-pro-v8';
+const CORE = ['./', './index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png'];
 
-const CACHE_NAME = 'calisthenics-pro-v7';
-
-// NUR lokale Dateien cachen – externe CDN-URLs NICHT hier
-// eintragen (addAll() schlägt fehl, wenn ein einziger Request
-// scheitert, z. B. wegen CORS oder Offline bei Erstinstall).
-// Externe Ressourcen (Tailwind, FontAwesome, Google Fonts)
-// werden automatisch beim ersten Laden dynamisch gecacht.
-const ASSETS_TO_CACHE = [
-  './',
-  './index.html',
-  './manifest.json'
-];
-
-// ----------------------------------------------------------
-// INSTALL: Lokale Kern-Dateien vorladen
-// ----------------------------------------------------------
 self.addEventListener('install', (event) => {
-  console.log('[SW] Install – caching core assets');
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
+    caches.open(CACHE_NAME).then((cache) =>
+      Promise.all(CORE.map((url) => cache.add(new Request(url, { cache: 'reload' })).catch(() => null)))
+    )
   );
   self.skipWaiting();
 });
 
-// ----------------------------------------------------------
-// ACTIVATE: Veraltete Caches löschen
-// ----------------------------------------------------------
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activate – cleaning old caches');
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => {
-            console.log('[SW] Deleting old cache:', name);
-            return caches.delete(name);
-          })
-      );
-    })
+    caches.keys()
+      .then((names) => Promise.all(names.filter((n) => n !== CACHE_NAME).map((n) => caches.delete(n))))
+      .then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
-// ----------------------------------------------------------
-// FETCH: Cache-First – Netzwerk als Fallback
-// ----------------------------------------------------------
+function isHTML(req) {
+  return req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html');
+}
+function cacheable(res) {
+  return res && (res.status === 200 || res.type === 'opaque');
+}
+
 self.addEventListener('fetch', (event) => {
-  // Nur GET-Requests abfangen
-  if (event.request.method !== 'GET') return;
+  const req = event.request;
+  if (req.method !== 'GET') return;
 
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse; // Cache-Treffer
+  if (isHTML(req)) {
+    // Network-First mit 4s Timeout, dann Cache
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE_NAME);
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 4000);
+        const res = await fetch(req, { cache: 'no-store', signal: ctrl.signal });
+        clearTimeout(t);
+        if (res && res.ok) cache.put('./index.html', res.clone());
+        return res;
+      } catch (e) {
+        return (await cache.match(req)) || (await cache.match('./index.html')) || Response.error();
       }
+    })());
+    return;
+  }
 
-      // Kein Treffer – aus Netzwerk laden und dynamisch cachen
-      return fetch(event.request)
-        .then((networkResponse) => {
-          // Nur gültige same-origin oder basic Antworten cachen
-          if (
-            !networkResponse ||
-            networkResponse.status !== 200 ||
-            networkResponse.type !== 'basic'
-          ) {
-            return networkResponse;
-          }
-
-          // Response klonen (darf nur einmal gelesen werden)
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-          return networkResponse;
-        })
-        .catch(() => {
-          // Offline-Fallback: bei Navigation immer index.html
-          if (event.request.mode === 'navigate') {
-            return caches.match('./index.html');
-          }
-          // Für andere Ressourcen: nichts zurückgeben
-        });
-    })
-  );
+  // Stale-While-Revalidate für alles andere (inkl. Google Fonts)
+  event.respondWith((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    const cached = await cache.match(req);
+    const network = fetch(req).then((res) => {
+      if (cacheable(res)) cache.put(req, res.clone());
+      return res;
+    }).catch(() => cached);
+    return cached || network;
+  })());
 });
