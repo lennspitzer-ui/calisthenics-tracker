@@ -1,9 +1,9 @@
 // ============================================================
 // Service Worker – Calisthenics Pro (Offline-Caching)
-// Version: 1.0 | Strategie: Cache-First für lokale Dateien
+// Version: 1.1 | Strategie: Cache-First für lokale Dateien
 // ============================================================
 
-const CACHE_NAME = 'calisthenics-pro-v6';
+const CACHE_NAME = 'calisthenics-pro-v7';
 
 // NUR lokale Dateien cachen – externe CDN-URLs NICHT hier
 // eintragen (addAll() schlägt fehl, wenn ein einziger Request
