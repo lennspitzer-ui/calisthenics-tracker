@@ -591,6 +591,81 @@ body.has-live .app{padding-bottom:calc(190px + var(--sb))}
 #view-train.swl{animation:swl .28s ease-out}#view-train.swr{animation:swr .28s ease-out}
 @keyframes swl{from{transform:translateX(24px);opacity:.5}to{transform:none;opacity:1}}
 @keyframes swr{from{transform:translateX(-24px);opacity:.5}to{transform:none;opacity:1}}
+
+/* ===================== V8.1 · Übersichtlichkeit ===================== */
+/* Woche kompakter */
+.weekhead{margin:14px 2px 8px}
+.wd{padding:6px 0 5px;gap:2px;border-radius:11px}
+.wd .n{font-size:14px}
+/* Hero schlanker */
+.hero.slim{padding:16px 16px 16px 18px}
+.hero.slim h2{font-size:24px;margin:7px 0 3px}
+.hero.slim p.clamp{-webkit-line-clamp:2}
+.ring.sm{width:72px;height:72px}
+.ring.sm .rv b{font-size:18px}
+.ring.sm .rv span{font-size:9.5px}
+.hero-line{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:12px 0 14px;font-size:12px;color:var(--mu);font-weight:600}
+.hero-line .ic{opacity:.7}
+.hero-line i{width:3px;height:3px;border-radius:50%;background:var(--di);margin:0 3px}
+/* Vor dem Training */
+.prep{margin-top:12px;padding:12px 14px 14px;border-radius:var(--r);background:var(--s1);border:1px solid var(--line)}
+.prep .warm{margin-top:10px;padding:0;background:none;border:0}
+.prep .checks{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.prep .warm+.checks{margin-top:12px}
+/* Übungskarten: kompakt / offen */
+.exlist .ex+.ex{margin-top:8px}
+.ex .ex-h{width:100%;text-align:left;align-items:center}
+.ex.compact{padding:11px 12px 11px 15px;background:linear-gradient(165deg,#141c28,#0f151e)}
+.ex.compact::before{top:10px;bottom:10px;opacity:.45}
+.ex.compact .ex-t{font-size:14px}
+.ex.compact .ex-s{margin:1px 0 0;color:var(--mu)}
+.ex.compact.done{opacity:.72}
+.ex.open{margin-top:8px;margin-bottom:4px;border-color:color-mix(in srgb,var(--day) 38%,rgba(255,255,255,.1))}
+.ex.open .ex-s{margin:2px 0 0}
+.ex-s .up{color:#fbbf24;font-weight:700;display:inline-flex;align-items:center;gap:3px}
+.ex-s .alt{color:var(--xp);font-weight:700}
+.ex-prog{display:flex;gap:3px;flex-shrink:0}
+.ex-prog i{width:7px;height:7px;border-radius:50%;background:var(--s3)}
+.ex-prog i.on{background:var(--acc)}
+.ex .chev{color:var(--di);flex-shrink:0;transition:transform .25s}
+.ex.open .chev{transform:rotate(180deg)}
+.ex.open .ex-note{margin:12px 0 12px}
+.ex-tools{display:flex;gap:6px;align-items:center}
+.btn.icon.sm{width:34px;height:34px;border-radius:11px}
+.ex-f{margin-top:10px}
+/* Plan: Kopf-Karte */
+.planhead{padding:0;overflow:hidden}
+.ph-top{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px 14px 12px 16px}
+.ph-top>div{flex:1;min-width:0}
+.ph-top b{display:block;font-size:16px}
+.ph-top span{font-size:12px;color:var(--mu)}
+.ph-btn{display:inline-flex;align-items:center;gap:4px;font-size:12px!important;font-weight:700;color:var(--mu);padding:7px 10px;border-radius:10px;background:var(--s2);border:1px solid var(--line);flex-shrink:0}
+.ph-sched{padding:12px 14px 14px 16px;border-top:1px solid var(--line);background:rgba(0,0,0,.15)}
+.ph-mode{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+.ph-sched .wgrid{margin-top:10px}
+.rotline{display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px;margin-top:10px;font-size:12.5px;font-weight:700}
+.rotline span{display:inline-flex;align-items:center;gap:5px}
+.rotline span i{width:7px;height:7px;border-radius:50%;background:var(--c)}
+.rotline>.ic{color:var(--di)}
+/* Plan: Tages-Karte */
+.dayhead{margin-top:12px;padding:0;overflow:hidden;border-color:color-mix(in srgb,var(--c) 30%,rgba(255,255,255,.1))}
+.dh-top{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:14px 14px 12px 16px}
+.dh-top>div{flex:1;min-width:0}
+.dh-top b{display:block;font-size:17px}
+.dh-top span{font-size:12px;color:var(--mu)}
+.dh-top p{font-size:12.5px;color:var(--mu);margin-top:6px;line-height:1.4}
+.dh-dot{width:10px;height:10px;border-radius:50%;background:var(--c);margin-top:6px;flex-shrink:0;box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 18%,transparent)}
+.dh-row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:11px 14px 12px 16px;border-top:1px solid var(--line)}
+.dh-row>div{flex:1;min-width:0}
+.dh-row b{display:block;font-size:13.5px}
+.dh-row span{font-size:11.5px;color:var(--mu)}
+.dh-row>.ic,.prow .go{color:var(--di)}
+.prow .go{display:grid;place-items:center;padding-right:4px}
+.prow.sorting{border-style:dashed}
+.sortbtn{margin-left:10px;padding:0;font-size:12px;color:var(--acc)!important;font-weight:700}
+.sortbtn.on{color:var(--tx)!important}
+.opt.tplopt.on{border-color:color-mix(in srgb,var(--acc) 50%,transparent)}
+.opt.tplopt span span{line-height:1.4}
 </style>
 </head>
 <body>
@@ -674,7 +749,7 @@ body.has-live .app{padding-bottom:calc(190px + var(--sb))}
 // CALISTHENICS PRO V5 – TRAININGSPLAN (hier Übungen ändern)
 // group: push | pull | legs | core   ·   unit: reps | sec
 // ================================================================
-const APP_VERSION = '8.0';
+const APP_VERSION = '8.1';
 
 // Standard-Plan (wird nur genutzt, bis du im Plan-Tab etwas änderst)
 const DEFAULT_PLAN = {
@@ -1222,13 +1297,15 @@ function renderTrain() {
     const est = Math.round(D.exercises.reduce((a, ex, i) => a + ex.sets * 40 + (ex.sets - 1) * (ex.rest || setR) + (i ? exR : 0), 0) / 60);
     const lastDone = S.lastByDay[day];
 
-    const items = setting('checkItems', DEFAULT_CHECKS), ch = appMeta.checks?.[today] || [];
-    const checks = setting('checkOn', true) && items.length ? `<div class="checks">${items.map((t, i) => `<button class="chk ${ch.includes(i) ? 'on' : ''}" onclick="toggleCheck(${i})">${ic('check')}${esc(t)}</button>`).join('')}</div>` : '';
+    const items = setting('checkItems', DEFAULT_CHECKS), ch = appMeta.checks?.[today] || [], hasWarm = !!M.warm?.length;
+    const shown = items.map((t, i) => [t, i]).filter(([t]) => !(hasWarm && /aufw[äa]rm|warm/i.test(t)));
+    const checks = setting('checkOn', true) && shown.length ? `<div class="checks">${shown.map(([t, i]) => `<button class="chk ${ch.includes(i) ? 'on' : ''}" onclick="toggleCheck(${i})">${ic('check')}${esc(t)}</button>`).join('')}</div>` : '';
+    // „Vor dem Training": nur solange noch kein Satz erledigt ist
+    const warm = warmCard(day), prep = !finishedToday && done === 0 && (warm || checks) ? `<div class="prep"><div class="lbl">Vor dem Training</div>${warm}${checks}</div>` : '';
 
     const ctaLabel = pct === 0 ? 'Workout starten' : pct === 100 ? 'Workout ansehen' : 'Weiter trainieren';
     const statusPill = finishedToday ? `<span class="pill acc">${ic('check', 'xs')}Heute erledigt</span>` : day === due ? `<span class="pill warn">${ic('flame', 'xs')}Heute dran</span>` : '';
 
-    const rpe = appMeta.dayRatings?.[day]?.[today] || 5, note = appMeta.dayNotes?.[day]?.[today] || '';
 
     const cards = D.exercises.map((ex, i) => exCard(day, ex, i)).join('');
 
@@ -1236,39 +1313,42 @@ function renderTrain() {
       <div class="weekhead"><b>Diese Woche · ${wcount}/${goal}</b><div class="goalbar">${goalbar}</div></div>
       <div class="week">${week}</div>
       <div class="days">${chips}</div>${restBanner}
-      <div class="hero">
+      <div class="hero slim">
         <div class="hero-top">
-          <div><div class="pills"><span class="pill acc">${esc(D.badge)}</span>${statusPill}</div>
-            <h2 class="disp">${esc(M.short)}</h2><p>${esc(D.subtitle)}</p></div>
-          <div class="ring">${ringSvg(pct / 100, 86, 8, 'var(--day)')}<div class="rv"><b class="disp num">${pct}%</b><span>${done}/${total} Sätze</span></div></div>
+          <div><div class="pills">${statusPill || `<span class="pill acc">${esc(D.badge)}</span>`}</div>
+            <h2 class="disp">${esc(M.short)}</h2><p class="clamp">${esc(D.subtitle)}</p></div>
+          <div class="ring sm">${ringSvg(pct / 100, 72, 7, 'var(--day)')}<div class="rv"><b class="disp num">${pct}%</b><span>${done}/${total}</span></div></div>
         </div>
-        <div class="hero-meta">
-          <div><b class="num">${D.exercises.length}</b><span>Übungen</span></div>
-          <div><b class="num">~${est}</b><span>Minuten</span></div>
-          <div><b>${lastDone ? relDay(lastDone) : 'neu'}</b><span>zuletzt</span></div>
-        </div>
+        <div class="hero-line">${ic('layers', 'xs')}${D.exercises.length} Übungen<i></i>${ic('clock', 'xs')}~${est} Min.<i></i>${lastDone ? 'zuletzt ' + relDay(lastDone) : 'zum ersten Mal'}</div>
         <button class="cta" onclick="focusOpen()">${ic('play')} ${ctaLabel}</button>
-        ${checks}
       </div>
-      ${finishedToday ? '' : warmCard(day)}
-      <div class="sec-h"><h2>Übungen</h2><span class="dim sm">Tippe auf Hinweise für mehr</span></div>
-      <div>${cards}</div>
-      <div class="card" style="margin-top:14px">
-        <div class="row-h"><span class="lbl">Wie hart war's?</span><span class="rpe-v" id="rpeDisp"><span id="rpeEmoji"></span><b id="rpeValue" class="num disp"></b><small>/10</small></span></div>
-        <input type="range" min="1" max="10" value="${rpe}" class="rpe-slider" id="rpeSlider" oninput="rpeInput(this.value)" aria-label="Schwierigkeit">
-        <div class="rpe-scale"><span>Easy</span><span id="rpeLabel"></span><span>Limit</span></div>
-        <textarea class="note" id="dayNote" rows="2" maxlength="300" placeholder="Notiz: Energie, Schmerzen, Fortschritte …" oninput="saveNote(this.value)">${esc(note)}</textarea>
-      </div>
+      ${prep}
+      <div class="sec-h"><h2>Übungen</h2><span class="dim sm">${D.exercises.filter(e => userState.days[day][e.id].sets.every(x => x.done)).length}/${D.exercises.length} fertig</span></div>
+      <div class="exlist">${cards}</div>
       <div class="endrow">
         <button class="cta" onclick="finishWorkout()">${ic('flag')} Training beenden</button>
         <button class="btn icon" style="height:auto;width:54px" onclick="askReset()" aria-label="Tag zurücksetzen">${ic('reset')}</button>
       </div>`;
-    rpeVisual(rpe);
 }
 
+// Übungskarten: nur die aktuelle Übung ist offen, der Rest kompakt (Tippen klappt auf/zu)
+let exOv = {};
+const exKey = (day, id) => day + '|' + id;
+function exIsOpen(day, id) {
+    const k = exKey(day, id); if (k in exOv) return exOv[k];
+    const n = nextOpen(day, 0); return !!n && WORKOUT_DATA[day].exercises[n.ex].id === id;
+}
+function exToggle(day, id) { exOv[exKey(day, id)] = !exIsOpen(day, id); renderTrain(); vibe(8); }
 function exCard(day, ex, i) {
-    const act = getActive(day, ex.id), st = userState.days[day][ex.id], sug = suggest(day, ex.id), today = todayStr();
-    const dn = st.sets.filter(s => s.done).length, all = dn === st.sets.length;
+    const act = getActive(day, ex.id), st = userState.days[day][ex.id], sug = suggest(day, ex.id);
+    const dn = st.sets.filter(s => s.done).length, all = dn === st.sets.length, open = exIsOpen(day, ex.id);
+    const sub = `${esc(act.target)}${act.isAlt ? ' · <span class="alt">Alternative</span>' : ''}${sug?.up && !all ? ` · <span class="up">${ic('trend', 'xs')}Steigern</span>` : ''}`;
+    const head = `<button class="ex-h" onclick="exToggle('${day}','${ex.id}')" aria-expanded="${open}">
+        <div class="ex-n">${all ? ic('check', 's') : i + 1}</div>
+        <div class="ex-main"><h3 class="ex-t">${esc(act.name)}</h3><div class="ex-s">${sub}</div></div>
+        <div class="ex-prog">${st.sets.map(x => `<i class="${x.done ? 'on' : ''}"></i>`).join('')}</div>
+        ${ic('down1', 's chev')}</button>`;
+    if (!open) return `<article class="ex compact ${all ? 'done' : ''}" id="ex-${ex.id}">${head}</article>`;
     const rows = st.sets.map((s, j) => {
         const lv = sug?.last?.[j];
         return `<div class="set ${s.done ? 'is-done' : ''}">
@@ -1279,16 +1359,17 @@ function exCard(day, ex, i) {
           <button class="done-btn ${s.done ? 'on' : ''}" onclick="toggleSet('${day}','${ex.id}',${j})">${ic('check')}${s.done ? '<span>Fertig</span>' : `<span class="ghost">${lv != null ? 'zuletzt ' + lv : unitShort(act.unit)}</span>`}</button>
         </div>`;
     }).join('');
-    return `<article class="ex ${all ? 'done' : ''}" id="ex-${ex.id}">
-      <div class="ex-h"><div class="ex-n">${all ? ic('check', 's') : i + 1}</div>
-        <div class="ex-main"><h3 class="ex-t">${esc(act.name)}</h3><div class="ex-s">${esc(act.target)}</div>
-          <div class="pills">${act.isAlt ? '<span class="pill alt">Alternative</span>' : ''}${sug?.up ? `<span class="pill warn">${ic('trend', 'xs')}Steigern</span>` : ''}</div></div>
-        <div class="ex-act"><button class="btn icon" onclick="planDay='${day}';editEx('${day}','${ex.id}')" aria-label="Übung bearbeiten">${ic('edit')}</button>${ex.alternatives?.length ? `<button class="btn icon" onclick="openVariants('${day}','${ex.id}')" aria-label="Übung ersetzen">${ic('swap')}</button>` : ''}<button class="btn icon" onclick="exDetail('${ex.id}')" aria-label="Verlauf">${ic('chart')}</button></div>
-      </div>
-      <p class="ex-note" onclick="this.firstElementChild.classList.toggle('clamp')"><span class="clamp">${esc(act.note)}</span></p>
+    return `<article class="ex open ${all ? 'done' : ''}" id="ex-${ex.id}">${head}
+      ${act.note ? `<p class="ex-note" onclick="this.firstElementChild.classList.toggle('clamp')"><span class="clamp">${esc(act.note)}</span></p>` : '<div style="height:12px"></div>'}
       <div class="sets">${rows}</div>
-      <div class="ex-f">${sug ? `<button class="link" onclick="copyLast('${day}','${ex.id}')">${ic('copy', 's')} Werte vom ${fmtDate(sug.date)}</button>` : '<span class="dim sm">Erstes Mal – leg los</span>'}
-        <button class="link" onclick="toggleAll('${day}','${ex.id}')">${all ? 'Zurücksetzen' : 'Alle erledigt'}</button></div>
+      <div class="ex-f">
+        ${sug ? `<button class="link" onclick="copyLast('${day}','${ex.id}')">${ic('copy', 's')} Werte vom ${fmtDate(sug.date)}</button>` : '<span class="dim sm">Erstes Mal – leg los</span>'}
+        <div class="ex-tools">
+          ${ex.alternatives?.length ? `<button class="btn icon sm" onclick="openVariants('${day}','${ex.id}')" aria-label="Übung ersetzen">${ic('swap', 's')}</button>` : ''}
+          <button class="btn icon sm" onclick="exDetail('${ex.id}')" aria-label="Verlauf">${ic('chart', 's')}</button>
+          <button class="btn icon sm" onclick="planDay='${day}';editEx('${day}','${ex.id}')" aria-label="Übung bearbeiten">${ic('edit', 's')}</button>
+          <button class="btn sm" onclick="toggleAll('${day}','${ex.id}')">${all ? 'Zurück' : ic('check', 'xs') + ' Alle'}</button>
+        </div></div>
     </article>`;
 }
 
@@ -1309,6 +1390,7 @@ function toggleSet(day, id, j) {
     const inp = document.getElementById('v-' + id + '-' + j); if (inp) s.reps = parseVal(day, id, inp.value);
     if (!s.done) {
         const r = doneSet(day, id, j);
+        if (st.sets.every(x => x.done)) { delete exOv[exKey(day, id)]; if (r.n) { const nid = WORKOUT_DATA[day].exercises[r.n.ex].id; delete exOv[exKey(day, nid)]; setTimeout(() => document.getElementById('ex-' + nid)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 60); } }
         toast(!r.n ? 'Alle Sätze erledigt – Training beenden 🏁' : st.sets.every(x => x.done) ? `${act.name} geschafft 💪` : `Satz ${j + 1} · ${fmtVal(s.reps)} ${unitShort(act.unit)}`);
     } else { s.done = false; st.date = todayStr(); logHistory(day, id); save(); }
     renderTrain(); renderTop(); updLive();
@@ -1329,7 +1411,7 @@ function toggleAll(day, id) {
     const st = userState.days[day][id], all = st.sets.every(s => s.done);
     st.sets.forEach((s, j) => { const inp = document.getElementById('v-' + id + '-' + j); if (inp) s.reps = parseVal(day, id, inp.value); s.done = !all; });
     st.date = todayStr(); logHistory(day, id);
-    if (!all) { touchSession(day); startRest(getExerciseTimerSecs(), 'exercise'); vibe([40, 50, 40]); setTimeout(checkBadges, 400); }
+    if (!all) { touchSession(day); startRest(getExerciseTimerSecs(), 'exercise'); vibe([40, 50, 40]); setTimeout(checkBadges, 400); delete exOv[exKey(day, id)]; const n = nextOpen(day, 0); if (n) delete exOv[exKey(day, WORKOUT_DATA[day].exercises[n.ex].id)]; }
     save(); renderTrain(); renderTop(); updLive();
 }
 function copyLast(day, id) {
@@ -1373,14 +1455,22 @@ function askReset() {
 // ================================================================
 function dayCounts(day) { let t = 0, d = 0; WORKOUT_DATA[day].exercises.forEach(ex => { const st = ensureState(day, ex.id); t += st.sets.length; d += st.sets.filter(s => s.done).length; }); return { t, d }; }
 function finishWorkout() {
-    const { t, d } = dayCounts(currentDay);
+    const { t, d } = dayCounts(currentDay), today = todayStr();
     if (!d) { toast('Noch kein Satz erledigt'); return; }
-    if (d < t) {
-        openSheet(`<div class="sheet-h"><div><h3>${t - d} Sätze offen</h3><p>Wie soll das Training gespeichert werden?</p></div></div>
-          <button class="opt" onclick="doFinish(true)"><b>${ic('check', 's')} Alles erledigt</b><span>Offene Sätze mit den eingetragenen Werten abhaken</span></button>
-          <button class="opt" onclick="doFinish(false)"><b>Nur erledigte Sätze speichern</b><span>${d} von ${t} Sätzen kommen in den Verlauf</span></button>
-          <button class="btn block ghost" onclick="closeSheet()">Weiter trainieren</button>`);
-    } else doFinish(false);
+    const rpe = appMeta.dayRatings?.[currentDay]?.[today] || 6, note = appMeta.dayNotes?.[currentDay]?.[today] || '';
+    if (!appMeta.dayRatings?.[currentDay]?.[today]) rpeInput(rpe);
+    openSheet(`<div class="sheet-h"><div><h3>Training beenden</h3><p>${esc(DAY_META[currentDay].short)} · ${d} von ${t} Sätzen erledigt</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="row-h"><span class="lbl">Wie hart war's?</span><span class="rpe-v" id="rpeDisp"><span id="rpeEmoji"></span><b id="rpeValue" class="num disp"></b><small>/10</small></span></div>
+        <input type="range" min="1" max="10" value="${rpe}" class="rpe-slider" id="rpeSlider" oninput="rpeInput(this.value)" aria-label="Schwierigkeit">
+        <div class="rpe-scale"><span>Easy</span><span id="rpeLabel"></span><span>Limit</span></div>
+        <textarea class="note" id="dayNote" rows="2" maxlength="300" placeholder="Notiz: Energie, Schmerzen, Fortschritte …" oninput="saveNote(this.value)">${esc(note)}</textarea>
+      </div>
+      ${d < t ? `<button class="opt" onclick="doFinish(true)"><b>${ic('check', 's')} Alles erledigt</b><span>${t - d} offene ${t - d === 1 ? 'Satz' : 'Sätze'} mit den eingetragenen Werten abhaken</span></button>
+        <button class="opt" onclick="doFinish(false)"><b>Nur erledigte Sätze speichern</b><span>${d} von ${t} Sätzen kommen in den Verlauf</span></button>`
+        : `<button class="cta" onclick="doFinish(false)">${ic('flag')} Abschließen</button>`}
+      <button class="btn block ghost" style="margin-top:8px" onclick="closeSheet()">Weiter trainieren</button>`);
+    rpeVisual(rpe);
 }
 function doFinish(markAll) {
     const day = currentDay, today = todayStr();
@@ -1993,47 +2083,54 @@ let planDay = null, draft = null, draftCtx = null;
 function pDay(id) { return activePlan().days.find(d => d.id === id); }
 function commitPlan(msg, undo) {
     if (appMeta.plan) { try { appMeta.plan = sanitizePlan(appMeta.plan); } catch (e) { console.error(e); } }
-    applyPlan(); save(); renderView(); if (msg) toast(msg, undo);
+    applyPlan(); save(); renderView();
+    if ($('#sheet').classList.contains('open') && sheetRefresh) sheetRefresh();
+    if (msg) toast(msg, undo);
 }
 function planName() { return appMeta.plan ? (appMeta.planName || 'Eigener Plan') : 'Standard-Plan'; }
 function planCount(p) { const ex = p.days.reduce((n, d) => n + d.exercises.length, 0); return `${p.days.length} ${p.days.length === 1 ? 'Tag' : 'Tage'} · ${ex} Übungen`; }
 
+let planSort = false;
 function renderPlan() {
     const P = activePlan();
     if (!planDay || !pDay(planDay)) planDay = pDay(currentDay) ? currentDay : P.days[0].id;
-    const d = pDay(planDay), di = P.days.indexOf(d), week = planMode() === 'week';
+    const d = pDay(planDay), week = planMode() === 'week';
     document.documentElement.style.setProperty('--day', d.c);
-    const chips = P.days.map(x => `<button class="dchip ${x.id === planDay ? 'on' : ''}" style="--c:${x.c}" onclick="planDay='${x.id}';renderPlan()"><span class="dc-top"><i></i>${week ? `<em class="ok" style="color:var(--mu)">${x.wd?.length ? x.wd.slice().sort().map(i => WD[i]).join('·') : 'Extra'}</em>` : ''}</span><b>${esc(x.short)}</b><span>${x.exercises.length} Übung${x.exercises.length === 1 ? '' : 'en'}</span></button>`).join('')
+    const chips = P.days.map(x => `<button class="dchip ${x.id === planDay ? 'on' : ''}" style="--c:${x.c}" onclick="planDay='${x.id}';planSort=false;renderPlan()"><span class="dc-top"><i></i>${week ? `<em class="ok" style="color:var(--mu)">${x.wd?.length ? x.wd.slice().sort().map(i => WD[i]).join('·') : 'Extra'}</em>` : ''}</span><b>${esc(x.short)}</b><span>${x.exercises.length} Übung${x.exercises.length === 1 ? '' : 'en'}</span></button>`).join('')
         + `<button class="dchip add" onclick="addDay()"><span class="dc-top"></span><b>${ic('plus', 'xs')} Tag</b><span>hinzufügen</span></button>`;
     const setR = getSetTimerSecs(), exR = getExerciseTimerSecs();
     const est = Math.round(d.exercises.reduce((a, e, i) => a + e.sets * 40 + (e.sets - 1) * (e.rest || setR) + (i ? exR : 0), 0) / 60);
     const rows = d.exercises.map((e, i) => {
         const g = GROUPS[e.group] || GROUPS.push;
-        return `<div class="prow"><span class="gd" style="background:${g.c}"></span>
-          <button class="nm" onclick="editEx('${d.id}','${e.id}')"><b>${esc(e.name)}</b><span>${esc(genTarget(e))} · ${g.n}${e.alternatives?.length ? ' · ' + e.alternatives.length + ' Alt.' : ''}${e.rest ? ' · Pause ' + fmtS(e.rest) : ''}</span></button>
-          <div class="mv"><button onclick="moveEx(${i},-1)" ${i === 0 ? 'disabled' : ''} aria-label="nach oben">${ic('up1', 'xs')}</button><button onclick="moveEx(${i},1)" ${i === d.exercises.length - 1 ? 'disabled' : ''} aria-label="nach unten">${ic('down1', 'xs')}</button></div>
-          <button class="btn icon" onclick="editEx('${d.id}','${e.id}')" aria-label="bearbeiten">${ic('edit')}</button></div>`;
+        return `<div class="prow ${planSort ? 'sorting' : ''}"><span class="gd" style="background:${g.c}"></span>
+          <button class="nm" onclick="${planSort ? '' : `editEx('${d.id}','${e.id}')`}"><b>${esc(e.name)}</b><span>${esc(genTarget(e))} · ${g.n}${e.alternatives?.length ? ' · ' + e.alternatives.length + ' Alt.' : ''}${e.rest ? ' · Pause ' + fmtS(e.rest) : ''}</span></button>
+          ${planSort ? `<div class="mv"><button onclick="moveEx(${i},-1)" ${i === 0 ? 'disabled' : ''} aria-label="nach oben">${ic('up1', 'xs')}</button><button onclick="moveEx(${i},1)" ${i === d.exercises.length - 1 ? 'disabled' : ''} aria-label="nach unten">${ic('down1', 'xs')}</button></div>` : `<span class="go">${ic('chev', 's')}</span>`}</div>`;
     }).join('');
-
-    // Wochenplanung
-    const wdCells = WD.map((w, i) => { const x = P.days.find(y => y.wd?.includes(i)); const today = i === wdNow();
-        return `<button class="wcell ${x ? 'on' : ''} ${today ? 'today' : ''}" style="${x ? '--c:' + x.c : ''}" onclick="pickWd(${i})"><span>${w}</span><b>${x ? esc(x.short) : 'Ruhe'}</b></button>`; }).join('');
-    const unassigned = P.days.filter(x => !x.wd?.length).length;
-    const planning = `<div class="card" style="margin-top:12px">
-        <div class="row-h" style="margin-bottom:10px"><span class="lbl">Planung</span></div>
-        <div class="seg">${[['rot', 'Rotation'], ['week', 'Feste Wochentage']].map(([m, l]) => `<button class="${planMode() === m ? 'on' : ''}" onclick="setMode('${m}')">${l}</button>`).join('')}</div>
-        ${week ? `<div class="wgrid">${wdCells}</div>
-          <p class="sm muted" style="margin-top:10px;line-height:1.45">Tippe auf einen Wochentag, um ihm ein Training zuzuordnen. Freie Tage sind Ruhetage${unassigned ? `, Tage ohne Wochentag bleiben als <b style="color:var(--tx)">Extra-Training</b> wählbar` : ''}.</p>`
-        : `<p class="sm muted" style="margin-top:10px;line-height:1.45">Die App schlägt nach jedem Training automatisch den nächsten Tag in dieser Reihenfolge vor: <b style="color:var(--tx)">${P.days.map(x => esc(x.short)).join(' → ')}</b> → von vorn.</p>`}
-      </div>`;
-
+    // Woche kompakt (nur bei festen Wochentagen), sonst Rotations-Zeile
+    const wdCells = WD.map((w, i) => { const x = P.days.find(y => y.wd?.includes(i));
+        return `<button class="wcell ${x ? 'on' : ''} ${i === wdNow() ? 'today' : ''}" style="${x ? '--c:' + x.c : ''}" onclick="pickWd(${i})"><span>${w}</span><b>${x ? esc(x.short) : 'Ruhe'}</b></button>`; }).join('');
+    const sched = week ? `<div class="wgrid">${wdCells}</div>` : `<div class="rotline">${P.days.map(x => `<span style="--c:${x.c}"><i></i>${esc(x.short)}</span>`).join(ic('chev', 'xs'))}</div>`;
+    const w = d.warm || [], wt = w.reduce((a, x) => a + x.s, 0);
     $('#view-plan').innerHTML = `
       <div class="sec-h" style="margin-top:16px"><h2>Trainingsplan</h2></div>
-      <button class="card linkcard" style="margin-top:0" onclick="openPlans()"><span class="rtile" style="--rc:var(--acc)">${ic('layers')}</span><div style="flex:1;min-width:0"><div class="lbl">Aktiver Plan</div><b style="font-size:15px">${esc(planName())}</b><div class="sm muted">${planCount(P)} · Profile, Export & Import</div></div>${ic('chev')}</button>
-      ${planning}
+      <div class="card planhead">
+        <button class="ph-top" onclick="openPlans()"><span class="rtile" style="--rc:var(--acc)">${ic('layers')}</span><div><b>${esc(planName())}</b><span>${planCount(P)}</span></div><span class="ph-btn">Pläne ${ic('chev', 'xs')}</span></button>
+        <div class="ph-sched"><button class="ph-mode" onclick="openPlanning()">${ic(week ? 'cal' : 'refresh', 'xs')} ${week ? 'Feste Wochentage' : 'Rotation'} ${ic('down1', 'xs')}</button>${sched}</div>
+      </div>
       <div class="sec-h"><h2>Tage</h2><span class="dim sm">${P.days.length}</span></div>
       <div class="days" style="margin-top:0">${chips}</div>
-      <div class="card" style="margin-top:14px">
+      <div class="card dayhead" style="--c:${d.c}">
+        <button class="dh-top" onclick="openDayEdit()"><i class="dh-dot"></i><div><b>${esc(d.short)}</b><span>${esc([d.sub, d.badge].filter(Boolean).join(' · ') || 'Kein Untertitel')}</span>${d.desc ? `<p>${esc(d.desc)}</p>` : ''}</div><span class="ph-btn">${ic('edit', 's')}</span></button>
+        <button class="dh-row" onclick="openWarmEdit()"><span class="rtile sm" style="--rc:#f59e0b">${ic('flame')}</span><div><b>Aufwärmen</b><span>${w.length ? `${w.length} Übungen · ${fmtTime(wt)}` : 'Nicht eingerichtet'}</span></div>${ic('chev', 's')}</button>
+      </div>
+      <div class="sec-h"><h2>Übungen</h2><span class="dim sm">${d.exercises.length} · ~${est} Min.${d.exercises.length > 1 ? `<button class="link sortbtn ${planSort ? 'on' : ''}" onclick="planSort=!planSort;renderPlan()">${planSort ? 'Fertig' : 'Sortieren'}</button>` : ''}</span></div>
+      <div>${rows || `<div class="empty-card">${ic('dumb')}<div><b>Noch keine Übungen</b><span>Füge die erste Übung für ${esc(d.short)} hinzu.</span></div></div>`}</div>
+      ${planSort ? '' : `<button class="addrow" onclick="newEx()">${ic('plus')} Übung hinzufügen</button>`}`;
+}
+// Tag bearbeiten (Sheet)
+function openDayEdit() {
+    const P = activePlan(), d = pDay(planDay), di = P.days.indexOf(d);
+    openSheet(`<div class="sheet-h"><div><h3>Tag bearbeiten</h3><p>${esc(d.short)} · ${d.exercises.length} Übungen</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
         <div class="fld" style="margin-top:0"><label>Name des Tages</label><input class="inp" value="${esc(d.short)}" maxlength="20" onchange="setDayField('short',this.value)"></div>
         <div class="two">
           <div class="fld"><label>Untertitel</label><input class="inp" value="${esc(d.sub || '')}" maxlength="24" placeholder="z. B. Schulter · Skill" onchange="setDayField('sub',this.value)"></div>
@@ -2041,19 +2138,30 @@ function renderPlan() {
         </div>
         <div class="fld"><label>Beschreibung</label><input class="inp" value="${esc(d.desc || '')}" maxlength="80" placeholder="Worum geht's an diesem Tag?" onchange="setDayField('desc',this.value)"></div>
         <div class="fld"><label>Farbe</label><div class="swatches">${PALETTE.map(c => `<button class="${c === d.c ? 'on' : ''}" style="background:${c}" onclick="setDayField('c','${c}')" aria-label="Farbe"></button>`).join('')}</div></div>
-        ${week ? `<p class="sm muted" style="margin-top:12px">${ic('cal', 's')} ${d.wd?.length ? 'Geplant am ' + d.wd.slice().sort().map(i => WD[i]).join(', ') : 'Keinem Wochentag zugeordnet (Extra-Training)'}</p>` : ''}
-        <div class="btnrow" style="margin-top:16px">
+        <div class="fld"><label>Reihenfolge</label><div class="btnrow" style="margin-top:0">
           <button class="btn sm" onclick="moveDay(-1)" ${di === 0 ? 'disabled' : ''}>${ic('chevl', 'xs')} Früher</button>
-          <button class="btn sm" onclick="moveDay(1)" ${di === P.days.length - 1 ? 'disabled' : ''}>Später ${ic('chev', 'xs')}</button>
-          <button class="btn sm danger" onclick="delDay()">${ic('trash', 's')} Tag</button>
-        </div>
-      </div>
-      ${warmEditor(d)}
-      <div class="sec-h"><h2>Übungen</h2><span class="dim sm">${d.exercises.length} · ~${est} Min.</span></div>
-      <div>${rows || `<div class="empty-card">${ic('dumb')}<div><b>Noch keine Übungen</b><span>Füge die erste Übung für ${esc(d.short)} hinzu.</span></div></div>`}</div>
-      <button class="addrow" onclick="newEx()">${ic('plus')} Übung hinzufügen</button>
-      <div class="insight" style="margin-top:18px">${ic('info')}<span>Änderungen gelten sofort. Der Verlauf bleibt bei der Übung – auch wenn du sie umbenennst, verschiebst oder löschst.</span></div>
-      ${appMeta.plan ? `<button class="btn block ghost" style="margin-top:12px" onclick="resetPlan()">${ic('reset')} Standard-Plan laden</button>` : ''}`;
+          <button class="btn sm" onclick="moveDay(1)" ${di === P.days.length - 1 ? 'disabled' : ''}>Später ${ic('chev', 'xs')}</button></div></div>
+        <button class="cta" style="margin-top:18px" onclick="closeSheet()">${ic('check')} Fertig</button>
+        <button class="btn block ghost danger" style="margin-top:8px" onclick="delDay()">${ic('trash', 's')} Tag löschen</button>`);
+    sheetRefresh = openDayEdit;
+}
+// Planungs-Modus (Sheet)
+function openPlanning() {
+    const m = planMode();
+    openSheet(`<div class="sheet-h"><div><h3>Wie soll geplant werden?</h3><p>Bestimmt, welcher Tag als „Heute dran“ vorgeschlagen wird</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+      <button class="opt tplopt ${m === 'rot' ? 'on' : ''}" onclick="setMode('rot');closeSheet()"><span class="rtile" style="--rc:var(--acc)">${ic('refresh')}</span><span><b>Rotation</b><span>Nach jedem Training kommt der nächste Tag dran – egal an welchem Wochentag.</span></span>${m === 'rot' ? ic('check', 's') : ''}</button>
+      <button class="opt tplopt ${m === 'week' ? 'on' : ''}" onclick="setMode('week');closeSheet()"><span class="rtile" style="--rc:#38bdf8">${ic('cal')}</span><span><b>Feste Wochentage</b><span>Jeder Wochentag hat sein Training, freie Tage sind Ruhetage. Ideal mit Lauf-Tagen.</span></span>${m === 'week' ? ic('check', 's') : ''}</button>`);
+}
+// Aufwärmen bearbeiten (Sheet)
+function openWarmEdit() {
+    const d = pDay(planDay), w = d.warm || [], tot = w.reduce((a, x) => a + x.s, 0);
+    openSheet(`<div class="sheet-h"><div><h3>Aufwärmen · ${esc(d.short)}</h3><p>${w.length ? `${w.length} Übungen · ${fmtTime(tot)}` : 'Noch leer'}</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+      ${w.map((x, i) => `<div class="wrow"><input class="inp" value="${esc(x.n)}" maxlength="40" onchange="warmSet(${i},'n',this.value)">
+        <div class="stp sm"><button onclick="warmSet(${i},'s',${x.s - 5})" aria-label="kürzer">−</button><b class="num">${x.s}s</b><button onclick="warmSet(${i},'s',${x.s + 5})" aria-label="länger">+</button></div>
+        <button class="btn icon" onclick="warmDel(${i})" aria-label="entfernen">${ic('x', 's')}</button></div>`).join('') || '<p class="sm muted" style="padding:2px 0 10px">Füge eigene Übungen hinzu oder lade ein fertiges Programm.</p>'}
+      <div class="btnrow" style="margin-top:6px">${w.length < 12 ? `<button class="btn" onclick="warmAdd()">${ic('plus', 's')} Übung</button>` : ''}<button class="btn" onclick="warmPreset()">${ic('layers', 's')} Programm laden</button></div>
+      <button class="cta" style="margin-top:16px" onclick="closeSheet()">${ic('check')} Fertig</button>`);
+    sheetRefresh = openWarmEdit;
 }
 function setDayField(k, v) {
     const d = editablePlan().days.find(x => x.id === planDay);
@@ -2064,7 +2172,14 @@ function setDayField(k, v) {
 }
 function setMode(m) {
     const P = editablePlan(); if (P.mode === m) return;
-    P.mode = m; commitPlan(m === 'week' ? (P.days.some(d => d.wd?.length) ? 'Feste Wochentage aktiv' : 'Tippe auf die Wochentage, um Trainings zuzuordnen') : 'Rotation aktiv');
+    P.mode = m;
+    if (m === 'week' && !P.days.some(d => d.wd?.length)) {
+        // Vorschlag: Trainings sinnvoll über die Woche verteilen
+        const pat = { 1: [0], 2: [0, 3], 3: [0, 2, 4], 4: [0, 1, 3, 4], 5: [0, 1, 3, 4, 5], 6: [0, 1, 2, 3, 4, 5], 7: [0, 1, 2, 3, 4, 5, 6] }[Math.min(7, P.days.length)];
+        P.days.forEach((d, i) => { d.wd = i < pat.length ? [pat[i]] : []; });
+        currentDay = null; commitPlan('Vorschlag eingetragen – tippe auf einen Wochentag zum Ändern'); currentDay = computeSuggestedDay(); return;
+    }
+    commitPlan(m === 'week' ? 'Feste Wochentage aktiv' : 'Rotation aktiv');
 }
 function pickWd(i) {
     const P = activePlan(), cur = P.days.find(d => d.wd?.includes(i));
@@ -2107,16 +2222,6 @@ function addDayFrom(k) {
     if (planMode() === 'week') setTimeout(() => toast('Tipp: Ordne den Tag oben einem Wochentag zu'), 2500);
 }
 // ---------------- Aufwärmen pro Tag ----------------
-function warmEditor(d) {
-    const w = d.warm || [], tot = w.reduce((a, x) => a + x.s, 0);
-    return `<div class="sec-h"><h2>Aufwärmen</h2><span class="dim sm">${w.length ? w.length + ' · ' + fmtTime(tot) : 'aus'}</span></div>
-      <div class="card warmed">
-        ${w.map((x, i) => `<div class="wrow"><input class="inp" value="${esc(x.n)}" maxlength="40" onchange="warmSet(${i},'n',this.value)">
-          <div class="stp sm"><button onclick="warmSet(${i},'s',${x.s - 5})" aria-label="kürzer">−</button><b class="num">${x.s}s</b><button onclick="warmSet(${i},'s',${x.s + 5})" aria-label="länger">+</button></div>
-          <button class="btn icon" onclick="warmDel(${i})" aria-label="entfernen">${ic('x', 's')}</button></div>`).join('') || '<p class="sm muted" style="padding:2px 0 8px">Kein Aufwärmen für diesen Tag. Füge Übungen hinzu oder lade ein passendes Programm.</p>'}
-        <div class="btnrow" style="margin-top:8px">${w.length < 12 ? `<button class="btn sm" onclick="warmAdd()">${ic('plus', 'xs')} Übung</button>` : ''}<button class="btn sm" onclick="warmPreset()">${ic('layers', 's')} Programm laden</button></div>
-      </div>`;
-}
 function warmDay() { return editablePlan().days.find(x => x.id === planDay); }
 function warmSet(i, k, v) {
     const d = warmDay(), w = (d.warm ||= []);
@@ -2128,10 +2233,10 @@ function warmAdd() { const d = warmDay(); (d.warm ||= []).push({ n: 'Neue Übung
 function warmDel(i) { const undo = snapshot(); warmDay().warm.splice(i, 1); commitPlan('Aufwärm-Übung entfernt', undo); }
 function warmPreset() {
     const opts = [['push', 'Push', 'Schultern, Handgelenke, Brust'], ['pull', 'Pull', 'Schulterblätter, Griff, Rücken'], ['legs', 'Beine', 'Hüfte, Sprunggelenke, Knie'], ['run', 'Laufen', 'Locker einlaufen, Beine mobilisieren'], ['core', 'Core', 'Rumpf aktivieren'], ['mob', 'Kurz', 'Minimal-Programm']];
-    openSheet(`<div class="sheet-h"><div><h3>Aufwärm-Programm</h3><p>Ersetzt das aktuelle Aufwärmen von ${esc(pDay(planDay).short)}</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>Aufwärm-Programm</h3><p>Ersetzt das aktuelle Aufwärmen von ${esc(pDay(planDay).short)}</p></div><button class="btn icon" onclick="openWarmEdit()">${ic('x')}</button></div>
       ${opts.map(([k, n, s]) => `<button class="opt" onclick="warmLoad('${k}')"><b>${n} · ${fmtTime(DEFAULT_WARM[k].reduce((a, x) => a + x.s, 0))}</b><span>${s}: ${esc(DEFAULT_WARM[k].map(x => x.n).join(', '))}</span></button>`).join('')}`);
 }
-function warmLoad(k) { const undo = snapshot(); warmDay().warm = clone(DEFAULT_WARM[k]); closeSheet(); commitPlan('Aufwärm-Programm geladen', undo); }
+function warmLoad(k) { const undo = snapshot(); warmDay().warm = clone(DEFAULT_WARM[k]); openWarmEdit(); commitPlan('Aufwärm-Programm geladen', undo); }
 function delDay() {
     const P = activePlan(); if (P.days.length <= 1) { toast('Mindestens ein Tag muss bleiben'); return; }
     const d = pDay(planDay);
