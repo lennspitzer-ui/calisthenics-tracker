@@ -1,9 +1,9 @@
 // ============================================================
-// Service Worker – Calisthenics Pro V7
+// Service Worker – Calisthenics Pro V8
 // HTML: Network-First (neue Versionen kommen sofort an, offline → Cache)
 // Rest: Stale-While-Revalidate (schnell + im Hintergrund aktualisiert)
 // ============================================================
-const CACHE_NAME = 'calisthenics-pro-v9';
+const CACHE_NAME = 'calisthenics-pro-v10';
 const CORE = ['./', './index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', (event) => {
