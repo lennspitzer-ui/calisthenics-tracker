@@ -666,6 +666,83 @@ body.has-live .app{padding-bottom:calc(190px + var(--sb))}
 .sortbtn.on{color:var(--tx)!important}
 .opt.tplopt.on{border-color:color-mix(in srgb,var(--acc) 50%,transparent)}
 .opt.tplopt span span{line-height:1.4}
+
+/* ===================== V9 · Coach, Sicherheit, Berichte ===================== */
+/* Coach */
+.ctag{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:800;letter-spacing:.03em;color:var(--cc);padding:1px 7px 1px 6px;border-radius:999px;background:color-mix(in srgb,var(--cc) 13%,transparent);border:1px solid color-mix(in srgb,var(--cc) 30%,transparent);vertical-align:1px;white-space:nowrap}
+.ctag .ic{stroke-width:2.8}
+.coach{display:flex;align-items:center;gap:10px;margin:0 0 12px;padding:10px 10px 10px 10px;border-radius:14px;background:color-mix(in srgb,var(--cc) 8%,rgba(0,0,0,.25));border:1px solid color-mix(in srgb,var(--cc) 28%,transparent)}
+.coach>div{flex:1;min-width:0}
+.coach b{display:block;font-size:12.5px;color:var(--cc)}
+.coach span{display:block;font-size:11.5px;color:var(--mu);line-height:1.4;margin-top:1px}
+.coach .rtile span,.coach .rtile{margin:0}
+.cbtn{flex-shrink:0;background:var(--cc)!important;color:#05110c!important;border-color:transparent!important}
+.f-coach{display:flex;gap:8px;align-items:flex-start;max-width:340px;font-size:12px;color:var(--mu);text-align:left;padding:8px 11px;border-radius:12px;background:color-mix(in srgb,var(--cc) 9%,transparent);border:1px solid color-mix(in srgb,var(--cc) 25%,transparent)}
+.f-coach .ic{color:var(--cc);margin-top:1px}
+/* Tagesform */
+.form{display:flex;align-items:center;gap:10px;margin-top:10px}
+.form-l{flex:1;min-width:0}
+.form-l b{display:block;font-size:14px}
+.form-l span{display:block;font-size:11.5px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.form-b{display:flex;gap:4px}
+.form-b button{width:36px;height:36px;border-radius:11px;background:var(--s2);border:1px solid var(--line);font-size:18px;line-height:1;filter:grayscale(.75);opacity:.6;transition:all .15s}
+.form-b button.on{filter:none;opacity:1;border-color:var(--acc);background:rgba(16,185,129,.12);transform:scale(1.06)}
+.prep .form+.warm{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+@media (max-width:370px){.form-b button{width:31px;height:31px;font-size:16px}}
+/* Progressionspfade */
+.lad{padding:12px 12px 12px 14px;border-radius:16px;background:var(--s2);border:1px solid var(--line);margin-bottom:10px;transition:border-color .3s}
+.lad.hl{border-color:#fbbf24}
+.lad-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.lad-h b{font-size:14.5px}
+.lad-h span{font-size:11.5px;color:var(--di);font-weight:700}
+.lsteps{display:flex;flex-wrap:wrap;gap:6px}
+.lstep{display:inline-flex;align-items:center;gap:6px;padding:6px 10px 6px 6px;border-radius:999px;background:var(--s1);border:1px solid var(--line);font-size:12px;font-weight:600;color:var(--di)}
+.lstep i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:10.5px;font-weight:800;font-style:normal;background:var(--s3);color:var(--mu);flex-shrink:0}
+.lstep.done{color:var(--mu)}.lstep.done i{background:color-mix(in srgb,var(--gc) 22%,transparent);color:var(--gc)}
+.lstep.cur{color:var(--tx);border-color:var(--gc);background:color-mix(in srgb,var(--gc) 13%,var(--s1));box-shadow:0 0 16px -8px var(--gc)}
+.lstep.cur i{background:var(--gc);color:#05110c}
+.lad-in{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:10px;font-size:11.5px;color:var(--mu)}
+.lad-in span{display:inline-flex;align-items:center;gap:5px}
+.lad-in i{width:7px;height:7px;border-radius:50%;background:var(--c)}
+.ladinfo{display:flex;align-items:center;gap:8px;width:100%;margin-top:10px;padding:9px 11px;border-radius:12px;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);font-size:12px;color:var(--mu);text-align:left}
+.ladinfo span{flex:1;min-width:0}.ladinfo b{color:var(--tx)}
+.ladinfo>.ic:first-child{color:#fbbf24}
+.opt:disabled{opacity:1;cursor:default}
+/* Fortschritt pro Übung */
+.rec.prog .nm span{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.spark{width:64px;height:22px;flex-shrink:0}
+.rec.prog .tr{width:48px;text-align:right;font-size:12.5px;font-weight:800;color:var(--mu)}
+.rec.prog .tr.up{color:var(--acc)}.rec.prog .tr.down{color:#f87171}
+/* Bericht */
+.mdprev{margin-top:12px;border-radius:14px;background:rgba(0,0,0,.3);border:1px solid var(--line)}
+.mdprev summary{padding:12px 14px;font-size:13px;font-weight:700;color:var(--mu);cursor:pointer}
+.mdprev pre{padding:0 14px 14px;font:11.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mu);white-space:pre-wrap;word-break:break-word;max-height:320px;overflow:auto}
+.wk-rep{display:flex;align-items:center;gap:10px;width:100%;margin-top:12px;padding:11px 0 0;border-top:1px solid var(--line);text-align:left}
+.wk-rep>span{flex:1;min-width:0}
+.wk-rep b{display:block;font-size:13px}
+.wk-rep span span{font-size:11.5px;color:var(--mu)}
+.wk-rep>.ic{color:var(--di)}.wk-rep>.ic:first-child{color:var(--xp)}
+/* Datensicherheit */
+.safe{display:flex;flex-direction:column;gap:7px}
+.safe>div{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--mu);line-height:1.4}
+.safe>div .ic{margin-top:1px;color:var(--di)}
+.safe>div.ok .ic,.bkinfo.ok .ic{color:var(--acc)}
+.safe>div.warn{color:#fbbf24}.safe>div.warn .ic{color:#fbbf24}
+.safe .bkinfo{padding:0}
+.bkinfo .ic{color:var(--di)}
+.bkinfo.due .ic{color:#fbbf24}
+.linkrow{width:100%;text-align:left;border-bottom:0}
+.linkrow>.ic{color:var(--di)}
+.card>.linkrow:last-child{padding-bottom:6px}
+/* Plan-Kopf */
+.ph-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ph-ics{padding:0;color:var(--acc)!important;font-weight:700}
+.planhead .dh-row{background:rgba(0,0,0,.1)}
+/* Willkommen */
+.welc{display:flex;flex-direction:column;gap:8px;margin:16px 0 4px}
+.welc div{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:13px;background:var(--s2);border:1px solid var(--line);font-size:12.5px;color:var(--mu);line-height:1.4}
+.welc .ic{color:var(--acc);margin-top:1px}
+.welc b{color:var(--tx);margin-right:4px}
 </style>
 </head>
 <body>
@@ -749,7 +826,7 @@ body.has-live .app{padding-bottom:calc(190px + var(--sb))}
 // CALISTHENICS PRO V5 – TRAININGSPLAN (hier Übungen ändern)
 // group: push | pull | legs | core   ·   unit: reps | sec
 // ================================================================
-const APP_VERSION = '8.1';
+const APP_VERSION = '9.0';
 
 // Standard-Plan (wird nur genutzt, bis du im Plan-Tab etwas änderst)
 const DEFAULT_PLAN = {
@@ -883,7 +960,7 @@ const BADGES = [
     {id:'s25',   e:'🧱',n:'Fundament',      d:'25 Trainings',             t:S=>S.sessions>=25},
     {id:'s50',   e:'🏛️',n:'Säule',          d:'50 Trainings',             t:S=>S.sessions>=50},
     {id:'s100',  e:'👑',n:'Centurion',      d:'100 Trainings',            t:S=>S.sessions>=100},
-    {id:'week',  e:'📅',n:'Volle Woche',    d:'Alle 5 Tage in einer Woche',t:S=>S.maxDaysInWeek>=5},
+    {id:'week',  e:'📅',n:'Volle Woche',    d:'Wochenziel erreicht',      t:S=>Object.values(S.weekCount).some(n=>n>=S.goal)},
     {id:'r1k',   e:'💯',n:'1.000 Wdh.',     d:'Wiederholungen gesamt',    t:S=>S.reps>=1000},
     {id:'r5k',   e:'⚡',n:'5.000 Wdh.',     d:'Wiederholungen gesamt',    t:S=>S.reps>=5000},
     {id:'r10k',  e:'🌋',n:'10.000 Wdh.',    d:'Wiederholungen gesamt',    t:S=>S.reps>=10000},
@@ -892,6 +969,8 @@ const BADGES = [
     {id:'warm10',e:'🔥',n:'Warm-up-Routine',d:'10× geführt aufgewärmt',   t:()=>(appMeta.extraLog||[]).filter(e=>e.kind==='warm').length>=10},
     {id:'iv1',   e:'⏱️',n:'Intervall-Debüt', d:'Erstes Intervall-Training', t:()=>(appMeta.extraLog||[]).some(e=>e.kind==='iv')},
     {id:'plan',  e:'🛠️',n:'Architekt',      d:'Eigenen Plan gebaut',      t:S=>S.customPlan},
+    {id:'lvlup', e:'🪜',n:'Aufsteiger',     d:'Nächste Progressionsstufe',t:()=>(appMeta.levelLog||[]).some(e=>e.dir>0)},
+    {id:'form',  e:'🧭',n:'Körpergefühl',   d:'10× Tagesform angegeben',  t:()=>Object.keys(appMeta.form||{}).length>=10},
     {id:'streak4',e:'🔥',n:'Feuer-Serie',   d:'4 Wochen Wochenziel',      t:S=>S.bestStreak>=4},
     {id:'hold',  e:'🧘',n:'Eiserne Mitte',  d:'10 Min. Haltezeit',        t:S=>S.secs>=600},
     {id:'limit', e:'☠️',n:'Ans Limit',      d:'Training mit RPE 10',      t:S=>S.rpe10},
@@ -964,6 +1043,7 @@ function sanitizePlan(p) {
             if (range[1] < range[0]) range = [range[1], range[0]];
             return { id: eid, group, name: str(e.name, 40) || 'Übung', sets: (num(e.sets, 3, 1, 12) | 0) || 1, unit, range: e.max ? null : range, max: !!e.max,
                 side: ['Seite', 'Bein'].includes(e.side) ? e.side : '', defaultReps: dr, note: str(e.note, 300), rest: e.rest ? num(e.rest, null, 10, 600) : null,
+                ...(/^\d{4}-\d{2}-\d{2}$/.test(e.since || '') ? { since: e.since } : {}),
                 alternatives: (Array.isArray(e.alternatives) ? e.alternatives : []).filter(a => a && str(a.name, 40)).slice(0, 6).map(a => {
                     const o = { id: str(a.id, 40) || uid('a_'), name: str(a.name, 40), note: str(a.note, 200) };
                     if (Array.isArray(a.range)) o.range = [num(a.range[0], dr), num(a.range[1], dr)];
@@ -1103,8 +1183,10 @@ function ensureState(day, id) {
     if (!st || !Array.isArray(st.sets) || stale) {
         const last = lastEntry(id, today)?.reps;
         const act = getActive(day, id);
+        // V9: Coach-Ziel vorbefüllen (sonst letzte Werte)
+        const tg = setting('coach', true) && setting('coachFill', true) && typeof coach === 'function' ? coach(day, id)?.target : null;
         st = userState.days[day][id] = {
-            sets: Array.from({ length: m.sets }, (_, i) => ({ reps: Number(last?.[i] ?? last?.[last.length - 1] ?? act.defaultReps) || 0, done: false }))
+            sets: Array.from({ length: m.sets }, (_, i) => ({ reps: Number(tg?.[i] ?? last?.[i] ?? last?.[last.length - 1] ?? act.defaultReps) || 0, done: false }))
         };
         ensureState.changed = true;
     }
@@ -1121,6 +1203,7 @@ function suggest(day, id) {
     return { last: last.reps, date: last.date, up };
 }
 function targetFor(day, id, i) {
+    if (setting('coach', true)) return coachTarget(day, id, i);
     const s = suggest(day, id), act = getActive(day, id), step = stepOf(day, id);
     if (!s) return act.range ? act.range[0] : null;
     const l = Number(s.last[i] ?? s.last[s.last.length - 1]);
@@ -1134,7 +1217,8 @@ function logHistory(day, id) {
     history[id] ||= [];
     const today = todayStr(), i = history[id].findIndex(h => h.date === today);
     if (!reps.length) { if (i >= 0) history[id].splice(i, 1); return; }
-    if (i >= 0) history[id][i].reps = reps; else history[id].push({ date: today, reps });
+    const nm = getActive(day, id)?.name;
+    if (i >= 0) { history[id][i].reps = reps; if (nm) history[id][i].nm = nm; } else history[id].push(nm ? { date: today, reps, nm } : { date: today, reps });
     if (history[id].length > 400) history[id] = history[id].slice(-400);
 }
 function touchSession(day) {
@@ -1158,7 +1242,7 @@ function stats() {
             const k = e.date + '|' + inf.day;
             const s = sess[k] || (sess[k] = { key: k, date: e.date, day: inf.day, ex: [], reps: 0, secs: 0, sets: 0 });
             const nums = e.reps.map(Number), sum = nums.reduce((a, b) => a + b, 0);
-            s.ex.push({ id, reps: nums }); s.sets += nums.length; sets += nums.length;
+            s.ex.push({ id, reps: nums, nm: e.nm }); s.sets += nums.length; sets += nums.length;
             if (inf.unit === 'sec') { s.secs += sum; secs += sum; } else if (inf.unit === 'reps') { s.reps += sum; reps += sum; } else { s.cardio = (s.cardio || 0) + 1; }
         }
     }
@@ -1186,7 +1270,8 @@ function stats() {
     let early = false, night = false;
     list.forEach(s => { if (s.start) { const h = new Date(s.start).getHours(); if (h < 8) early = true; if (h >= 21) night = true; } });
     const rpe10 = Object.values(appMeta.dayRatings || {}).some(o => Object.values(o).some(v => v >= 10));
-    const recs = recImprovements(), customPlan = !!appMeta.plan;
+    const recs = recImprovements(), exSig = p => JSON.stringify(p.days.map(d => d.exercises.map(e => [e.name, e.sets, e.range])));
+    const customPlan = !!appMeta.plan && exSig(appMeta.plan) !== exSig(_defPlan ||= defaultPlan());
     const xp = reps + Math.round(secs / 2) + list.length * 40 + recs * 30;
     const since = addDays(todayStr(), -27), groups = { push: 0, pull: 0, legs: 0, core: 0 };
     list.filter(s => s.date >= since).forEach(s => s.ex.forEach(x => { const inf = exInfo(x.id); const sum = x.reps.reduce((a, b) => a + b, 0); if (inf.unit === 'sec') groups[inf.group] = (groups[inf.group] || 0) + Math.round(sum / 3); else if (inf.unit === 'reps') groups[inf.group] = (groups[inf.group] || 0) + sum; }));
@@ -1288,7 +1373,7 @@ function renderTrain() {
         return `<button class="dchip ${d === day ? 'on' : ''}" style="--c:${m.c}" onclick="switchDay('${d}')"><span class="dc-top"><i></i>${d === due ? '<em>Heute</em>' : wk.has(d) ? `<em class="ok">${ic('check', 'xs')}Woche</em>` : ''}</span><b>${esc(m.short)}</b><span>${esc(wds)}</span></button>`;
     }).join('');
     if (!D.exercises.length) {
-        $('#view-train').innerHTML = `<div class="days">${chips}</div>${restBanner}<div class="hero"><div class="pills"><span class="pill acc">${esc(D.badge)}</span></div><h2 class="disp">${esc(M.short)}</h2><p>Dieser Tag hat noch keine Übungen.</p><div style="height:14px"></div><button class="cta" onclick="planDay='${day}';go('plan');newEx()">${ic('plus')} Erste Übung hinzufügen</button></div>`;
+        $('#view-train').innerHTML = `<div class="days">${chips}</div>${restBanner}<div class="hero slim"><div class="pills"><span class="pill acc">${esc(D.badge)}</span></div><h2 class="disp">${esc(M.short)}</h2><p>Dieser Tag hat noch keine Übungen.</p><div style="height:14px"></div><button class="cta" onclick="planDay='${day}';go('plan');newEx()">${ic('plus')} Erste Übung hinzufügen</button></div>`;
         return;
     }
 
@@ -1301,7 +1386,9 @@ function renderTrain() {
     const shown = items.map((t, i) => [t, i]).filter(([t]) => !(hasWarm && /aufw[äa]rm|warm/i.test(t)));
     const checks = setting('checkOn', true) && shown.length ? `<div class="checks">${shown.map(([t, i]) => `<button class="chk ${ch.includes(i) ? 'on' : ''}" onclick="toggleCheck(${i})">${ic('check')}${esc(t)}</button>`).join('')}</div>` : '';
     // „Vor dem Training": nur solange noch kein Satz erledigt ist
-    const warm = warmCard(day), prep = !finishedToday && done === 0 && (warm || checks) ? `<div class="prep"><div class="lbl">Vor dem Training</div>${warm}${checks}</div>` : '';
+    const warm = warmCard(day), form = coachOn() ? formRow() : '';
+    const prep = !finishedToday && done === 0 && (warm || checks || form) ? `<div class="prep"><div class="lbl">Vor dem Training</div>${form}${warm}${checks}</div>` : '';
+    const fT = formToday(), formHint = fT && done > 0 ? `<i></i>${FORM[fT].e} ${FORM[fT].l}` : '';
 
     const ctaLabel = pct === 0 ? 'Workout starten' : pct === 100 ? 'Workout ansehen' : 'Weiter trainieren';
     const statusPill = finishedToday ? `<span class="pill acc">${ic('check', 'xs')}Heute erledigt</span>` : day === due ? `<span class="pill warn">${ic('flame', 'xs')}Heute dran</span>` : '';
@@ -1319,7 +1406,7 @@ function renderTrain() {
             <h2 class="disp">${esc(M.short)}</h2><p class="clamp">${esc(D.subtitle)}</p></div>
           <div class="ring sm">${ringSvg(pct / 100, 72, 7, 'var(--day)')}<div class="rv"><b class="disp num">${pct}%</b><span>${done}/${total}</span></div></div>
         </div>
-        <div class="hero-line">${ic('layers', 'xs')}${D.exercises.length} Übungen<i></i>${ic('clock', 'xs')}~${est} Min.<i></i>${lastDone ? 'zuletzt ' + relDay(lastDone) : 'zum ersten Mal'}</div>
+        <div class="hero-line">${ic('layers', 'xs')}${D.exercises.length} Übungen<i></i>${ic('clock', 'xs')}~${est} Min.<i></i>${lastDone ? 'zuletzt ' + relDay(lastDone) : 'zum ersten Mal'}${formHint}</div>
         <button class="cta" onclick="focusOpen()">${ic('play')} ${ctaLabel}</button>
       </div>
       ${prep}
@@ -1342,7 +1429,8 @@ function exToggle(day, id) { exOv[exKey(day, id)] = !exIsOpen(day, id); renderTr
 function exCard(day, ex, i) {
     const act = getActive(day, ex.id), st = userState.days[day][ex.id], sug = suggest(day, ex.id);
     const dn = st.sets.filter(s => s.done).length, all = dn === st.sets.length, open = exIsOpen(day, ex.id);
-    const sub = `${esc(act.target)}${act.isAlt ? ' · <span class="alt">Alternative</span>' : ''}${sug?.up && !all ? ` · <span class="up">${ic('trend', 'xs')}Steigern</span>` : ''}`;
+    const c = coachOn() && !all ? coach(day, ex.id) : null;
+    const sub = `${esc(act.target)}${act.isAlt ? ' · <span class="alt">Alternative</span>' : ''}${c && c.k !== 'new' && !open ? ' ' + coachTag(c) : ''}`;
     const head = `<button class="ex-h" onclick="exToggle('${day}','${ex.id}')" aria-expanded="${open}">
         <div class="ex-n">${all ? ic('check', 's') : i + 1}</div>
         <div class="ex-main"><h3 class="ex-t">${esc(act.name)}</h3><div class="ex-s">${sub}</div></div>
@@ -1361,10 +1449,12 @@ function exCard(day, ex, i) {
     }).join('');
     return `<article class="ex open ${all ? 'done' : ''}" id="ex-${ex.id}">${head}
       ${act.note ? `<p class="ex-note" onclick="this.firstElementChild.classList.toggle('clamp')"><span class="clamp">${esc(act.note)}</span></p>` : '<div style="height:12px"></div>'}
+      ${all ? '' : coachLine(day, ex.id)}
       <div class="sets">${rows}</div>
       <div class="ex-f">
-        ${sug ? `<button class="link" onclick="copyLast('${day}','${ex.id}')">${ic('copy', 's')} Werte vom ${fmtDate(sug.date)}</button>` : '<span class="dim sm">Erstes Mal – leg los</span>'}
+        ${sug ? `<button class="link" onclick="copyLast('${day}','${ex.id}')">${ic('copy', 's')} Wie am ${fmtDate(sug.date)}</button>` : '<span class="dim sm">Erstes Mal – leg los</span>'}
         <div class="ex-tools">
+          ${act.unit === 'sec' && !all ? `<button class="btn icon sm" onclick="focusOpenAt('${day}','${ex.id}')" aria-label="Halte-Timer">${ic('hourglass', 's')}</button>` : ''}
           ${ex.alternatives?.length ? `<button class="btn icon sm" onclick="openVariants('${day}','${ex.id}')" aria-label="Übung ersetzen">${ic('swap', 's')}</button>` : ''}
           <button class="btn icon sm" onclick="exDetail('${ex.id}')" aria-label="Verlauf">${ic('chart', 's')}</button>
           <button class="btn icon sm" onclick="planDay='${day}';editEx('${day}','${ex.id}')" aria-label="Übung bearbeiten">${ic('edit', 's')}</button>
@@ -1433,11 +1523,8 @@ function rpeVisual(v) {
     $('#rpeEmoji').textContent = c.e; $('#rpeValue').textContent = v; $('#rpeValue').style.color = c.c; $('#rpeLabel').textContent = c.l;
     const d = $('#rpeDisp'); d.classList.toggle('hot', v >= 8); d.classList.toggle('max', v >= 10);
 }
-function rpeInput(v) {
-    rpeVisual(v);
-    ((appMeta.dayRatings ||= {})[currentDay] ||= {})[todayStr()] = parseInt(v, 10);
-    save(); if (v >= 9) vibe(10);
-}
+let finRpe = null;
+function rpeInput(v) { rpeVisual(v); finRpe = parseInt(v, 10); if (v >= 9) vibe(10); }
 function saveNote(t) { ((appMeta.dayNotes ||= {})[currentDay] ||= {})[todayStr()] = t; save(); }
 
 function askReset() {
@@ -1458,7 +1545,7 @@ function finishWorkout() {
     const { t, d } = dayCounts(currentDay), today = todayStr();
     if (!d) { toast('Noch kein Satz erledigt'); return; }
     const rpe = appMeta.dayRatings?.[currentDay]?.[today] || 6, note = appMeta.dayNotes?.[currentDay]?.[today] || '';
-    if (!appMeta.dayRatings?.[currentDay]?.[today]) rpeInput(rpe);
+    finRpe = rpe;
     openSheet(`<div class="sheet-h"><div><h3>Training beenden</h3><p>${esc(DAY_META[currentDay].short)} · ${d} von ${t} Sätzen erledigt</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
       <div class="card" style="margin-bottom:12px">
         <div class="row-h"><span class="lbl">Wie hart war's?</span><span class="rpe-v" id="rpeDisp"><span id="rpeEmoji"></span><b id="rpeValue" class="num disp"></b><small>/10</small></span></div>
@@ -1476,6 +1563,7 @@ function doFinish(markAll) {
     const day = currentDay, today = todayStr();
     const prevLevel = stats().level;
     if (markAll) WORKOUT_DATA[day].exercises.forEach(ex => { const st = userState.days[day][ex.id]; if (st.sets.some(s => !s.done)) { st.sets.forEach(s => s.done = true); st.date = today; logHistory(day, ex.id); } });
+    if (finRpe) { ((appMeta.dayRatings ||= {})[day] ||= {})[today] = finRpe; finRpe = null; }
     appMeta.lastCompletedDay = day; appMeta.lastCompletedDate = today; touchSession(day); save();
     stopRest();
     const S = stats(), s = S.list.find(x => x.key === today + '|' + day) || { reps: 0, secs: 0, sets: 0, vol: 0 };
@@ -1493,12 +1581,13 @@ function doFinish(markAll) {
         <div class="kpi">${ic('zap')}<b class="disp num">${fmtNum(s.reps)}</b><span>Wiederholungen</span></div>
         <div class="kpi">${s.secs ? ic('timer') : ic('gauge')}<b class="disp num" ${!s.secs && rc ? `style="color:${rc.c}"` : ''}>${s.secs ? s.secs : rp || '–'}</b><span>${s.secs ? 'Sek. gehalten' : 'Anstrengung (RPE)'}</span></div>
       </div>
-      <button class="opt" style="display:flex;align-items:center;gap:12px" onclick="closeSheet();go('rec')"><span class="rtile" style="--rc:#f59e0b">${ic('trophy')}</span><span style="flex:1"><b>Neuen Rekord aufgestellt?</b><span>Im Rekorde-Tab eintragen</span></span>${ic('chev')}</button>
+      ${backupDue() ? `<button class="opt tplopt" onclick="closeSheet();shareBackup()"><span class="rtile" style="--rc:#fbbf24">${ic('save')}</span><span><b>Backup fällig</b><span>${backupAge() == null ? 'Noch nie gesichert' : 'Letztes vor ' + backupAge() + ' Tagen'} – jetzt in Drive o. Ä. teilen</span></span>${ic('chev')}</button>` : ''}
+      <button class="opt tplopt" onclick="closeSheet();go('rec')"><span class="rtile" style="--rc:#f59e0b">${ic('trophy')}</span><span><b>Neuen Rekord aufgestellt?</b><span>Im Rekorde-Tab eintragen</span></span>${ic('chev')}</button>
       <button class="cta" onclick="closeSheet();go('stats')">${ic('chart')} Statistik ansehen</button>
       <button class="btn block ghost" style="margin-top:8px" onclick="closeSheet()">Fertig</button>`);
     confetti(140);
     vibe([60, 100, 60, 100, 200]);
-    renderView();
+    renderView(); snapPut('Nach Training');
     setTimeout(() => { checkBadges(); if (stats().level > prevLevel) setTimeout(() => burst('⭐', 'Level ' + stats().level + '!', stats().title), 2600); }, 900);
 }
 
@@ -1568,20 +1657,23 @@ function barChart(weeks) {
 // ÜBUNGS-DETAIL
 // ================================================================
 function exDetail(id) {
-    const inf = EX_INDEX[id]; if (!inf) return;
-    const act = getActive(inf.day, id), es = entries(id).filter(e => e.reps?.length), u = unitShort(act.unit);
-    const c = DAY_META[inf.day].c;
+    const live = EX_INDEX[id], ai = exInfo(id); if (!ai) return;
+    const act = live ? getActive(live.day, id) : { name: ai.name, unit: ai.unit, target: 'Archiv', note: '' }, inf = { day: ai.day };
+    const es = entries(id).filter(e => e.reps?.length), u = unitShort(act.unit);
+    const c = dayInfo(inf.day).c, cc = live && coachOn() ? coach(live.day, id) : null, lad = ladderOf(act.name);
     const totals = es.map(e => Math.round(e.reps.reduce((a, b) => a + Number(b), 0) * 100) / 100);
     const trend = es.length >= 2 ? Math.round((totals[totals.length - 1] - totals[0]) / Math.max(1, totals[0]) * 100) : null;
-    openSheet(`<div class="sheet-h"><div><h3>${esc(act.name)}</h3><p>${DAY_META[inf.day].short} · ${esc(act.target)}</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>${esc(act.name)}</h3><p>${esc(dayInfo(inf.day).short)} · ${esc(act.target)}</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
       <div class="kpis" style="margin-bottom:12px">
         <div class="kpi">${ic('cal')}<b class="disp num">${es.length}</b><span>Einheiten${es.length ? ' · zuletzt ' + fmtDate(es[es.length - 1].date) : ''}</span></div>
         <div class="kpi">${ic('trend')}<b class="disp num ${trend > 0 ? 'up' : trend < 0 ? 'down' : ''}">${trend == null ? '–' : (trend > 0 ? '+' : '') + trend + '%'}</b><span>Volumen seit Start</span></div>
       </div>
       <div class="card" style="margin-bottom:12px"><div class="lbl" style="margin-bottom:8px">Gesamt pro Einheit (${u})</div>${lineChart(totals.slice(-12), es.slice(-12).map(e => fmtDate(e.date)), c)}</div>
-      <div class="card" style="margin-bottom:12px"><div class="lbl" style="margin-bottom:8px">Technik</div><p class="sm muted" style="line-height:1.5">${esc(act.note)}</p></div>
+      ${cc && cc.k !== 'new' ? `<div class="coach" style="--cc:${cc.c};margin:0 0 12px"><span class="rtile sm" style="--rc:${cc.c}">${ic(cc.ic)}</span><div><b>Coach: ${cc.l}</b><span>${esc(cc.text)}</span></div></div>` : ''}
+      ${lad ? `<button class="opt tplopt" onclick="openLadders('${lad.l.k}')"><span class="rtile" style="--rc:${GROUPS[lad.l.g].c}">${ic('layers')}</span><span><b>Pfad ${esc(lad.l.n)} · Stufe ${lad.i + 1}/${lad.l.steps.length}</b><span>${lad.next ? 'Nächste Stufe: ' + esc(lad.next.n) : 'Höchste Stufe erreicht 🏆'}</span></span>${ic('chev')}</button>` : ''}
+      ${act.note ? `<div class="card" style="margin-bottom:12px"><div class="lbl" style="margin-bottom:8px">Technik</div><p class="sm muted" style="line-height:1.5">${esc(act.note)}</p></div>` : ''}
       <div class="lbl" style="margin:16px 2px 8px">Alle Einheiten (${es.length})</div>
-      ${es.length ? [...es].reverse().map(e => `<div class="rec"><span class="dot" style="background:${c}"></span><div class="nm"><b>${fmtLong(e.date)}</b><span>${e.reps.join(' · ')} ${u}</span></div><div class="bv"><b class="disp num">${e.reps.reduce((a, b) => a + Number(b), 0)}</b><span class="dim">gesamt</span></div></div>`).join('') : '<p class="muted sm" style="padding:10px 2px">Noch keine Einheiten.</p>'}`);
+      ${es.length ? [...es].reverse().map(e => `<div class="rec"><span class="dot" style="background:${c}"></span><div class="nm"><b>${fmtLong(e.date)}${e.nm && e.nm !== act.name ? ' · <span class="dim">' + esc(e.nm) + '</span>' : ''}</b><span>${e.reps.map(fmtVal).join(' · ')} ${u}</span></div><div class="bv"><b class="disp num">${e.reps.reduce((a, b) => a + Number(b), 0)}</b><span class="dim">gesamt</span></div></div>`).join('') : '<p class="muted sm" style="padding:10px 2px">Noch keine Einheiten.</p>'}`);
 }
 
 // ================================================================
@@ -1620,10 +1712,11 @@ function renderStats() {
         <div class="kpi">${ic('flame')}<b class="disp num">${S.streak}</b><span>Wochen-Serie (Ziel ${S.goal}×)</span></div>
         <div class="kpi">${ic('zap')}<b class="disp num">${fmtNum(S.reps)}</b><span>Wiederholungen</span></div>
         <div class="kpi">${ic('trophy')}<b class="disp num">${S.recs}</b><span>Rekorde aufgestellt</span></div>
-        <div class="kpi">${ic('clock')}<b class="disp num">${Math.round(S.secs / 60 * 10) / 10}</b><span>Min. Haltezeit</span></div>
+        <div class="kpi">${ic('clock')}<b class="disp num">${fmtVal(Math.round(S.secs / 60 * 10) / 10)}</b><span>Min. Haltezeit</span></div>
       </div>
       <div class="sec-h"><h2>Wochenvolumen</h2><span class="dim sm">Wdh. + Haltezeit/3</span></div>
       <div class="card">${barChart(S.weeks)}</div>
+      ${progressCard()}
       <div class="sec-h"><h2>Trainingskalender</h2><span class="dim sm">16 Wochen</span></div>
       <div class="card"><div class="hm">${hm}</div>
         <div class="legend">${DAY_ORDER.map(d => `<span><i style="background:${DAY_META[d].c}"></i>${esc(DAY_META[d].short)}</span>`).join('')}</div></div>
@@ -1650,7 +1743,7 @@ function renderLog() {
         html += `<button class="sess ${openLog.has(s.key) ? 'open' : ''}" style="--c:${di.c}" onclick="toggleLog('${s.key}')">
           <div class="sess-h"><div><b>${esc(di.short)}</b><small>${fmtLong(s.date)} · ${relDay(s.date)}</small></div>${DAY_META[s.day] ? '' : '<span class="pill">Archiv</span>'}</div>
           <div class="sess-m"><span>${ic("layers", "s")}${s.sets} ${s.sets === 1 ? "Satz" : "Sätze"}</span><span>${ic('zap', 's')}${fmtNum(s.reps)} Wdh.${s.secs ? ' · ' + s.secs + ' s' : ''}</span>${s.dur ? `<span>${ic('clock', 's')}${fmtDur(s.dur)}</span>` : ''}${r ? `<span>${ic('gauge', 's')}RPE ${s.rpe}</span>` : ''}</div>
-          <div class="sess-d">${s.ex.map(x => { const inf = exInfo(x.id); return `<div><span>${esc(inf.name)}</span><span class="num">${x.reps.map(fmtVal).join(' · ')} ${inf.unit === 'reps' ? '' : unitShort(inf.unit)}</span></div>`; }).join('')}${s.note ? `<i>„${esc(s.note)}"</i>` : ''}</div>
+          <div class="sess-d">${appMeta.form?.[s.date] ? `<div><span>Tagesform</span><span>${FORM[appMeta.form[s.date]].e} ${FORM[appMeta.form[s.date]].l}</span></div>` : ''}${s.ex.map(x => { const inf = exInfo(x.id); return `<div><span>${esc(x.nm || inf.name)}</span><span class="num">${x.reps.map(fmtVal).join(' · ')} ${inf.unit === 'reps' ? '' : unitShort(inf.unit)}</span></div>`; }).join('')}${s.note ? `<i>„${esc(s.note)}"</i>` : ''}</div>
         </button>`;
     });
     $('#view-stats').innerHTML = html;
@@ -1679,6 +1772,13 @@ function renderMore() {
         <div class="sub-l">Zwischen Übungen</div>
         <div class="seg">${segBtns([60, 90, 120, 180, 240], getExerciseTimerSecs(), 'setExTimer', fmtS)}</div>
       </div>
+      <div class="sec-h"><h2>Coach</h2></div>
+      <div class="card" style="padding:4px 16px">
+        <div class="set-row"><div><b>Coach-Vorschläge</b><span>Ziel pro Übung: Steigern, Halten, Leichter, nächste Stufe</span></div>${sw('coach', true)}</div>
+        ${setting('coach', true) ? `<div class="set-row"><div><b>Sätze vorbefüllen</b><span>Coach-Ziel statt letzter Werte eintragen</span></div>${sw('coachFill', true)}</div>
+        <div class="set-row"><div><b>Tagesform abfragen</b><span>Bei „Müde" plant der Coach leichter</span></div>${sw('formOn', true)}</div>` : ''}
+        <button class="set-row linkrow" onclick="openLadders()"><div><b>Progressionspfade</b><span>${LADDERS.length} Pfade vom Einstieg bis zum Skill</span></div>${ic('chev')}</button>
+      </div>
       <div class="sec-h"><h2>Feedback</h2></div>
       <div class="card" style="padding:4px 16px">
         <div class="set-row"><div><b>Töne</b><span>Signal am Pausen-Ende</span></div>${sw('sound', true)}</div>
@@ -1689,23 +1789,30 @@ function renderMore() {
       ${setting('checkOn', true) ? `<div class="card" style="margin-top:10px"><div class="sub-l" style="margin-top:0">Checkliste (eine Zeile pro Punkt)</div><textarea class="note" style="margin-top:0" rows="3" onchange="setSetting('checkItems',this.value.split('\\n').map(s=>s.trim()).filter(Boolean).slice(0,6))">${esc(setting('checkItems', DEFAULT_CHECKS).join('\n'))}</textarea></div>` : ''}
       <div class="sec-h"><h2>Trainingsplan</h2></div>
       <button class="card linkcard" onclick="openPlans()"><span class="rtile" style="--rc:var(--acc)">${ic('layers')}</span><div style="flex:1;min-width:0"><b style="font-size:15px">Plan-Profile</b><div class="sm muted">Aktiv: ${esc(planName())} · ${(appMeta.plans || []).length} gespeichert · Export & Import</div></div>${ic('chev')}</button>
-      <div class="sec-h"><h2>Daten</h2></div>
-      <div class="card stack">
-        ${backupInfo()}
-        <button class="btn prim block" onclick="exportData()">${ic('down')} Komplett-Backup exportieren</button>
-        <button class="btn block" onclick="$('#imp').click()">${ic('up')} Komplett-Backup importieren</button>
+      <div class="sec-h"><h2>Daten & Sicherheit</h2></div>
+      <div class="card">
+        <div class="safe">
+          <div class="${persistState === 'yes' ? 'ok' : persistState === 'no' ? 'warn' : ''}">${ic(persistState === 'yes' ? 'check' : 'info', 's')}<span>${persistState === 'yes' ? 'Speicher dauerhaft geschützt' : persistState === 'no' ? 'Browser darf den Speicher bei Platzmangel leeren – App installieren hilft' : 'Speicherschutz wird geprüft …'}</span></div>
+          <div class="${appMeta.lastSnap ? 'ok' : ''}">${ic(appMeta.lastSnap ? 'check' : 'info', 's')}<span>${appMeta.lastSnap ? 'Automatisch gesichert ' + relDay(dstr(new Date(appMeta.lastSnap))) : 'Automatische Sicherung nach dem ersten Training'}</span></div>
+          ${backupInfo()}
+        </div>
+        <button class="btn prim block" style="margin-top:12px" onclick="shareBackup()">${ic('share')} Backup teilen (Drive, Mail …)</button>
+        <div class="btnrow"><button class="btn" onclick="exportData()">${ic('down', 's')} Als Datei</button><button class="btn" onclick="$('#imp').click()">${ic('up', 's')} Importieren</button></div>
         <input type="file" id="imp" accept="application/json,.json" hidden onchange="importData(this)">
+        <button class="set-row linkrow" style="margin-top:6px" onclick="openSnaps()"><div><b>Automatische Sicherungen</b><span>Früheren Stand wiederherstellen</span></div>${ic('chev')}</button>
+      </div>
+      <div class="card stack" style="margin-top:10px">
         <button class="btn block ghost" onclick="hardReload()">${ic('reset')} App neu laden (Cache leeren)</button>
         <button class="btn danger block" onclick="askWipe()">${ic('trash')} Alle Daten löschen</button>
       </div>
-      <p class="foot">Calisthenics Pro V${APP_VERSION} · Alle Daten (Verlauf, Pläne, Rekorde) liegen nur auf diesem Gerät.<br>Das Komplett-Backup enthält alles, der Plan-Export nur Trainingspläne.</p>`;
+      <p class="foot">Calisthenics Pro V${APP_VERSION} · Alle Daten (Verlauf, Pläne, Rekorde) liegen nur auf diesem Gerät.<br>Das Backup enthält alles, der Plan-Export nur Trainingspläne.</p>`;
 }
 // Backup-Erinnerung
 function backupAge() { const t = appMeta.lastBackup; return t ? Math.floor((Date.now() - t) / 864e5) : null; }
 function backupDue() { const a = backupAge(); return stats().sessions >= 3 && (a == null || a >= 14); }
 function backupInfo() {
     const a = backupAge(), due = backupDue();
-    return `<div class="bkinfo ${due ? 'due' : ''}">${ic(due ? 'info' : 'check', 's')}<span>${a == null ? 'Noch nie ein Backup exportiert' : 'Letztes Backup: ' + (a === 0 ? 'heute' : a === 1 ? 'gestern' : 'vor ' + a + ' Tagen')}${due ? ' – am besten jetzt sichern' : ''}</span></div>`;
+    return `<div class="bkinfo ${due ? 'due' : a != null ? 'ok' : ''}">${ic(due || a == null ? 'info' : 'check', 's')}<span>${a == null ? 'Noch nie ein Backup geteilt oder gespeichert' : 'Letztes Backup: ' + (a === 0 ? 'heute' : a === 1 ? 'gestern' : 'vor ' + a + ' Tagen')}${due ? ' – am besten jetzt sichern' : ''}</span></div>`;
 }
 function updNavDot() { document.querySelector('#nav button[data-v="more"]')?.classList.toggle('dot', backupDue()); }
 function flip(k, def) { setSetting(k, !setting(k, def)); renderMore(); vibe(15); }
@@ -1713,11 +1820,8 @@ function setGoal(v) { setSetting('weeklyGoal', v); renderMore(); renderTop(); }
 function setSetTimer(v) { appMeta.setTimerSecs = v; save(); renderMore(); toast('Satzpause: ' + fmtS(v)); }
 function setExTimer(v) { appMeta.exerciseTimerSecs = v; save(); renderMore(); toast('Übungspause: ' + fmtS(v)); }
 function exportData() {
-    const blob = new Blob([JSON.stringify({ app: 'Calisthenics Pro', version: 'v' + APP_VERSION, exportedAt: new Date().toISOString(), userState, history, appMeta }, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob), a = document.createElement('a');
-    a.href = url; a.download = 'calisthenics-backup-' + todayStr() + '.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    appMeta.lastBackup = Date.now(); save(); if (view === 'more') renderMore(); updNavDot();
-    toast('Backup exportiert ✓');
+    downloadBlob(backupBlob(), 'calisthenics-backup-' + todayStr() + '.json');
+    markBackup(); toast('Backup gespeichert ✓');
 }
 function importData(inp) {
     const f = inp.files[0]; if (!f) return;
@@ -1726,18 +1830,23 @@ function importData(inp) {
         try {
             const d = JSON.parse(e.target.result);
             if (d.type === 'plan') { toast('Das ist ein Plan-Export – im Plan-Tab unter „Pläne" importieren'); return; }
-            if (!d.userState && !d.history) throw 0;
-            const prev = JSON.stringify({ userState, history, appMeta });
-            userState = d.userState || {}; history = d.history || {}; appMeta = d.appMeta || {};
-            applyPlan(); save(); currentDay = computeSuggestedDay(); checkBadges(true); go('train');
-            toast('Backup importiert ✓', () => { const p = JSON.parse(prev); userState = p.userState; history = p.history; appMeta = p.appMeta; applyPlan(); save(); currentDay = computeSuggestedDay(); go('train'); toast('Vorheriger Stand wiederhergestellt'); });
+            const st = cleanState(d), prev = stateJSON(), n = Object.values(st.history).reduce((a, x) => a + x.length, 0);
+            const run = () => {
+                snapPut('Vor Import').finally(() => {
+                    st.appMeta.onboarded = true; applyState(st); checkBadges(true); go('train');
+                    toast('Backup importiert ✓', () => { applyState(JSON.parse(prev)); go('train'); toast('Vorheriger Stand wiederhergestellt'); });
+                });
+            };
+            if (stats().sessions) confirmSheet('Backup importieren?', `Die Datei enthält ${n} Übungs-Einträge${d.exportedAt ? ' vom ' + new Date(d.exportedAt).toLocaleDateString('de-DE') : ''}. Dein aktueller Stand wird ersetzt – vorher automatisch gesichert.`, 'Importieren', run);
+            else run();
         } catch (err) { toast('Import fehlgeschlagen – keine gültige Datei'); }
     };
     r.readAsText(f); inp.value = '';
 }
 function askWipe() {
-    confirmSheet('Alle Daten löschen?', 'Verlauf, Rekorde, Erfolge und Einstellungen werden unwiderruflich gelöscht. Tipp: vorher ein Backup exportieren.', 'Endgültig löschen', () => {
-        localStorage.removeItem(STORAGE_KEY); userState = {}; history = {}; appMeta = {}; applyPlan(); save(); currentDay = DAY_ORDER[0]; go('train'); toast('Alles gelöscht');
+    confirmSheet('Alle Daten löschen?', 'Verlauf, Rekorde, Erfolge und Einstellungen werden gelöscht. Eine letzte automatische Sicherung bleibt erhalten (Profil → Automatische Sicherungen).', 'Endgültig löschen', async () => {
+        await snapPut('Vor dem Löschen');
+        const ls = appMeta.lastSnap; localStorage.removeItem(STORAGE_KEY); userState = {}; history = {}; appMeta = { onboarded: true, lastSnap: ls }; applyPlan(); save(); currentDay = DAY_ORDER[0]; go('train'); toast('Alles gelöscht');
     }, true);
 }
 
@@ -1755,6 +1864,14 @@ function nextOpen(day, fromEx = 0) {
         if (j >= 0) return { ex: i, set: j };
     }
     return null;
+}
+// Direkt bei einer bestimmten Übung starten (z. B. Halte-Timer aus der Karte)
+function focusOpenAt(day, id) {
+    currentDay = day; const i = WORKOUT_DATA[day].exercises.findIndex(e => e.id === id), st = ensureState(day, id), j = st.sets.findIndex(s => !s.done);
+    if (i < 0 || j < 0) { focusOpen(); return; }
+    if (rest.running) stopRest();
+    focus = { day, ex: i, set: j, phase: 'work' };
+    $('#focus').classList.add('open'); document.body.style.overflow = 'hidden'; requestWakeLock(); focusRender(); updTimerUI();
 }
 function focusOpen() {
     const day = currentDay;
@@ -1787,7 +1904,7 @@ function focusRender() {
           <div class="f-body"><div class="f-big">🏁</div><h2 class="f-name disp">Alles durchgezogen!</h2>
             <p class="f-hint"><b>${d}/${t}</b> Sätze · <b>${fmtNum(s?.reps || 0)}</b> Wdh.${s?.secs ? ' · <b>' + s.secs + ' s</b> Halten' : ''}${s?.dur ? ' · <b>' + fmtDur(s.dur) + '</b>' : ''}</p>
             <button class="btn" style="margin-top:6px" onclick="focusClose();go('rec')">${ic('trophy', 's')} Rekord eintragen</button></div>
-          <button class="cta f-cta" onclick="focusClose();doFinish(false)">${ic('flag')} Training abschließen</button>
+          <button class="cta f-cta" onclick="focusClose();finishWorkout()">${ic('flag')} Training abschließen</button>
           <div class="f-sub"><button onclick="focusClose()">Zurück zur Übersicht</button></div>`;
         return;
     }
@@ -1806,11 +1923,11 @@ function focusRender() {
         updTimerUI(); return;
     }
     // Work
-    const s = st.sets[focus.set], sug = suggest(day, ex.id), tgt = targetFor(day, ex.id, focus.set);
+    const s = st.sets[focus.set], sug = suggest(day, ex.id), tgt = targetFor(day, ex.id, focus.set), cch = coachOn() ? coach(day, ex.id) : null;
     const lastV = sug?.last?.[focus.set];
     el.innerHTML = `${focusTop(day, 'Übung ' + (focus.ex + 1) + ' / ' + exs.length)}
       <div class="f-body">
-        <div class="pills" style="justify-content:center"><span class="pill acc">${esc(act.target)}</span>${sug?.up ? `<span class="pill warn">${ic('trend', 'xs')}Steigern</span>` : ''}</div>
+        <div class="pills" style="justify-content:center"><span class="pill acc">${esc(act.target)}</span>${cch && cch.k !== 'new' ? coachTag(cch) : ''}</div>
         <h2 class="f-name disp">${esc(act.name)}</h2>
         <div class="f-dots">${st.sets.map((x, j) => `<i class="${x.done ? 'done' : j === focus.set ? 'cur' : ''}"></i>`).join('')}</div>
         <div class="f-setlbl">Satz ${focus.set + 1} von ${st.sets.length}</div>
@@ -1821,6 +1938,7 @@ function focusRender() {
         </div>
         ${act.unit === 'sec' ? `<button class="btn" id="holdBtn" onclick="holdToggle()" style="padding:12px 18px">${ic('timer')} Halte-Timer starten (3-2-1)</button>` : ''}
         <div class="f-hint">${lastV != null ? `Letztes Mal <b>${fmtVal(lastV)}</b>` : 'Erstes Mal – gib alles'}${tgt != null && sug ? ` · Ziel heute <b>${fmtVal(tgt)}</b>` : ''}</div>
+        ${cch && cch.k !== 'new' && focus.set === st.sets.findIndex(x => !x.done) ? `<div class="f-coach" style="--cc:${cch.c}">${ic(cch.ic, 's')}<span>${esc(cch.text)}</span></div>` : ''}
         <p class="f-note">${esc(act.note)}</p>
       </div>
       <button class="cta f-cta" onclick="focusDone()">${ic('check')} Satz geschafft</button>
@@ -2115,7 +2233,8 @@ function renderPlan() {
       <div class="sec-h" style="margin-top:16px"><h2>Trainingsplan</h2></div>
       <div class="card planhead">
         <button class="ph-top" onclick="openPlans()"><span class="rtile" style="--rc:var(--acc)">${ic('layers')}</span><div><b>${esc(planName())}</b><span>${planCount(P)}</span></div><span class="ph-btn">Pläne ${ic('chev', 'xs')}</span></button>
-        <div class="ph-sched"><button class="ph-mode" onclick="openPlanning()">${ic(week ? 'cal' : 'refresh', 'xs')} ${week ? 'Feste Wochentage' : 'Rotation'} ${ic('down1', 'xs')}</button>${sched}</div>
+        <div class="ph-sched"><div class="ph-row"><button class="ph-mode" onclick="openPlanning()">${ic(week ? 'cal' : 'refresh', 'xs')} ${week ? 'Feste Wochentage' : 'Rotation'} ${ic('down1', 'xs')}</button>${week && P.days.some(x => x.wd?.length) ? `<button class="link ph-ics" onclick="openIcs()">${ic('cal', 's')} In Kalender</button>` : ''}</div>${sched}</div>
+        <button class="dh-row" onclick="openLadders()"><span class="rtile sm" style="--rc:#fbbf24">${ic('zap')}</span><div><b>Progressionspfade</b><span>${(() => { const h = planLadderHits(), n = Object.values(h).reduce((a, x) => a + x.length, 0); return n ? `${n} Übungen auf ${Object.keys(h).length} Pfaden · Coach schlägt nächste Stufen vor` : 'Vom Einstieg bis zum Skill'; })()}</span></div>${ic('chev', 's')}</button>
       </div>
       <div class="sec-h"><h2>Tage</h2><span class="dim sm">${P.days.length}</span></div>
       <div class="days" style="margin-top:0">${chips}</div>
@@ -2396,8 +2515,9 @@ function renderEditSheet() {
     const prev = { ...d, range: d.max ? null : d.range };
     const dup = (d.name || '').trim() && pDay(draftCtx.day).exercises.some(x => x.id !== d.id && x.name.toLowerCase() === d.name.trim().toLowerCase());
     openSheet(`<div class="sheet-h"><div><h3>${draftCtx.id ? 'Übung bearbeiten' : 'Neue Übung'}</h3><p>${esc(pDay(draftCtx.day).short)}</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
-      <div class="fld" style="margin-top:0"><label>Name</label><input class="inp" id="dName" value="${esc(d.name)}" maxlength="40" placeholder="z. B. Archer Push-ups" oninput="draft.name=this.value;$('#dPrevN').textContent=this.value||'Name'"></div>
+      <div class="fld" style="margin-top:0"><label>Name</label><input class="inp" id="dName" value="${esc(d.name)}" maxlength="40" placeholder="z. B. Archer Push-ups" oninput="draft.name=this.value;$('#dPrevN').textContent=this.value||'Name'" onchange="renderEditSheet()"></div>
       ${dup ? '<p class="sm" style="color:#fbbf24;margin-top:6px">Hinweis: An diesem Tag gibt es schon eine Übung mit diesem Namen.</p>' : ''}
+      ${(() => { const m = ladderOf(d.name); return m ? `<button class="ladinfo" onclick="openLadders('${m.l.k}')">${ic('zap', 's')}<span>Pfad <b>${esc(m.l.n)}</b> · Stufe ${m.i + 1}/${m.l.steps.length}${m.next ? ' · danach ' + esc(m.next.n) : ''}</span>${ic('chev', 's')}</button>` : ''; })()}
       <div class="fld"><label>Muskelgruppe</label>${seg('group', Object.keys(GROUPS).map(k => [k, GROUPS[k].n]), d.group)}</div>
       <div class="fld"><label>Einheit</label>${seg('unit', Object.keys(UNITS).map(k => [k, UNITS[k].n]), d.unit)}</div>
       <div class="two">${stp('Sätze', 'sets', d.sets)}${stp('Startwert pro Satz', 'defaultReps', d.defaultReps)}</div>
@@ -2447,6 +2567,8 @@ function saveEx() {
     if (e.max) e.range = null;
     const d = editablePlan().days.find(x => x.id === draftCtx.day);
     const i = d.exercises.findIndex(x => x.id === e.id);
+    // Andere Progressionsstufe → Coach startet für diese Übung neu
+    if (i >= 0) { const o = d.exercises[i], a = ladderOf(o.name), b = ladderOf(name); if (o.name !== name && (a || b) && (a?.l.k !== b?.l.k || a?.i !== b?.i)) e.since = todayStr(); }
     if (i >= 0) d.exercises[i] = e; else d.exercises.push(e);
     if (userState.variants?.[e.id] && !e.alternatives.some(a => a.id === userState.variants[e.id])) delete userState.variants[e.id];
     closeSheet(); commitPlan(i >= 0 ? 'Übung gespeichert ✓' : 'Übung hinzugefügt ✓');
@@ -2823,8 +2945,9 @@ function weekCard() {
     else if (a.n < b.n) tip = `Letzte Woche warst du bis ${WD[off]} schon bei ${b.n} ${b.n === 1 ? 'Training' : 'Trainings'}.`;
     else tip = 'Auf Kurs mit der letzten Woche.';
     return `<div class="card wkcard"><div class="row-h"><span class="lbl">Diese Woche · KW ${kw(mon)}</span><span class="dim sm">vs. Vorwoche bis ${WD[off]}</span></div>
-      <div class="wkgrid">${cell(a.n, 'Trainings', a.n, b.n)}${cell(fmtNum(a.reps), 'Wdh.', a.reps, b.reps)}${cell(Math.round(a.secs / 60 * 10) / 10 + '', 'Min. Halten', a.secs, b.secs)}${cell(a.mins + a.extra, 'Min. aktiv', a.mins + a.extra, b.mins + b.extra)}</div>
-      <p class="sm muted" style="margin-top:10px">${tip}${a.recs ? ` · <b style="color:#fbbf24">${a.recs} neue${a.recs === 1 ? 'r' : ''} Rekord${a.recs === 1 ? '' : 'e'}</b>` : ''}${a.extra ? ` · ${a.extra} Min. Aufwärmen/Intervalle` : ''}</p></div>`;
+      <div class="wkgrid">${cell(a.n, 'Trainings', a.n, b.n)}${cell(fmtNum(a.reps), 'Wdh.', a.reps, b.reps)}${cell(fmtVal(Math.round(a.secs / 60 * 10) / 10), 'Min. Halten', a.secs, b.secs)}${cell(a.mins + a.extra, 'Min. aktiv', a.mins + a.extra, b.mins + b.extra)}</div>
+      <p class="sm muted" style="margin-top:10px">${tip}${a.recs ? ` · <b style="color:#fbbf24">${a.recs} neue${a.recs === 1 ? 'r' : ''} Rekord${a.recs === 1 ? '' : 'e'}</b>` : ''}${a.extra ? ` · ${a.extra} Min. Aufwärmen/Intervalle` : ''}</p>
+      <button class="wk-rep" onclick="openReport('w0')">${ic('copy', 's')}<span><b>Wochenbericht für Obsidian</b><span>Markdown teilen, kopieren oder speichern</span></span>${ic('chev', 's')}</button></div>`;
 }
 
 // ================================================================
@@ -2893,10 +3016,503 @@ function handleShortcut() {
 }
 
 // ================================================================
+// V9 · COACH: Progression pro Übung, Tagesform, Progressionspfade
+// ================================================================
+
+// ---------- Progressionspfade (Leitern) ----------
+// m = Erkennung über den Übungsnamen, r = Zielbereich der Stufe, u = Einheit
+const L = (n, m, r, cue, o = {}) => ({ n, m, r, cue, u: o.u || 'reps', side: o.side || '' });
+const LADDERS = [
+    { k: 'hspu', n: 'Handstand-Liegestütz', g: 'push', steps: [
+        L('Pike Push-ups (Boden)', /^(?!.*(deficit|erhöht|elevated|box)).*pike/, [8, 12], 'Hüfte hoch, Kopf zwischen die Hände, Ellbogen ca. 45°.'),
+        L('Deficit Pike Push-ups', /deficit.*pike|pike.*deficit/, [8, 12], 'Hände auf Griffen, Kopf unter Handhöhe absenken.'),
+        L('Elevated Pike Push-ups', /(elevated|erhöht|box).*pike|pike.*(elevated|erhöht|box)/, [6, 10], 'Füße auf Box oder Bank, Hüfte möglichst über den Schultern.'),
+        L('Wall HSPU Negatives', /(hspu|handstand).*negativ|negativ.*(hspu|handstand)/, [3, 5], 'Im Handstand an der Wand 3–5 Sek. kontrolliert absenken.'),
+        L('Wall Handstand Push-ups', /^(?!.*negativ).*(hspu|handstand.?push|handstand-liegest)/, [3, 8], 'Bauch zur Wand, voller Bewegungsweg, Rumpf fest.')] },
+    { k: 'dips', n: 'Dips', g: 'push', steps: [
+        L('Bench Dips', /(bench|stuhl|bank).?dip/, [10, 15], 'Hände an der Bank, Schultern unten, bis 90° beugen.'),
+        L('Negative Dips', /negativ.*dip|dip.*negativ/, [5, 8], 'Oben starten, 3–5 Sek. ablassen.'),
+        L('Bar Dips', /^(?!.*(tempo|bench|stuhl|bank|negativ|ring|gewicht|weighted)).*dip/, [8, 12], 'Tief runter, Schultern weg von den Ohren.'),
+        L('Tempo Bar Dips', /tempo.*dip/, [8, 10], '3 Sek. runter, 1 Sek. Pause, explosiv hoch.'),
+        L('Ring Dips', /ring.?dip/, [6, 10], 'Ringe eng am Körper, oben Ringe nach außen drehen.'),
+        L('Weighted Dips (Rucksack)', /(gewicht|weighted).*dip/, [6, 10], 'Rucksack mit 5–10 kg, gleiche saubere Technik.')] },
+    { k: 'push', n: 'Liegestütze', g: 'push', steps: [
+        L('Knie-Liegestütze', /^(?!.*diamond).*(knie.?(liegest|push)|knee.?push)/, [10, 15], 'Körper von Knie bis Kopf gerade.'),
+        L('Liegestütze', /^(normale )?(liegestütze|push-?ups)$/, [12, 20], 'Brust zum Boden, Ellbogen ca. 45°, Po angespannt.'),
+        L('Deficit Push-ups', /^(?!.*pike).*deficit.?push/, [8, 12], 'Auf Griffen, Brust tiefer als die Hände.'),
+        L('Diamond Push-ups', /diamond/, [8, 12], 'Hände bilden ein Dreieck, Ellbogen am Körper.'),
+        L('Archer Push-ups', /^(?!.*pull).*archer.?(push|liegest)/, [5, 8], 'Ein Arm arbeitet, der andere bleibt gestreckt.', { side: 'Seite' }),
+        L('Pseudo Planche Push-ups', /pseudo.?planche/, [6, 10], 'Schultern weit vor die Hände, Finger seitlich.'),
+        L('Einarmige Liegestütze', /(einarm|one.?arm).*(push|liegest)/, [3, 6], 'Füße breit, Hüfte bleibt gerade.', { side: 'Seite' })] },
+    { k: 'pull', n: 'Klimmzüge', g: 'pull', steps: [
+        L('Scapula Pull-ups', /scapula/, [8, 12], 'Im Hang nur die Schulterblätter runter und zusammen.'),
+        L('Negative Klimmzüge', /^(?!.*(dip|hspu|handstand|nordic)).*negativ/, [4, 7], 'Oben starten, 5 Sek. kontrolliert ablassen.'),
+        L('Chin-ups', /chin/, [6, 10], 'Untergriff, aus dem Dead Hang bis Kinn über die Stange.'),
+        L('Pull-ups', /^(?!.*(scapula|negativ|explosiv|archer|australian|apart|muscle|band)).*(pull-?ups?|klimmz)/, [6, 10], 'Obergriff, volle Bewegung, kein Schwung.'),
+        L('Explosive Pull-ups', /explosiv/, [3, 5], 'Maximal schnell, Brust zur Stange.'),
+        L('Archer Pull-ups', /archer.?(pull|klimm)/, [3, 6], 'Zu einer Hand ziehen, der andere Arm bleibt lang.', { side: 'Seite' }),
+        L('Muscle-up', /muscle/, [1, 3], 'Explosiv hoch, schneller Übergang über die Stange.')] },
+    { k: 'row', n: 'Rudern', g: 'pull', steps: [
+        L('Stangen-Rows', /^(?!.*(erhöht|elevated|archer|einarm|front)).*(row|rudern)/, [10, 15], 'Körper gerade, Brust zur Stange.'),
+        L('Elevated Rows', /(erhöht|elevated).*(row|rudern)|(row|rudern).*(erhöht|elevated)/, [10, 15], 'Füße erhöht, Schulterblätter zusammen.'),
+        L('Archer Rows', /archer.?row/, [6, 10], 'Zu einer Hand ziehen.', { side: 'Seite' }),
+        L('Tuck Front Lever', /front.?lever/, [10, 20], 'Knie zur Brust, Arme gestreckt, Rücken waagerecht.', { u: 'sec' })] },
+    { k: 'lsit', n: 'L-Sit', g: 'core', steps: [
+        L('Tuck L-Sit', /^(?!.*advanced).*tuck.?l-?sit/, [10, 20], 'Knie zur Brust, Schultern runterdrücken.', { u: 'sec' }),
+        L('Advanced Tuck L-Sit', /advanced.?tuck/, [10, 20], 'Beine etwas weiter vom Körper weg.', { u: 'sec' }),
+        L('One-Leg L-Sit', /(one.?leg|einbein).*l-?sit/, [10, 20], 'Ein Bein gestreckt, eins angewinkelt – Seiten wechseln.', { u: 'sec' }),
+        L('L-Sit', /^(?!.*(tuck|one.?leg|einbein)).*l-?sit/, [10, 30], 'Beide Beine gestreckt auf Hüfthöhe.', { u: 'sec' }),
+        L('V-Sit', /v-?sit/, [5, 15], 'Beine über Hüfthöhe, Hände hinter dem Po.', { u: 'sec' })] },
+    { k: 'wheel', n: 'Ab Wheel', g: 'core', steps: [
+        L('Ab Wheel Rollouts (Knie)', /(ab.?wheel|rollout).*knie|knie.*(ab.?wheel|rollout)/, [5, 10], 'Becken leicht kippen, Rücken darf nicht durchhängen.'),
+        L('Rollouts zur Wand (stehend)', /(ab.?wheel|rollout).*wand/, [3, 6], 'Stehend starten, Wand stoppt die Rolle.'),
+        L('Stehende Rollouts', /^(?!.*(knie|wand)).*(ab.?wheel|rollout)/, [3, 8], 'Volle Streckung aus dem Stand.')] },
+    { k: 'legraise', n: 'Beinheben', g: 'core', steps: [
+        L('Hanging Knee Raises', /knee.?raise|knieheben/, [8, 12], 'Kein Schwung, langsam absenken.'),
+        L('Hanging Leg Raises', /^(?!.*(knee|knie)).*(leg.?raise|beinheben)/, [6, 10], 'Gestreckte Beine bis Hüfthöhe.'),
+        L('Toes to Bar', /toes.?to.?bar|t2b/, [5, 10], 'Fußspitzen zur Stange, kontrolliert zurück.')] },
+    { k: 'squat', n: 'Kniebeuge', g: 'legs', steps: [
+        L('Squats', /^(bodyweight )?(squats?|kniebeugen?)$/, [15, 25], 'Fersen am Boden, Knie über den Zehen.'),
+        L('Reverse Lunges', /lunge|ausfallschritt/, [10, 14], 'Nach hinten treten, hinteres Knie fast am Boden.', { side: 'Bein' }),
+        L('Bulgarian Split Squats', /bulgarian|split.?squat/, [10, 14], 'Hinterer Fuß erhöht, Oberkörper aufrecht.', { side: 'Bein' }),
+        L('Shrimp Squats', /shrimp/, [5, 8], 'Hinteres Bein greifen, Knie kontrolliert absetzen.', { side: 'Bein' }),
+        L('Pistol Squats', /pistol/, [3, 6], 'Einbeinig tief, freies Bein gestreckt vorne.', { side: 'Bein' })] },
+    { k: 'ham', n: 'Hintere Kette', g: 'legs', steps: [
+        L('Glute Bridges', /^(?!.*(single|einbein)).*(glute.?bridge|hüftheben)/, [12, 20], 'Hüfte hoch, oben 1 Sek. halten.'),
+        L('Single-Leg Glute Bridges', /(single.?leg|einbein).*(glute|bridge|hüftheben)/, [10, 15], 'Einbeinig, Becken bleibt gerade.', { side: 'Seite' }),
+        L('Nordic Curl Negatives', /nordic.*negativ/, [3, 5], 'Langsam nach vorne fallen, mit den Händen abfangen.'),
+        L('Nordic Curls', /^(?!.*negativ).*nordic/, [3, 6], 'Runter und aus eigener Kraft wieder hoch.')] }
+];
+function ladderOf(name) {
+    const n = String(name || '').toLowerCase().trim();
+    for (const l of LADDERS) for (let i = 0; i < l.steps.length; i++) if (l.steps[i].m.test(n)) return { l, i, step: l.steps[i], next: l.steps[i + 1] || null, prev: l.steps[i - 1] || null };
+    return null;
+}
+
+// ---------- Tagesform (1–5) ----------
+const FORM = [null, { e: '😫', l: 'Platt' }, { e: '😕', l: 'Müde' }, { e: '🙂', l: 'Okay' }, { e: '💪', l: 'Gut' }, { e: '🔥', l: 'Top' }];
+function formToday() { return appMeta.form?.[todayStr()] || null; }
+const coachOn = () => setting('coach', true);
+
+// ---------- Kern: Empfehlung pro Übung ----------
+const CK = {
+    new:   { l: 'Start',         c: '#94a3b8', ic: 'flag' },
+    up:    { l: 'Steigern',      c: '#10b981', ic: 'trend' },
+    hold:  { l: 'Halten',        c: '#38bdf8', ic: 'target' },
+    easy:  { l: 'Leichter',      c: '#a78bfa', ic: 'moon' },
+    level: { l: 'Nächste Stufe', c: '#fbbf24', ic: 'zap' },
+    raise: { l: 'Bereich anheben', c: '#fbbf24', ic: 'trend' }
+};
+function coach(day, id) {
+    const b = getBase(day, id); if (!b) return null;
+    const act = getActive(day, id), today = todayStr(), step = (UNITS[act.unit] || UNITS.reps).step, n = b.sets;
+    const es = entries(id).filter(e => e.date < today && e.reps?.length && (!b.since || e.date >= b.since));
+    const last = es[es.length - 1], prev = es[es.length - 2];
+    const lo = act.range?.[0], hi = act.range?.[1];
+    const pad = r => Array.from({ length: n }, (_, i) => Number(r[i] ?? r[r.length - 1]) || 0);
+    const rnd = v => clamp(Math.round(v / step) * step, step, 9999);
+    const rpeOf = e => appMeta.dayRatings?.[EX_INDEX[id]?.day || day]?.[e.date] || null;
+    const lad = !act.isAlt ? ladderOf(act.name) : null;
+    const mk = (k, text, target, extra = {}) => ({ k, ...CK[k], text, target: target.map(v => Math.round(v * 100) / 100), lad, last: last ? last.reps : null, ...extra });
+    if (!last) return mk('new', act.range ? `Starte mit ${fmtVal(lo)} ${unitShort(act.unit)} und finde ein sauberes Niveau.` : 'Finde ein sauberes Startniveau.', Array(n).fill(act.range ? lo : act.defaultReps));
+    const v = pad(last.reps), rl = rpeOf(last), rp = prev ? rpeOf(prev) : null;
+    const form = formToday();
+    // Erholung: schlechte Tagesform oder zweimal in Folge am Limit
+    if (form && form <= 2) return mk('easy', `Tagesform „${FORM[form].l}" – heute ca. 20 % weniger, Technik vor Wiederholungen.`, v.map(x => rnd(x * .8)));
+    if (rl >= 9 && rp >= 9) return mk('easy', 'Zwei sehr harte Einheiten in Folge – heute bewusst leichter (Deload).', v.map(x => rnd(x * .8)));
+    const allTop = hi != null && last.reps.length >= n && v.every(x => x >= hi);
+    const prevTop = allTop && prev && prev.reps.length >= n && pad(prev.reps).every(x => x >= hi);
+    const totals = es.slice(-3).map(e => e.reps.reduce((a, x) => a + Number(x), 0));
+    const stuck = totals.length === 3 && Math.max(totals[1], totals[2]) <= totals[0];
+    const tip = stuck ? ' Seit 3 Einheiten kein Plus – probier langsameres Tempo oder 1 Satz mehr.' : '';
+    if (act.max || hi == null) {
+        if (rl >= 9) return mk('hold', 'Letztes Mal am Limit – heute die gleichen Werte, dafür sauberer.' + tip, v, { stuck });
+        return mk('up', `Versuche heute je Satz +${fmtVal(step)}.` + tip, v.map(x => x + step), { stuck });
+    }
+    if (allTop) {
+        if (lad?.next && prevTop) return mk('level', `Zweimal alle Sätze am oberen Ende – bereit für „${lad.next.n}".`, v, { action: 'level' });
+        if (lad?.next) return mk('up', `Alle Sätze am oberen Ende! Bestätige das heute – dann kommt „${lad.next.n}".`, Array(n).fill(hi));
+        if (prevTop) return mk('raise', 'Zweimal am oberen Ende – Zeit, den Zielbereich anzuheben.', v.map(x => x + step), { action: 'raise' });
+        return mk('up', 'Alle Sätze am oberen Ende – heute ruhig etwas mehr.', v.map(x => x + step));
+    }
+    if (lo != null && v.filter(x => x < lo).length > n / 2) return mk('hold', `Unter dem Zielbereich – heute ${fmtVal(lo)}+ anpeilen, Pausen ruhig länger.`, v.map(x => Math.max(x, Math.min(lo, x + step))), { stuck });
+    if (rl >= 9) return mk('hold', 'Letztes Mal sehr hart (RPE 9+) – heute gleiche Werte, sauberer.' + tip, v, { stuck });
+    // Doppelte Progression: jeder Satz unter dem Ziel bekommt +1 Schritt
+    return mk('up', `Heute +${fmtVal(step)} in den Sätzen unter ${fmtVal(hi)}.` + tip, v.map(x => x < hi ? Math.min(hi, x + step) : x), { stuck });
+}
+// Ziel für einen Satz (Fokus-Modus, Live-Leiste)
+function coachTarget(day, id, i) { const c = coach(day, id); return c ? c.target[i] ?? c.target[c.target.length - 1] : null; }
+function coachDiffers(day, id) {
+    const c = coach(day, id), st = userState.days?.[day]?.[id]; if (!c || !st) return false;
+    return st.sets.some((s, i) => !s.done && Number(s.reps) !== c.target[i]);
+}
+function coachApply(day, id, silent) {
+    const c = coach(day, id), st = userState.days[day][id]; if (!c) return;
+    st.sets.forEach((s, i) => { if (!s.done) s.reps = c.target[i]; });
+    save(); if (!silent) { renderTrain(); toast('Coach-Ziel übernommen'); vibe(10); }
+}
+// Tagesform setzen → offene Sätze neu vorbefüllen
+function setForm(n) {
+    const t = todayStr(), was = formToday(); (appMeta.form ||= {});
+    if (was === n) delete appMeta.form[t]; else appMeta.form[t] = n;
+    Object.keys(appMeta.form).forEach(d => { if (d < addDays(t, -400)) delete appMeta.form[d]; });
+    const low = formToday() && formToday() <= 2, wasLow = was && was <= 2;
+    if (coachOn() && setting('coachFill', true) && low !== wasLow) WORKOUT_DATA[currentDay].exercises.forEach(ex => { ensureState(currentDay, ex.id); coachApply(currentDay, ex.id, true); });
+    save(); renderTrain(); vibe(12);
+    if (low && !wasLow) toast('Leichter Tag: Ziele um ca. 20 % gesenkt');
+    else if (wasLow && !low && formToday()) toast('Ziele wieder normal');
+}
+function formRow() {
+    if (!setting('formOn', true)) return '';
+    const f = formToday();
+    return `<div class="form"><div class="form-l"><b>Tagesform</b><span>${f ? FORM[f].l + (f <= 2 ? ' · Coach plant leichter' : '') : 'Wie fühlst du dich?'}</span></div><div class="form-b">${[1, 2, 3, 4, 5].map(i => `<button class="${f === i ? 'on' : ''}" onclick="setForm(${i})" aria-label="${FORM[i].l}">${FORM[i].e}</button>`).join('')}</div></div>`;
+}
+
+// ---------- Aktionen: Stufe aufsteigen, Bereich anheben ----------
+function setStep(day, id, li, si, silent) {
+    const l = LADDERS.find(x => x.k === li), s = l?.steps[si]; if (!s) return;
+    const e = editablePlan().days.find(x => x.id === day)?.exercises.find(x => x.id === id); if (!e) return;
+    const undo = snapshot(['plan', 'plans', 'planName', 'records', 'recGoals', 'levelLog']), from = e.name;
+    // alte Einträge behalten ihren damaligen Namen (Verlauf & Bericht bleiben korrekt)
+    (history[id] || []).forEach(h => { if (!h.nm) h.nm = from; });
+    e.name = s.n; e.note = s.cue; e.unit = s.u; e.range = [...s.r]; e.max = false; e.defaultReps = s.r[0]; e.side = s.side; e.since = todayStr();
+    if (userState.variants?.[id]) delete userState.variants[id];
+    const st = userState.days?.[day]?.[id]; if (st && !st.sets.some(x => x.done)) delete userState.days[day][id];
+    (appMeta.levelLog ||= []).push({ date: todayStr(), id, from, to: s.n, dir: si > (ladderOf(from)?.i ?? -1) ? 1 : -1 });
+    if (appMeta.levelLog.length > 200) appMeta.levelLog.splice(0, appMeta.levelLog.length - 200);
+    commitPlan(`${from} → ${s.n}`, undo);
+    if (!silent && (ladderOf(s.n)?.i ?? 0) > (ladderOf(from)?.i ?? -1)) { burst('🪜', 'Neue Stufe!', s.n); confetti(80); vibe([60, 40, 60, 40, 160]); setTimeout(checkBadges, 2600); }
+}
+function coachLevel(day, id) { const c = coach(day, id); if (!c?.lad?.next) return; setStep(day, id, c.lad.l.k, c.lad.i + 1); }
+function coachRaise(day, id) {
+    const e = editablePlan().days.find(x => x.id === day)?.exercises.find(x => x.id === id); if (!e || !e.range) return;
+    const undo = snapshot(), st = (UNITS[e.unit] || UNITS.reps).step * 2;
+    e.range = [e.range[0] + st, e.range[1] + st]; e.defaultReps = e.range[0];
+    commitPlan(`Zielbereich jetzt ${fmtVal(e.range[0])}–${fmtVal(e.range[1])} ${unitShort(e.unit)}`, undo);
+}
+
+// ---------- UI-Bausteine ----------
+function coachTag(c) { return c ? `<span class="ctag" style="--cc:${c.c}">${ic(c.ic, 'xs')}${c.l}</span>` : ''; }
+function coachLine(day, id) {
+    if (!coachOn()) return '';
+    const c = coach(day, id); if (!c) return '';
+    const btn = c.action === 'level' ? `<button class="btn sm cbtn" onclick="coachLevel('${day}','${id}')">Aufsteigen</button>`
+        : c.action === 'raise' ? `<button class="btn sm cbtn" onclick="coachRaise('${day}','${id}')">Anheben</button>`
+        : coachDiffers(day, id) ? `<button class="btn sm cbtn" onclick="coachApply('${day}','${id}')">Übernehmen</button>` : '';
+    const tg = c.target.every(x => x === c.target[0]) ? fmtVal(c.target[0]) : c.target.map(fmtVal).join('·');
+    return `<div class="coach" style="--cc:${c.c}"><span class="rtile sm" style="--rc:${c.c}">${ic(c.ic)}</span><div><b>${c.l} · Ziel ${tg}</b><span>${esc(c.text)}</span></div>${btn}</div>`;
+}
+
+// ---------- Progressionspfade (Sheet) ----------
+function planLadderHits() {
+    const hits = {};
+    activePlan().days.forEach(d => d.exercises.forEach(e => { const m = ladderOf(e.name); if (m) (hits[m.l.k] ||= []).push({ d, e, i: m.i }); }));
+    return hits;
+}
+function openLadders(focusK) {
+    const hits = planLadderHits(), order = [...LADDERS].sort((a, b) => (hits[b.k] ? 1 : 0) - (hits[a.k] ? 1 : 0));
+    openSheet(`<div class="sheet-h"><div><h3>Progressionspfade</h3><p>Vom Einstieg bis zum Skill – deine Übungen sind markiert</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+      ${order.map(l => {
+          const h = hits[l.k] || [], cur = new Set(h.map(x => x.i)), top = h.length ? Math.max(...h.map(x => x.i)) : -1, low = h.length ? Math.min(...h.map(x => x.i)) : -1;
+          return `<div class="lad ${focusK === l.k ? 'hl' : ''}" id="lad-${l.k}"><div class="lad-h"><b>${l.n}</b><span>${h.length ? `Stufe ${top + 1}/${l.steps.length}` : 'nicht im Plan'}</span></div>
+            <div class="lsteps">${l.steps.map((s, i) => `<button class="lstep ${cur.has(i) ? 'cur' : i < low ? 'done' : ''}" style="--gc:${GROUPS[l.g].c}" onclick="ladStep('${l.k}',${i})"><i>${i < low ? ic('check', 'xs') : i + 1}</i><span>${esc(s.n)}</span></button>`).join('')}</div>
+            ${h.length ? `<div class="lad-in">${h.map(x => `<span style="--c:${x.d.c}"><i></i>${esc(x.d.short)}: ${esc(x.e.name)}</span>`).join('')}</div>` : ''}</div>`;
+      }).join('')}
+      <p class="sm dim" style="margin-top:12px;line-height:1.45">Der Coach schlägt die nächste Stufe vor, sobald du zweimal alle Sätze am oberen Ende des Zielbereichs schaffst. Dein Verlauf bleibt dabei bei der Übung.</p>`);
+    sheetRefresh = () => openLadders(focusK);
+    if (focusK) setTimeout(() => document.getElementById('lad-' + focusK)?.scrollIntoView({ block: 'center', behavior: 'smooth' }), 300);
+}
+function ladStep(k, i) {
+    const l = LADDERS.find(x => x.k === k), s = l.steps[i], h = (planLadderHits()[k] || []);
+    openSheet(`<div class="sheet-h"><div><h3>${esc(s.n)}</h3><p>${l.n} · Stufe ${i + 1} von ${l.steps.length}</p></div><button class="btn icon" onclick="openLadders('${k}')">${ic('x')}</button></div>
+      <div class="card" style="margin-bottom:12px"><div class="lbl">Ziel dieser Stufe</div><b style="font-size:20px;display:block;margin-top:4px" class="disp">${fmtVal(s.r[0])}–${fmtVal(s.r[1])} ${unitShort(s.u)}${s.side ? '/' + s.side : ''}</b>
+        <p class="sm muted" style="margin-top:8px;line-height:1.5">${esc(s.cue)}</p></div>
+      ${h.length ? `<div class="lbl" style="margin:14px 2px 8px">Übung auf diese Stufe setzen</div>${h.map(x => `<button class="opt dayopt ${x.i === i ? 'on' : ''}" style="--c:${x.d.c}" ${x.i === i ? 'disabled' : `onclick="closeSheet();setStep('${x.d.id}','${x.e.id}','${k}',${i})"`}><i></i><span><b>${esc(x.e.name)}</b><span>${esc(x.d.short)} · ${x.i === i ? 'aktuelle Stufe' : x.i < i ? 'aufsteigen' : 'zurückstufen'}</span></span></button>`).join('')}`
+        : `<p class="sm muted">Keine Übung aus deinem Plan gehört zu diesem Pfad. Im Plan-Tab kannst du „${esc(s.n)}" als neue Übung anlegen.</p>`}`);
+}
+
+// ================================================================
+// V9 · DATENSICHERHEIT: dauerhafter Speicher, automatische Sicherungen,
+// Backup teilen, sicherer Import
+// ================================================================
+const SNAP_DB = 'calisthenics_safety', SNAP_MAX = 14;
+function idb() {
+    return new Promise((res, rej) => {
+        if (!('indexedDB' in window)) { rej(new Error('kein IndexedDB')); return; }
+        const r = indexedDB.open(SNAP_DB, 1);
+        r.onupgradeneeded = () => r.result.createObjectStore('snaps', { keyPath: 't' });
+        r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+    });
+}
+function idbDo(mode, fn) {
+    return idb().then(db => new Promise((res, rej) => {
+        const tx = db.transaction('snaps', mode), st = tx.objectStore('snaps'); let out;
+        Promise.resolve(fn(st, v => { out = v; })).catch(rej);
+        tx.oncomplete = () => { db.close(); res(out); }; tx.onerror = () => { db.close(); rej(tx.error); };
+    }));
+}
+const stateJSON = () => JSON.stringify({ userState, history, appMeta });
+async function snapPut(reason) {
+    try {
+        const data = stateJSON(), t = Date.now(), sessions = stats().sessions;
+        await idbDo('readwrite', st => {
+            st.put({ t, reason, size: data.length, sessions, v: APP_VERSION, data });
+            const r = st.getAllKeys(); r.onsuccess = () => { const ks = r.result.sort((a, b) => a - b); ks.slice(0, Math.max(0, ks.length - SNAP_MAX)).forEach(k => st.delete(k)); };
+        });
+        appMeta.lastSnap = t; save(); return true;
+    } catch (e) { console.warn('[Sicherung]', e); return false; }
+}
+async function snapList() {
+    try { return (await idbDo('readonly', (st, out) => { const r = st.getAll(); r.onsuccess = () => out(r.result.map(({ data, ...m }) => m).sort((a, b) => b.t - a.t)); })) || []; }
+    catch (e) { return null; }
+}
+async function snapGet(t) { try { return await idbDo('readonly', (st, out) => { const r = st.get(t); r.onsuccess = () => out(r.result); }); } catch (e) { return null; } }
+// Täglich automatisch (beim Öffnen) + nach jedem Training
+function snapDaily() { if (stats().sessions && (!appMeta.lastSnap || Date.now() - appMeta.lastSnap > 20 * 3600e3)) snapPut('Täglich'); }
+
+// Browser bitten, den Speicher nicht automatisch zu leeren
+let persistState = null;
+async function askPersist() {
+    try {
+        if (!navigator.storage?.persist) { persistState = 'n/a'; return; }
+        persistState = (await navigator.storage.persisted()) || (await navigator.storage.persist()) ? 'yes' : 'no';
+    } catch (e) { persistState = 'n/a'; }
+    if (view === 'more') renderMore();
+}
+
+// ---------- Backup als Datei teilen (Android: Drive, Mail, Messenger …) ----------
+function backupBlob() { return new Blob([JSON.stringify({ app: 'Calisthenics Pro', version: 'v' + APP_VERSION, exportedAt: new Date().toISOString(), userState, history, appMeta }, null, 2)], { type: 'application/json' }); }
+function markBackup() { appMeta.lastBackup = Date.now(); save(); if (view === 'more') renderMore(); updNavDot(); }
+async function shareFile(blob, name, title, fallbackMsg) {
+    for (const type of [blob.type, 'text/plain']) {
+        try {
+            const f = new File([blob], name, { type });
+            if (navigator.canShare?.({ files: [f] })) { await navigator.share({ files: [f], title }); return 'shared'; }
+        } catch (e) { if (e.name === 'AbortError') return 'abort'; }
+    }
+    downloadBlob(blob, name); toast(fallbackMsg); return 'saved';
+}
+function downloadBlob(blob, name) {
+    const url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+async function shareBackup() {
+    const r = await shareFile(backupBlob(), 'calisthenics-backup-' + todayStr() + '.json', 'Calisthenics Backup', 'Backup als Datei gespeichert ✓');
+    if (r !== 'abort') { markBackup(); if (r === 'shared') toast('Backup geteilt ✓'); }
+}
+
+// ---------- Backup prüfen & reparieren (Import / Wiederherstellen) ----------
+function cleanState(d) {
+    if (!d || typeof d !== 'object' || (!d.history && !d.userState)) throw new Error('kein Backup');
+    const h = {};
+    if (d.history && typeof d.history === 'object') for (const id in d.history) {
+        if (!Array.isArray(d.history[id])) continue;
+        const es = d.history[id].filter(e => e && /^\d{4}-\d{2}-\d{2}$/.test(e.date) && Array.isArray(e.reps))
+            .map(e => ({ ...e, reps: e.reps.map(Number).filter(Number.isFinite) })).filter(e => e.reps.length);
+        if (es.length) h[id] = es.sort((a, b) => a.date < b.date ? -1 : 1);
+    }
+    const am = d.appMeta && typeof d.appMeta === 'object' ? d.appMeta : {};
+    if (am.plan) { try { am.plan = sanitizePlan(am.plan); } catch (e) { delete am.plan; } }
+    if (Array.isArray(am.plans)) am.plans = am.plans.filter(p => { try { p.plan = sanitizePlan(p.plan); return true; } catch (e) { return false; } });
+    return { userState: d.userState && typeof d.userState === 'object' ? d.userState : {}, history: h, appMeta: am };
+}
+function applyState(s) { userState = s.userState; history = s.history; appMeta = s.appMeta; applyPlan(); save(); currentDay = computeSuggestedDay(); }
+
+// ---------- Automatische Sicherungen (Sheet) ----------
+async function openSnaps() {
+    openSheet(`<div class="sheet-h"><div><h3>Automatische Sicherungen</h3><p>Wird geladen …</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>`);
+    const list = await snapList();
+    const rows = list == null ? '<p class="sm muted">Dieser Browser erlaubt keine automatischen Sicherungen.</p>'
+        : !list.length ? '<p class="sm muted" style="padding:4px 2px 10px">Noch keine Sicherung. Die erste entsteht nach deinem nächsten Training.</p>'
+        : list.map(s => `<div class="plrow"><div class="nm"><b>${new Date(s.t).toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit' })} · ${new Date(s.t).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}</b><span>${esc(s.reason)} · ${s.sessions} Trainings · ${Math.max(1, Math.round(s.size / 1024))} KB</span></div><div class="acts"><button class="btn sm" onclick="snapRestore(${s.t})">Laden</button></div></div>`).join('');
+    openSheet(`<div class="sheet-h"><div><h3>Automatische Sicherungen</h3><p>Die letzten ${SNAP_MAX} Stände – täglich und nach jedem Training</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+      ${rows}
+      <button class="btn block" style="margin-top:8px" onclick="snapPut('Manuell').then(ok=>{toast(ok?'Sicherung erstellt ✓':'Sicherung nicht möglich');openSnaps()})">${ic('save', 's')} Jetzt sichern</button>
+      <p class="sm dim" style="margin-top:12px;line-height:1.45">Die Sicherungen liegen in einem eigenen Speicher dieser App – sie schützen vor Fehlbedienung (falscher Import, versehentlich gelöscht). Gegen Handy-Verlust hilft nur „Backup teilen" (z. B. in Google Drive).</p>`);
+}
+async function snapRestore(t) {
+    const s = await snapGet(t); if (!s) { toast('Sicherung nicht gefunden'); return; }
+    confirmSheet('Diesen Stand laden?', `Stand vom ${new Date(t).toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' })} mit ${s.sessions} Trainings. Dein aktueller Stand wird vorher selbst gesichert.`, 'Laden', async () => {
+        try {
+            const st = cleanState(JSON.parse(s.data)), prev = stateJSON();
+            await snapPut('Vor Wiederherstellen');
+            applyState(st); go('train');
+            toast('Stand wiederhergestellt ✓', () => { applyState(JSON.parse(prev)); go('train'); toast('Vorheriger Stand zurück'); });
+        } catch (e) { toast('Sicherung ist beschädigt'); }
+    });
+}
+
+// ================================================================
+// V9 · BERICHTE (Markdown für Obsidian), KALENDER (.ics),
+// FORTSCHRITT PRO ÜBUNG, WILLKOMMEN
+// ================================================================
+const MON = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+function monthStart(s) { return s.slice(0, 8) + '01'; }
+function monthEnd(s) { const d = parseD(monthStart(s)); d.setMonth(d.getMonth() + 1); d.setDate(0); return dstr(d); }
+// Zeitraum + Vergleichszeitraum (gleich lang, bei laufenden Zeiträumen bis zum gleichen Tag)
+function period(k) {
+    const t = todayStr(), mon = mondayOf(t);
+    if (k === 'w1') { const a = addDays(mon, -7); return { k, a, b: addDays(mon, -1), pa: addDays(a, -7), pb: addDays(mon, -8), title: `KW ${kw(a)}`, label: 'Letzte Woche' }; }
+    if (k === 'm0') { const a = monthStart(t), pa = monthStart(addDays(a, -1)), off = daysBetween(a, t); return { k, a, b: t, pa, pb: [addDays(pa, off), monthEnd(pa)].sort()[0], title: `${MON[+a.slice(5, 7) - 1]} ${a.slice(0, 4)}`, label: 'Dieser Monat' }; }
+    if (k === 'm1') { const b = addDays(monthStart(t), -1), a = monthStart(b), pb = addDays(a, -1); return { k, a, b, pa: monthStart(pb), pb, title: `${MON[+a.slice(5, 7) - 1]} ${a.slice(0, 4)}`, label: 'Letzter Monat' }; }
+    const off = daysBetween(mon, t); return { k: 'w0', a: mon, b: t, pa: addDays(mon, -7), pb: addDays(mon, off - 7), title: `KW ${kw(mon)}`, label: 'Diese Woche' };
+}
+function periodData(a, b) {
+    const ss = stats().list.filter(s => s.date >= a && s.date <= b).slice().reverse();
+    const ex = (appMeta.extraLog || []).filter(e => e.date >= a && e.date <= b);
+    const rpes = ss.map(s => s.rpe).filter(Boolean);
+    const recs = recDefs().flatMap(d => recWalk(d.k).filter(e => e.date >= a && e.date <= b).map(e => ({ ...e, d })));
+    const g = { push: 0, pull: 0, legs: 0, core: 0 };
+    ss.forEach(s => s.ex.forEach(x => { const inf = exInfo(x.id); if (!inf || !(inf.group in g)) return; const sum = x.reps.reduce((p, q) => p + q, 0); g[inf.group] += inf.unit === 'sec' ? Math.round(sum / 3) : inf.unit === 'reps' ? sum : 0; }));
+    return { ss, n: ss.length, reps: ss.reduce((p, s) => p + s.reps, 0), secs: ss.reduce((p, s) => p + s.secs, 0), sets: ss.reduce((p, s) => p + s.sets, 0),
+        mins: Math.round(ss.reduce((p, s) => p + (s.dur || 0), 0) / 60000) + Math.round(ex.reduce((p, e) => p + e.secs, 0) / 60),
+        rpe: rpes.length ? Math.round(rpes.reduce((p, q) => p + q, 0) / rpes.length * 10) / 10 : null, ex, recs, g,
+        lv: (appMeta.levelLog || []).filter(e => e.date >= a && e.date <= b) };
+}
+const pct = (x, y) => { if (!y) return x ? 'neu' : '–'; const v = Math.round((x - y) / y * 100); return (v > 0 ? '+' : v < 0 ? '−' : '±') + Math.abs(v) + ' %'; };
+const dez = v => String(v).replace('.', ',');
+function reportMd(k) {
+    const P = period(k), A = periodData(P.a, P.b), B = periodData(P.pa, P.pb), name = setting('name', '');
+    const L = [];
+    L.push('---', 'typ: trainingsbericht', `zeitraum: ${P.a} bis ${P.b}`, `trainings: ${A.n}`, `erstellt: ${todayStr()}`, 'tags: [training, calisthenics]', '---', '');
+    L.push(`# Trainingsbericht ${P.title} · ${fmtDate(P.a)}–${fmtDate(P.b)}${P.b.slice(0, 4)}`, '');
+    L.push(`**${A.n} ${A.n === 1 ? 'Training' : 'Trainings'}** · ${fmtNum(A.reps)} Wdh. · ${dez(Math.round(A.secs / 6) / 10)} Min. Halten · ${A.mins} Min. aktiv${A.rpe ? ' · Ø RPE ' + dez(A.rpe) : ''}${name ? ' · ' + name : ''}`, '');
+    L.push('| Kennzahl | Zeitraum | Vorher | Veränderung |', '|---|---:|---:|---:|');
+    [['Trainings', A.n, B.n], ['Wiederholungen', A.reps, B.reps], ['Haltezeit (Sek.)', A.secs, B.secs], ['Sätze', A.sets, B.sets], ['Aktive Minuten', A.mins, B.mins]]
+        .forEach(([l, x, y]) => L.push(`| ${l} | ${fmtNum(x)} | ${fmtNum(y)} | ${pct(x, y)} |`));
+    L.push('', `*Vergleich: ${fmtDate(P.pa)}–${fmtDate(P.pb)}*`, '');
+    L.push('## Einheiten', '');
+    if (!A.ss.length) L.push('Keine Trainings in diesem Zeitraum.', '');
+    A.ss.forEach(s => {
+        const f = appMeta.form?.[s.date];
+        L.push(`### ${fmtLong(s.date)} · ${dayInfo(s.day).short}`);
+        const meta = [s.rpe ? 'RPE ' + s.rpe : '', s.dur ? fmtDur(s.dur) : '', f ? 'Tagesform: ' + FORM[f].l : '', s.sets + ' Sätze'].filter(Boolean);
+        L.push(meta.join(' · '), '');
+        s.ex.forEach(x => { const inf = exInfo(x.id) || { name: x.id, unit: 'reps' }; L.push(`- ${x.nm || inf.name}: ${x.reps.map(fmtVal).join(' · ')} ${unitShort(inf.unit)}`); });
+        if (s.note) L.push('', `> ${s.note.replace(/\n/g, ' ')}`);
+        L.push('');
+    });
+    if (A.recs.length) { L.push('## Rekorde', ''); A.recs.forEach(e => L.push(`- ${e.d.n}: **${recFmt(e.val, e.d.u)}** (${fmtDate(e.date)})${e.isRec ? ' – Rekord' : ''}`)); L.push(''); }
+    if (A.lv.length) { L.push('## Progressionen', ''); A.lv.forEach(e => L.push(`- ${fmtDate(e.date)}: ${e.from} → **${e.to}**`)); L.push(''); }
+    const gs = Object.values(A.g).reduce((p, q) => p + q, 0);
+    if (gs) { L.push('## Muskelbalance', '', Object.keys(A.g).map(x => `${GROUPS[x].n} ${Math.round(A.g[x] / gs * 100)} %`).join(' · '), ''); }
+    const warm = A.ex.filter(e => e.kind === 'warm').length, iv = A.ex.filter(e => e.kind === 'iv');
+    if (warm || iv.length) { L.push('## Aufwärmen & Intervalle', ''); if (warm) L.push(`- ${warm}× geführt aufgewärmt`); if (iv.length) L.push(`- ${iv.length}× Intervall: ${[...new Set(iv.map(e => e.title))].join(', ')}`); L.push(''); }
+    const stuck = [], up = [];
+    if (coachOn()) DAY_ORDER.forEach(d => WORKOUT_DATA[d].exercises.forEach(e => { const c = coach(d, e.id); if (!c || c.k === 'new') return; if (c.stuck) stuck.push(getActive(d, e.id).name); if (c.k === 'level') up.push(getActive(d, e.id).name + ' → ' + c.lad.next.n); }));
+    if (stuck.length || up.length) { L.push('## Coach', ''); up.forEach(x => L.push(`- Bereit für die nächste Stufe: ${x}`)); if (stuck.length) L.push(`- Stagnation (3 Einheiten ohne Plus): ${[...new Set(stuck)].join(', ')}`); L.push(''); }
+    L.push('---', `Erstellt mit Calisthenics Pro V${APP_VERSION} · [[Calisthenics Tracker]] · [[Training und Fitness]]`);
+    return { md: L.join('\n'), P, A, B, file: `Trainingsbericht ${P.a}.md` };
+}
+let repK = 'w0';
+function openReport(k) {
+    if (k) repK = k;
+    const r = reportMd(repK), A = r.A, B = r.B;
+    const kp = (v, l, x, y) => `<div><b class="disp num">${v}</b><span>${l}</span><em class="${x > y ? 'up' : x < y ? 'down' : ''}">${pct(x, y)}</em></div>`;
+    openSheet(`<div class="sheet-h"><div><h3>Trainingsbericht</h3><p>Als Markdown – passt direkt in deinen Obsidian-Vault</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+      <div class="seg" style="margin-bottom:12px">${[['w0', 'Diese Woche'], ['w1', 'Letzte Woche'], ['m0', 'Monat'], ['m1', 'Letzter M.']].map(([x, l]) => `<button class="${repK === x ? 'on' : ''}" onclick="openReport('${x}')">${l}</button>`).join('')}</div>
+      <div class="card" style="margin-bottom:12px"><div class="row-h" style="margin-bottom:0"><span class="lbl">${esc(r.P.title)}</span><span class="dim sm">${fmtDate(r.P.a)}–${fmtDate(r.P.b)}</span></div>
+        <div class="wkgrid">${kp(A.n, 'Trainings', A.n, B.n)}${kp(fmtNum(A.reps), 'Wdh.', A.reps, B.reps)}${kp(A.sets, 'Sätze', A.sets, B.sets)}${kp(A.mins, 'Min. aktiv', A.mins, B.mins)}</div>
+        <p class="sm muted" style="margin-top:10px">${A.rpe ? 'Ø RPE ' + dez(A.rpe) + ' · ' : ''}${(n => n + (n === 1 ? ' Rekord' : ' Rekorde'))(A.recs.filter(e => e.isRec).length)} · ${A.lv.length} ${A.lv.length === 1 ? 'Stufen-Aufstieg' : 'Stufen-Aufstiege'}</p></div>
+      <div class="btnrow" style="margin-top:0"><button class="btn prim" onclick="repShare()">${ic('share', 's')} Teilen</button><button class="btn" onclick="repCopy()">${ic('copy', 's')} Kopieren</button><button class="btn" onclick="repSave()">${ic('down', 's')} .md</button></div>
+      <details class="mdprev"><summary>Vorschau</summary><pre>${esc(r.md)}</pre></details>`);
+}
+async function repShare() {
+    const r = reportMd(repK);
+    try { if (navigator.share) { await navigator.share({ title: r.file.replace('.md', ''), text: r.md }); return; } } catch (e) { if (e.name === 'AbortError') return; }
+    repCopy();
+}
+async function repCopy() {
+    const r = reportMd(repK);
+    try { await navigator.clipboard.writeText(r.md); toast('Bericht kopiert – in Obsidian einfügen ✓'); }
+    catch (e) { repSave(); }
+}
+function repSave() { const r = reportMd(repK); downloadBlob(new Blob([r.md], { type: 'text/markdown' }), r.file); toast('Bericht gespeichert ✓'); }
+
+// ---------- Kalender (.ics) für feste Wochentage ----------
+function openIcs() {
+    const P = activePlan(), days = P.days.filter(d => d.wd?.length);
+    if (!days.length) { toast('Erst Wochentage zuordnen'); return; }
+    const tm = setting('icsTime', '17:00'), al = setting('icsAlarm', 30);
+    openSheet(`<div class="sheet-h"><div><h3>In den Kalender</h3><p>Deine Trainingstage als wiederkehrende Termine – mit Erinnerung</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+      <div class="card" style="margin-bottom:12px">${days.map(d => `<div class="rec"><span class="dot" style="background:${d.c}"></span><div class="nm"><b>${esc(d.short)}</b><span>${d.wd.slice().sort().map(i => WD[i]).join(', ')} · ~${dayEst(d)} Min.</span></div></div>`).join('')}</div>
+      <div class="fld" style="margin-top:0"><label>Uhrzeit</label><input class="inp datein" type="time" id="icsT" value="${tm}" onchange="setSetting('icsTime',this.value||'17:00')"></div>
+      <div class="fld"><label>Erinnerung vorher</label><div class="seg">${[0, 15, 30, 60].map(v => `<button class="${al === v ? 'on' : ''}" onclick="setSetting('icsAlarm',${v});openIcs()">${v ? v + ' Min.' : 'Keine'}</button>`).join('')}</div></div>
+      <button class="cta" style="margin-top:16px" onclick="icsMake()">${ic('cal')} Kalender-Datei erstellen</button>
+      <p class="sm dim" style="margin-top:12px;line-height:1.45">Die Datei mit deiner Kalender-App öffnen (z. B. Google Kalender) – die Termine wiederholen sich jede Woche. Bei Planänderungen einfach neu erstellen und die alten Termine löschen.</p>`);
+}
+function dayEst(d) { const setR = getSetTimerSecs(), exR = getExerciseTimerSecs(); return Math.max(15, Math.round(d.exercises.reduce((a, e, i) => a + e.sets * 40 + (e.sets - 1) * (e.rest || setR) + (i ? exR : 0), 0) / 60) + (d.warm || []).reduce((a, w) => a + w.s, 0) / 60 | 0); }
+function icsMake() {
+    const tm = ($('#icsT')?.value || setting('icsTime', '17:00')).split(':'), al = setting('icsAlarm', 30), t = todayStr();
+    const BY = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'], pad = n => String(n).padStart(2, '0');
+    const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+    const escI = s => String(s).replace(/([,;\\])/g, '\\$1').replace(/\n/g, '\\n');
+    const L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Calisthenics Pro//DE', 'CALSCALE:GREGORIAN', 'X-WR-CALNAME:Training'];
+    activePlan().days.forEach(d => (d.wd || []).forEach(w => {
+        let k = 0; while ((parseD(addDays(t, k)).getDay() + 6) % 7 !== w) k++;
+        const ds = addDays(t, k).replace(/-/g, ''), st = new Date(+ds.slice(0, 4), +ds.slice(4, 6) - 1, +ds.slice(6), +tm[0] || 17, +tm[1] || 0);
+        const en = new Date(st.getTime() + dayEst(d) * 60000), f = x => x.getFullYear() + pad(x.getMonth() + 1) + pad(x.getDate()) + 'T' + pad(x.getHours()) + pad(x.getMinutes()) + '00';
+        L.push('BEGIN:VEVENT', `UID:${d.id}-${w}-${stamp}@calisthenics-pro`, `DTSTAMP:${stamp}`, `DTSTART:${f(st)}`, `DTEND:${f(en)}`, `RRULE:FREQ=WEEKLY;BYDAY=${BY[w]}`,
+            `SUMMARY:${escI('Training · ' + d.short)}`, `DESCRIPTION:${escI(d.exercises.map(e => '• ' + e.name + ' – ' + genTarget(e)).join('\n'))}`);
+        if (al) L.push('BEGIN:VALARM', 'ACTION:DISPLAY', `DESCRIPTION:${escI(d.short + ' in ' + al + ' Min.')}`, `TRIGGER:-PT${al}M`, 'END:VALARM');
+        L.push('END:VEVENT');
+    }));
+    L.push('END:VCALENDAR');
+    shareFile(new Blob([L.join('\r\n')], { type: 'text/calendar' }), 'training-' + slug(planName()) + '.ics', 'Trainingstermine', 'Kalender-Datei gespeichert – jetzt öffnen ✓');
+}
+
+// ---------- Fortschritt pro Übung (Statistik) ----------
+let progAll = false;
+function spark(vals, c) {
+    if (vals.length < 2) return '<svg class="spark" viewBox="0 0 64 22"></svg>';
+    const mn = Math.min(...vals), mx = Math.max(...vals), rg = mx - mn || 1;
+    const pts = vals.map((v, i) => [2 + i * 60 / (vals.length - 1), 19 - (v - mn) / rg * 16]);
+    return `<svg class="spark" viewBox="0 0 64 22"><path d="${pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ')}" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${pts[pts.length - 1][0]}" cy="${pts[pts.length - 1][1]}" r="2.6" fill="${c}"/></svg>`;
+}
+function progressCard() {
+    const rows = [];
+    DAY_ORDER.forEach(d => WORKOUT_DATA[d].exercises.forEach(e => {
+        const es = entries(e.id).filter(x => x.reps?.length); if (!es.length) return;
+        const tot = es.slice(-8).map(x => x.reps.reduce((a, b) => a + Number(b), 0)), c = coachOn() ? coach(d, e.id) : null;
+        const tr = tot.length >= 2 ? Math.round((tot[tot.length - 1] - tot[0]) / Math.max(1, tot[0]) * 100) : null;
+        rows.push({ d, e, tot, tr, c, last: es[es.length - 1].date, a: getActive(d, e.id) });
+    }));
+    if (!rows.length) return '';
+    const shown = progAll ? rows : rows.filter(r => daysBetween(r.last, todayStr()) <= 28).slice(0, 6);
+    return `<div class="sec-h"><h2>Fortschritt pro Übung</h2><span class="dim sm">letzte 8 Einheiten</span></div>
+      <div class="card" style="padding:4px 14px">${(shown.length ? shown : rows.slice(0, 6)).map(r => `<button class="rec prog" onclick="exDetail('${r.e.id}')"><span class="dot" style="background:${DAY_META[r.d].c}"></span><div class="nm"><b>${esc(r.a.name)}</b><span>${esc(DAY_META[r.d].short)} · ${r.tot.length} ${r.tot.length === 1 ? 'Einheit' : 'Einheiten'}${r.c && r.c.k !== 'new' ? ' · ' + coachTag(r.c) : ''}</span></div>${spark(r.tot, DAY_META[r.d].c)}<b class="tr num ${r.tr > 0 ? 'up' : r.tr < 0 ? 'down' : ''}">${r.tr == null ? '–' : (r.tr > 0 ? '+' : '') + r.tr + '%'}</b></button>`).join('')}
+      ${rows.length > 6 ? `<button class="link" style="width:100%;justify-content:center;padding:10px 0" onclick="progAll=!progAll;renderStats()">${progAll ? 'Weniger anzeigen' : `Alle ${rows.length} Übungen`}</button>` : ''}</div>`;
+}
+
+// ---------- Willkommen (erster Start) ----------
+function maybeWelcome() {
+    if (appMeta.onboarded) return;
+    if (stats().sessions || setting('name', '')) { appMeta.onboarded = true; save(); return; }
+    setTimeout(openWelcome, 500);
+}
+function openWelcome() {
+    const g = setting('weeklyGoal', 5), m = planMode();
+    openSheet(`<div style="text-align:center;padding:4px 0 2px"><div class="f-big" style="font-size:54px">🤸</div><h3 class="disp" style="font-size:24px;margin-top:8px">Willkommen bei Calisthenics Pro</h3>
+        <p class="muted sm" style="margin-top:6px;line-height:1.5">Plan, Coach, Timer und Statistik – alles offline auf deinem Handy.</p></div>
+      <div class="welc">
+        <div>${ic('dumb')}<span><b>Trainieren</b> Sätze abhaken, die Pause startet automatisch.</span></div>
+        <div>${ic('trend')}<span><b>Coach</b> schlägt pro Übung das Ziel für heute vor.</span></div>
+        <div>${ic('save')}<span><b>Sicher</b> Automatische Sicherungen + Backup zum Teilen.</span></div></div>
+      <div class="fld"><label>Wie heißt du?</label><input class="inp" id="wName" maxlength="24" placeholder="Dein Name (optional)"></div>
+      <div class="fld"><label>Trainings pro Woche</label><div class="seg">${[3, 4, 5, 6].map(v => `<button class="${v === g ? 'on' : ''}" onclick="setSetting('weeklyGoal',${v});welcKeep()">${v}×</button>`).join('')}</div></div>
+      <div class="fld"><label>Planung</label><div class="seg"><button class="${m === 'rot' ? 'on' : ''}" onclick="setMode('rot');welcKeep()">Rotation</button><button class="${m === 'week' ? 'on' : ''}" onclick="setMode('week');welcKeep()">Feste Wochentage</button></div></div>
+      <button class="cta" style="margin-top:18px" onclick="welcDone()">${ic('play')} Los geht's</button>`);
+}
+function welcKeep() { const n = $('#wName')?.value || ''; openWelcome(); const i = $('#wName'); if (i) i.value = n; }
+function welcDone() { const n = ($('#wName')?.value || '').trim(); if (n) setSetting('name', n.slice(0, 24)); appMeta.onboarded = true; save(); closeSheet(); renderView(); toast(n ? `Los geht's, ${n} 💪` : 'Los geht\'s 💪'); }
+
+// ================================================================
 // INIT
 // ================================================================
 function init() {
-    load(); applyPlan(); migrateV2();
+    load();
+    if (appMeta.plan) { try { appMeta.plan = sanitizePlan(appMeta.plan); } catch (e) { console.warn('Plan defekt, Standard wird genutzt', e); delete appMeta.plan; } }
+    applyPlan(); migrateV2();
     delete appMeta.prSeen; // V7: keine automatischen Bestleistungen mehr
     save();
     currentDay = computeSuggestedDay();
@@ -2904,6 +3520,7 @@ function init() {
     checkBadges(true);
     go('train');
     updTimerUI(); handleShortcut();
+    askPersist(); setTimeout(snapDaily, 1500); maybeWelcome();
     document.addEventListener('visibilitychange', () => { if (!document.hidden && seq) { seqCatchUp(); seqUI(); } });
     document.addEventListener('keydown', e => {
         if (e.key === 'Escape') { if ($('#sheet').classList.contains('open')) closeSheet(); else if (focus) focusClose(); }
