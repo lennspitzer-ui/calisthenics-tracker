@@ -54,7 +54,7 @@ if ('serviceWorker' in navigator) {
 :root{
   --bg:#05070a; --bg2:#0b1017; --s1:#121a25; --s2:#19222f; --s3:#232d3b;
   --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.16);
-  --tx:#eef2f7; --mu:#8b97a8; --di:#5b6778;
+  --tx:#eef2f7; --mu:#97a3b4; --di:#8290a2;
   --acc:#10b981; --day:#10b981; --warn:#f59e0b; --hot:#ef4444; --xp:#a78bfa;
   --r:18px; --sb:env(safe-area-inset-bottom,0px); --st:env(safe-area-inset-top,0px);
   color-scheme:dark only;
@@ -685,7 +685,7 @@ body.has-live .app{padding-bottom:calc(190px + var(--sb))}
 .form-l b{display:block;font-size:14px}
 .form-l span{display:block;font-size:11.5px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .form-b{display:flex;gap:4px}
-.form-b button{width:36px;height:36px;border-radius:11px;background:var(--s2);border:1px solid var(--line);font-size:18px;line-height:1;filter:grayscale(.75);opacity:.6;transition:all .15s}
+.form-b button{width:40px;height:40px;border-radius:11px;background:var(--s2);border:1px solid var(--line);font-size:18px;line-height:1;filter:grayscale(.75);opacity:.6;transition:all .15s}
 .form-b button.on{filter:none;opacity:1;border-color:var(--acc);background:rgba(16,185,129,.12);transform:scale(1.06)}
 .prep .form+.warm{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
 @media (max-width:370px){.form-b button{width:31px;height:31px;font-size:16px}}
@@ -743,6 +743,13 @@ body.has-live .app{padding-bottom:calc(190px + var(--sb))}
 .welc div{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:13px;background:var(--s2);border:1px solid var(--line);font-size:12.5px;color:var(--mu);line-height:1.4}
 .welc .ic{color:var(--acc);margin-top:1px}
 .welc b{color:var(--tx);margin-right:4px}
+
+/* ===================== V9.1 · Barrierefreiheit ===================== */
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:8px}
+/* kleine Knöpfe: größere unsichtbare Tippfläche (≥44 px) ohne Layout-Änderung */
+.ph-mode,.sortbtn,.btn.icon.sm,.form-b button{position:relative}
+.ph-mode::after,.sortbtn::after,.rcard .add::after,.btn.icon.sm::after{content:'';position:absolute;inset:-10px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 </head>
 <body>
@@ -790,19 +797,19 @@ body.has-live .app{padding-bottom:calc(190px + var(--sb))}
   <symbol id="i-chevl" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
 </svg>
 
-<div class="app">
+<main class="app">
   <header class="top" id="top"></header>
   <section id="view-train" class="view"></section>
   <section id="view-stats" class="view" hidden></section>
   <section id="view-plan" class="view" hidden></section>
   <section id="view-rec" class="view" hidden></section>
   <section id="view-more" class="view" hidden></section>
-</div>
+</main>
 
 <div class="live" id="live">
   <div class="live-bar" id="lvBar"></div>
   <div class="live-ic" id="lvIc" onclick="liveOpen()"></div>
-  <button class="live-tx" onclick="liveOpen()"><span class="live-k" id="lvK"></span><b id="lvT"></b><small id="lvS"></small></button>
+  <button class="live-tx" onclick="liveOpen()" aria-label="Timer öffnen"><span class="live-k" id="lvK"></span><b id="lvT"></b><small id="lvS"></small></button>
   <div class="live-act" id="lvA"></div>
 </div>
 
@@ -816,8 +823,8 @@ body.has-live .app{padding-bottom:calc(190px + var(--sb))}
 
 <div class="focus" id="focus"></div>
 <div class="scrim" id="scrim" onclick="closeSheet()"></div>
-<div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
-<div class="toast" id="toast"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Dialog"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="burst" id="burst"></div>
 <div class="updbar" id="updateBar">Neue Version bereit <button onclick="location.reload()">Neu laden</button></div>
 <noscript><div style="padding:40px;text-align:center">Bitte JavaScript aktivieren.</div></noscript>
@@ -826,7 +833,7 @@ body.has-live .app{padding-bottom:calc(190px + var(--sb))}
 // CALISTHENICS PRO V5 – TRAININGSPLAN (hier Übungen ändern)
 // group: push | pull | legs | core   ·   unit: reps | sec
 // ================================================================
-const APP_VERSION = '9.0';
+const APP_VERSION = '9.1';
 
 // Standard-Plan (wird nur genutzt, bis du im Plan-Tab etwas änderst)
 const DEFAULT_PLAN = {
@@ -1032,11 +1039,12 @@ function activePlan() { return appMeta.plan || (_defPlan ||= defaultPlan()); }
 function sanitizePlan(p) {
     if (!p || !Array.isArray(p.days) || !p.days.length) throw new Error('Plan ohne Tage');
     const seenD = new Set(), seenE = new Set(), str = (v, n) => String(v ?? '').trim().slice(0, n);
+    const sid = (v, n) => str(v, n).replace(/[^\w-]/g, ''); // IDs landen in onclick="…" → nur sichere Zeichen
     const num = (v, d, lo = 0, hi = 9999) => { v = Number(v); return Number.isFinite(v) ? clamp(Math.round(v * 100) / 100, lo, hi) : d; };
     const days = p.days.slice(0, 14).filter(d => d && typeof d === 'object').map((d, di) => {
-        let id = str(d.id, 40); if (!id || seenD.has(id)) id = uid('d_'); seenD.add(id);
+        let id = sid(d.id, 40); if (!id || seenD.has(id)) id = uid('d_'); seenD.add(id);
         const exercises = (Array.isArray(d.exercises) ? d.exercises : []).filter(e => e && typeof e === 'object').slice(0, 30).map(e => {
-            let eid = str(e.id, 40); if (!eid || seenE.has(eid)) eid = uid('x_'); seenE.add(eid);
+            let eid = sid(e.id, 40); if (!eid || seenE.has(eid)) eid = uid('x_'); seenE.add(eid);
             const unit = UNITS[e.unit] ? e.unit : 'reps', group = GROUPS[e.group] ? e.group : 'push';
             const dr = num(e.defaultReps, UNIT_DEFAULTS[unit].d);
             let range = Array.isArray(e.range) ? [num(e.range[0], dr), num(e.range[1], dr)] : [dr, dr];
@@ -1045,7 +1053,7 @@ function sanitizePlan(p) {
                 side: ['Seite', 'Bein'].includes(e.side) ? e.side : '', defaultReps: dr, note: str(e.note, 300), rest: e.rest ? num(e.rest, null, 10, 600) : null,
                 ...(/^\d{4}-\d{2}-\d{2}$/.test(e.since || '') ? { since: e.since } : {}),
                 alternatives: (Array.isArray(e.alternatives) ? e.alternatives : []).filter(a => a && str(a.name, 40)).slice(0, 6).map(a => {
-                    const o = { id: str(a.id, 40) || uid('a_'), name: str(a.name, 40), note: str(a.note, 200) };
+                    const o = { id: sid(a.id, 40) || uid('a_'), name: str(a.name, 40), note: str(a.note, 200) };
                     if (Array.isArray(a.range)) o.range = [num(a.range[0], dr), num(a.range[1], dr)];
                     if (a.defaultReps != null) o.defaultReps = num(a.defaultReps, dr);
                     return o;
@@ -1110,7 +1118,8 @@ function load() {
 }
 function save() {
     _cache = null;
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ userState, history, appMeta })); } catch (e) { console.error('save', e); }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ userState, history, appMeta })); save.failed = false; }
+    catch (e) { console.error('save', e); if (!save.failed && typeof toast === 'function') toast('⚠ Speichern fehlgeschlagen – bitte gleich Backup teilen (Profil)'); save.failed = true; }
 }
 function migrateV2() {
     if (userState.days && Object.keys(userState.days).length) return;
@@ -1186,6 +1195,7 @@ function ensureState(day, id) {
         // V9: Coach-Ziel vorbefüllen (sonst letzte Werte)
         const tg = setting('coach', true) && setting('coachFill', true) && typeof coach === 'function' ? coach(day, id)?.target : null;
         st = userState.days[day][id] = {
+            date: today, // auch nur angesehene Tage gelten morgen als alt
             sets: Array.from({ length: m.sets }, (_, i) => ({ reps: Number(tg?.[i] ?? last?.[i] ?? last?.[last.length - 1] ?? act.defaultReps) || 0, done: false }))
         };
         ensureState.changed = true;
@@ -1218,7 +1228,10 @@ function logHistory(day, id) {
     const today = todayStr(), i = history[id].findIndex(h => h.date === today);
     if (!reps.length) { if (i >= 0) history[id].splice(i, 1); return; }
     const nm = getActive(day, id)?.name;
-    if (i >= 0) { history[id][i].reps = reps; if (nm) history[id][i].nm = nm; } else history[id].push(nm ? { date: today, reps, nm } : { date: today, reps });
+    if (i < 0) history[id].push({ date: today });
+    const h = history[id][i < 0 ? history[id].length - 1 : i]; h.reps = reps; if (nm) h.nm = nm;
+    // Coach hat heute „leichter" geplant → Einheit zählt später nicht als Basis
+    if (typeof coach === 'function' && setting('coach', true) && coach(day, id)?.k === 'easy') h.ez = 1; else delete h.ez;
     if (history[id].length > 400) history[id] = history[id].slice(-400);
 }
 function touchSession(day) {
@@ -1546,7 +1559,7 @@ function finishWorkout() {
     if (!d) { toast('Noch kein Satz erledigt'); return; }
     const rpe = appMeta.dayRatings?.[currentDay]?.[today] || 6, note = appMeta.dayNotes?.[currentDay]?.[today] || '';
     finRpe = rpe;
-    openSheet(`<div class="sheet-h"><div><h3>Training beenden</h3><p>${esc(DAY_META[currentDay].short)} · ${d} von ${t} Sätzen erledigt</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>Training beenden</h3><p>${esc(DAY_META[currentDay].short)} · ${d} von ${t} Sätzen erledigt</p></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>
       <div class="card" style="margin-bottom:12px">
         <div class="row-h"><span class="lbl">Wie hart war's?</span><span class="rpe-v" id="rpeDisp"><span id="rpeEmoji"></span><b id="rpeValue" class="num disp"></b><small>/10</small></span></div>
         <input type="range" min="1" max="10" value="${rpe}" class="rpe-slider" id="rpeSlider" oninput="rpeInput(this.value)" aria-label="Schwierigkeit">
@@ -1609,6 +1622,7 @@ let sheetOnClose = null;
 function openSheet(html, onClose) {
     sheetRefresh = null;
     $('#sheet').innerHTML = '<div class="grab"></div>' + html; $('#sheet').scrollTop = 0;
+    $('#sheet').setAttribute('aria-label', $('#sheet h3')?.textContent || 'Dialog');
     $('#scrim').classList.add('open'); $('#sheet').classList.add('open'); sheetOnClose = onClose || null;
     $('#live')?.classList.remove('show');
 }
@@ -1621,7 +1635,7 @@ function confirmSheet(title, text, ok, fn, danger) {
 function openVariants(day, id) {
     const b = getBase(day, id), cur = userState.variants?.[id];
     const opts = [{ id: 'default', name: b.name, note: b.note, target: b.target }, ...(b.alternatives || []).map(a => ({ ...a, target: a.target || b.target }))];
-    openSheet(`<div class="sheet-h"><div><h3>Übung ersetzen</h3><p>Verlauf & Rekorde bleiben bei der Übung</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>Übung ersetzen</h3><p>Verlauf & Rekorde bleiben bei der Übung</p></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>
       ${opts.map(o => `<button class="opt ${(o.id === 'default' ? !cur : cur === o.id) ? 'on' : ''}" onclick="selectVariant('${id}','${o.id}')"><b>${esc(o.name)}</b><span>${esc(o.target)} · ${esc(o.note)}</span></button>`).join('')}`);
 }
 function selectVariant(id, vid) {
@@ -1663,7 +1677,7 @@ function exDetail(id) {
     const c = dayInfo(inf.day).c, cc = live && coachOn() ? coach(live.day, id) : null, lad = ladderOf(act.name);
     const totals = es.map(e => Math.round(e.reps.reduce((a, b) => a + Number(b), 0) * 100) / 100);
     const trend = es.length >= 2 ? Math.round((totals[totals.length - 1] - totals[0]) / Math.max(1, totals[0]) * 100) : null;
-    openSheet(`<div class="sheet-h"><div><h3>${esc(act.name)}</h3><p>${esc(dayInfo(inf.day).short)} · ${esc(act.target)}</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>${esc(act.name)}</h3><p>${esc(dayInfo(inf.day).short)} · ${esc(act.target)}</p></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>
       <div class="kpis" style="margin-bottom:12px">
         <div class="kpi">${ic('cal')}<b class="disp num">${es.length}</b><span>Einheiten${es.length ? ' · zuletzt ' + fmtDate(es[es.length - 1].date) : ''}</span></div>
         <div class="kpi">${ic('trend')}<b class="disp num ${trend > 0 ? 'up' : trend < 0 ? 'down' : ''}">${trend == null ? '–' : (trend > 0 ? '+' : '') + trend + '%'}</b><span>Volumen seit Start</span></div>
@@ -1786,7 +1800,7 @@ function renderMore() {
         <div class="set-row"><div><b>Vibration</b><span>Haptisches Feedback</span></div>${sw('vibe', true)}</div>
         <div class="set-row"><div><b>Checkliste vor dem Training</b><span>Wird auf der Trainingskarte angezeigt</span></div>${sw('checkOn', true)}</div>
       </div>
-      ${setting('checkOn', true) ? `<div class="card" style="margin-top:10px"><div class="sub-l" style="margin-top:0">Checkliste (eine Zeile pro Punkt)</div><textarea class="note" style="margin-top:0" rows="3" onchange="setSetting('checkItems',this.value.split('\\n').map(s=>s.trim()).filter(Boolean).slice(0,6))">${esc(setting('checkItems', DEFAULT_CHECKS).join('\n'))}</textarea></div>` : ''}
+      ${setting('checkOn', true) ? `<div class="card" style="margin-top:10px"><div class="sub-l" style="margin-top:0">Checkliste (eine Zeile pro Punkt)</div><textarea class="note" style="margin-top:0" rows="3" aria-label="Checkliste, ein Punkt pro Zeile" onchange="setSetting('checkItems',this.value.split('\\n').map(s=>s.trim()).filter(Boolean).slice(0,6))">${esc(setting('checkItems', DEFAULT_CHECKS).join('\n'))}</textarea></div>` : ''}
       <div class="sec-h"><h2>Trainingsplan</h2></div>
       <button class="card linkcard" onclick="openPlans()"><span class="rtile" style="--rc:var(--acc)">${ic('layers')}</span><div style="flex:1;min-width:0"><b style="font-size:15px">Plan-Profile</b><div class="sm muted">Aktiv: ${esc(planName())} · ${(appMeta.plans || []).length} gespeichert · Export & Import</div></div>${ic('chev')}</button>
       <div class="sec-h"><h2>Daten & Sicherheit</h2></div>
@@ -2054,7 +2068,7 @@ function openTimerSheet() {
     const body = timerTab === 'iv' ? ivPanel() : `<div class="bigtime"><b class="disp num" id="tsTime">${fmtTime(restLeft())}</b><span id="tsLbl">Bereit</span></div>
       <div class="seg">${p.map(s => `<button onclick="presetRest(${s})">${fmtS(s)}</button>`).join('')}</div>
       <div class="btnrow"><button class="btn" onclick="addRest(15)">+15 s</button><button class="btn prim" id="tsBtn" style="flex:2" onclick="rest.running?pauseRest():resumeRest()"></button><button class="btn" onclick="stopRest()">Reset</button></div>`;
-    openSheet(`<div class="sheet-h"><div><h3>Timer</h3><p>${timerTab === 'iv' ? 'Tabata, EMOM, Zirkel oder eigenes Intervall' : 'Freie Pause stoppen'}</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>${tabs}${body}`);
+    openSheet(`<div class="sheet-h"><div><h3>Timer</h3><p>${timerTab === 'iv' ? 'Tabata, EMOM, Zirkel oder eigenes Intervall' : 'Freie Pause stoppen'}</p></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>${tabs}${body}`);
     if (timerTab === 'rest') updTimerUI();
 }
 function presetRest(s) { startRest(s, 'set'); }
@@ -2249,7 +2263,7 @@ function renderPlan() {
 // Tag bearbeiten (Sheet)
 function openDayEdit() {
     const P = activePlan(), d = pDay(planDay), di = P.days.indexOf(d);
-    openSheet(`<div class="sheet-h"><div><h3>Tag bearbeiten</h3><p>${esc(d.short)} · ${d.exercises.length} Übungen</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>Tag bearbeiten</h3><p>${esc(d.short)} · ${d.exercises.length} Übungen</p></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>
         <div class="fld" style="margin-top:0"><label>Name des Tages</label><input class="inp" value="${esc(d.short)}" maxlength="20" onchange="setDayField('short',this.value)"></div>
         <div class="two">
           <div class="fld"><label>Untertitel</label><input class="inp" value="${esc(d.sub || '')}" maxlength="24" placeholder="z. B. Schulter · Skill" onchange="setDayField('sub',this.value)"></div>
@@ -2267,14 +2281,14 @@ function openDayEdit() {
 // Planungs-Modus (Sheet)
 function openPlanning() {
     const m = planMode();
-    openSheet(`<div class="sheet-h"><div><h3>Wie soll geplant werden?</h3><p>Bestimmt, welcher Tag als „Heute dran“ vorgeschlagen wird</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>Wie soll geplant werden?</h3><p>Bestimmt, welcher Tag als „Heute dran“ vorgeschlagen wird</p></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>
       <button class="opt tplopt ${m === 'rot' ? 'on' : ''}" onclick="setMode('rot');closeSheet()"><span class="rtile" style="--rc:var(--acc)">${ic('refresh')}</span><span><b>Rotation</b><span>Nach jedem Training kommt der nächste Tag dran – egal an welchem Wochentag.</span></span>${m === 'rot' ? ic('check', 's') : ''}</button>
       <button class="opt tplopt ${m === 'week' ? 'on' : ''}" onclick="setMode('week');closeSheet()"><span class="rtile" style="--rc:#38bdf8">${ic('cal')}</span><span><b>Feste Wochentage</b><span>Jeder Wochentag hat sein Training, freie Tage sind Ruhetage. Ideal mit Lauf-Tagen.</span></span>${m === 'week' ? ic('check', 's') : ''}</button>`);
 }
 // Aufwärmen bearbeiten (Sheet)
 function openWarmEdit() {
     const d = pDay(planDay), w = d.warm || [], tot = w.reduce((a, x) => a + x.s, 0);
-    openSheet(`<div class="sheet-h"><div><h3>Aufwärmen · ${esc(d.short)}</h3><p>${w.length ? `${w.length} Übungen · ${fmtTime(tot)}` : 'Noch leer'}</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>Aufwärmen · ${esc(d.short)}</h3><p>${w.length ? `${w.length} Übungen · ${fmtTime(tot)}` : 'Noch leer'}</p></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>
       ${w.map((x, i) => `<div class="wrow"><input class="inp" value="${esc(x.n)}" maxlength="40" onchange="warmSet(${i},'n',this.value)">
         <div class="stp sm"><button onclick="warmSet(${i},'s',${x.s - 5})" aria-label="kürzer">−</button><b class="num">${x.s}s</b><button onclick="warmSet(${i},'s',${x.s + 5})" aria-label="länger">+</button></div>
         <button class="btn icon" onclick="warmDel(${i})" aria-label="entfernen">${ic('x', 's')}</button></div>`).join('') || '<p class="sm muted" style="padding:2px 0 10px">Füge eigene Übungen hinzu oder lade ein fertiges Programm.</p>'}
@@ -2302,7 +2316,7 @@ function setMode(m) {
 }
 function pickWd(i) {
     const P = activePlan(), cur = P.days.find(d => d.wd?.includes(i));
-    openSheet(`<div class="sheet-h"><div><h3>${['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'][i]}</h3><p>Welches Training an diesem Tag?</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>${['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'][i]}</h3><p>Welches Training an diesem Tag?</p></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>
       ${P.days.map(d => `<button class="opt dayopt ${cur === d ? 'on' : ''}" style="--c:${d.c}" onclick="setWd(${i},'${d.id}')"><i></i><span><b>${esc(d.short)}</b><span>${d.exercises.length} Übungen${d.wd?.length && cur !== d ? ' · auch ' + d.wd.slice().sort().map(w => WD[w]).join(', ') : ''}</span></span></button>`).join('')}
       <button class="opt dayopt ${!cur ? 'on' : ''}" style="--c:var(--di)" onclick="setWd(${i},null)"><i></i><span><b>Ruhetag</b><span>Kein Training geplant</span></span></button>`);
 }
@@ -2319,7 +2333,7 @@ function moveDay(dir) {
 function addDay() {
     if (activePlan().days.length >= 14) { toast('Maximal 14 Tage pro Plan'); return; }
     const cur = pDay(planDay);
-    openSheet(`<div class="sheet-h"><div><h3>Neuer Tag</h3><p>Mit Vorlage starten oder leer anlegen</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>Neuer Tag</h3><p>Mit Vorlage starten oder leer anlegen</p></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>
       ${DAY_TEMPLATES.map(t => `<button class="opt tplopt" onclick="addDayFrom('${t.k}')"><span class="rtile" style="--rc:${t.c}">${ic(t.ic)}</span><span><b>${t.n}</b><span>${t.s} · ${t.day.exercises.length} Übungen</span></span>${ic('plus', 's')}</button>`).join('')}
       ${cur ? `<button class="opt tplopt" onclick="addDayFrom('copy')"><span class="rtile" style="--rc:${cur.c}">${ic('copy')}</span><span><b>Kopie von ${esc(cur.short)}</b><span>${cur.exercises.length} Übungen · neue IDs, eigener Verlauf</span></span>${ic('plus', 's')}</button>` : ''}
       <button class="opt tplopt" onclick="addDayFrom('empty')"><span class="rtile" style="--rc:var(--mu)">${ic('plus')}</span><span><b>Leerer Tag</b><span>Übungen selbst hinzufügen</span></span>${ic('plus', 's')}</button>`);
@@ -2352,7 +2366,7 @@ function warmAdd() { const d = warmDay(); (d.warm ||= []).push({ n: 'Neue Übung
 function warmDel(i) { const undo = snapshot(); warmDay().warm.splice(i, 1); commitPlan('Aufwärm-Übung entfernt', undo); }
 function warmPreset() {
     const opts = [['push', 'Push', 'Schultern, Handgelenke, Brust'], ['pull', 'Pull', 'Schulterblätter, Griff, Rücken'], ['legs', 'Beine', 'Hüfte, Sprunggelenke, Knie'], ['run', 'Laufen', 'Locker einlaufen, Beine mobilisieren'], ['core', 'Core', 'Rumpf aktivieren'], ['mob', 'Kurz', 'Minimal-Programm']];
-    openSheet(`<div class="sheet-h"><div><h3>Aufwärm-Programm</h3><p>Ersetzt das aktuelle Aufwärmen von ${esc(pDay(planDay).short)}</p></div><button class="btn icon" onclick="openWarmEdit()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>Aufwärm-Programm</h3><p>Ersetzt das aktuelle Aufwärmen von ${esc(pDay(planDay).short)}</p></div><button class="btn icon" onclick="openWarmEdit()" aria-label="Schließen">${ic('x')}</button></div>
       ${opts.map(([k, n, s]) => `<button class="opt" onclick="warmLoad('${k}')"><b>${n} · ${fmtTime(DEFAULT_WARM[k].reduce((a, x) => a + x.s, 0))}</b><span>${s}: ${esc(DEFAULT_WARM[k].map(x => x.n).join(', '))}</span></button>`).join('')}`);
 }
 function warmLoad(k) { const undo = snapshot(); warmDay().warm = clone(DEFAULT_WARM[k]); openWarmEdit(); commitPlan('Aufwärm-Programm geladen', undo); }
@@ -2395,7 +2409,7 @@ function openPlans() {
           <div class="acts">${active ? '' : `<button class="btn sm prim" onclick="planLoad('${e.id}')">Laden</button>`}
           <button class="btn icon" onclick="planMenu('${e.id}')" aria-label="Mehr">${ic('more')}</button></div></div>`;
     };
-    openSheet(`<div class="sheet-h"><div><h3>Plan-Profile</h3><p>Varianten speichern, wechseln oder als Datei teilen</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>Plan-Profile</h3><p>Varianten speichern, wechseln oder als Datei teilen</p></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>
       <div class="card" style="margin-bottom:12px"><div class="lbl">Aktiv</div><b style="font-size:17px;display:block;margin-top:2px">${esc(planName())}</b><div class="sm muted">${planCount(P)} · ${planMode() === 'week' ? 'Feste Wochentage' : 'Rotation'}</div>
         <div class="btnrow" style="margin-top:12px"><button class="btn" onclick="planSaveAs()">${ic('save', 's')} Speichern als …</button><button class="btn" onclick="planExport()">${ic('down', 's')} Exportieren</button></div>
         ${appMeta.plan ? `<button class="link" style="margin-top:10px" onclick="planRenameActive()">${ic('edit', 's')} Umbenennen</button>` : ''}</div>
@@ -2409,7 +2423,7 @@ function openPlans() {
 }
 function nameSheet(title, sub, val, fn) {
     window.__nameFn = fn;
-    openSheet(`<div class="sheet-h"><div><h3>${title}</h3><p>${sub}</p></div><button class="btn icon" onclick="openPlans()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>${title}</h3><p>${sub}</p></div><button class="btn icon" onclick="openPlans()" aria-label="Schließen">${ic('x')}</button></div>
       <div class="fld" style="margin-top:0"><label>Name</label><input class="inp" id="nameIn" value="${esc(val)}" maxlength="30" placeholder="z. B. Sommer-Plan" onkeydown="if(event.key==='Enter')window.__nameFn(this.value)"></div>
       <button class="cta" style="margin-top:16px" onclick="window.__nameFn($('#nameIn').value)">${ic('check')} Speichern</button>`);
     setTimeout(() => { const i = $('#nameIn'); i?.focus(); i?.select(); }, 250);
@@ -2431,7 +2445,7 @@ function planRenameActive() {
 }
 function planMenu(id) {
     const e = (appMeta.plans || []).find(x => x.id === id); if (!e) return;
-    openSheet(`<div class="sheet-h"><div><h3>${esc(e.name)}</h3><p>${planCount(e.plan)}</p></div><button class="btn icon" onclick="openPlans()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>${esc(e.name)}</h3><p>${planCount(e.plan)}</p></div><button class="btn icon" onclick="openPlans()" aria-label="Schließen">${ic('x')}</button></div>
       <button class="opt" onclick="planLoad('${id}')"><b>${ic('play', 's')} Laden</b><span>Wird zum aktiven Plan – der aktuelle wird vorher gesichert</span></button>
       <button class="opt" onclick="planExport('${id}')"><b>${ic('down', 's')} Als Datei exportieren</b><span>JSON-Datei zum Teilen oder Sichern</span></button>
       <button class="opt" onclick="planRename('${id}')"><b>${ic('edit', 's')} Umbenennen</b><span>&nbsp;</span></button>
@@ -2514,7 +2528,7 @@ function renderEditSheet() {
     const stp = (label, key, val) => `<div class="fld"><label>${label}</label><div class="stp"><button onclick="dAdj('${key}',-1)" aria-label="weniger">−</button><b class="num disp">${fmtVal(val)}</b><button onclick="dAdj('${key}',1)" aria-label="mehr">+</button></div></div>`;
     const prev = { ...d, range: d.max ? null : d.range };
     const dup = (d.name || '').trim() && pDay(draftCtx.day).exercises.some(x => x.id !== d.id && x.name.toLowerCase() === d.name.trim().toLowerCase());
-    openSheet(`<div class="sheet-h"><div><h3>${draftCtx.id ? 'Übung bearbeiten' : 'Neue Übung'}</h3><p>${esc(pDay(draftCtx.day).short)}</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>${draftCtx.id ? 'Übung bearbeiten' : 'Neue Übung'}</h3><p>${esc(pDay(draftCtx.day).short)}</p></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>
       <div class="fld" style="margin-top:0"><label>Name</label><input class="inp" id="dName" value="${esc(d.name)}" maxlength="40" placeholder="z. B. Archer Push-ups" oninput="draft.name=this.value;$('#dPrevN').textContent=this.value||'Name'" onchange="renderEditSheet()"></div>
       ${dup ? '<p class="sm" style="color:#fbbf24;margin-top:6px">Hinweis: An diesem Tag gibt es schon eine Übung mit diesem Namen.</p>' : ''}
       ${(() => { const m = ladderOf(d.name); return m ? `<button class="ladinfo" onclick="openLadders('${m.l.k}')">${ic('zap', 's')}<span>Pfad <b>${esc(m.l.n)}</b> · Stufe ${m.i + 1}/${m.l.steps.length}${m.next ? ' · danach ' + esc(m.next.n) : ''}</span>${ic('chev', 's')}</button>` : ''; })()}
@@ -2633,7 +2647,7 @@ let recDraft = null;
 function recAdd(k) {
     const d = recDef(k), b = recBest(k);
     recDraft = { k, val: b ? b.val : (d.u === 'sec' ? 30 : 10) };
-    openSheet(`<div class="sheet-h"><div style="display:flex;gap:12px;align-items:center">${recTile(d)}<div><h3>${esc(d.n)} eintragen</h3><p>${b ? `Aktueller Rekord: <b style="color:var(--tx)">${recFmt(b.val, d.u)}</b> am ${fmtDate(b.date)}` : 'Dein erster Eintrag'}</p></div></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div style="display:flex;gap:12px;align-items:center">${recTile(d)}<div><h3>${esc(d.n)} eintragen</h3><p>${b ? `Aktueller Rekord: <b style="color:var(--tx)">${recFmt(b.val, d.u)}</b> am ${fmtDate(b.date)}` : 'Dein erster Eintrag'}</p></div></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>
       <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin:8px 0 4px">
         <button class="f-step" onclick="recStep(-1)" aria-label="weniger">−</button>
         <div style="text-align:center"><input id="recIn" class="recin disp num" type="number" min="0" step="any" inputmode="${d.u === 'sec' ? 'numeric' : 'numeric'}" value="${recDraft.val}" oninput="recHint()" onfocus="this.select()"><div class="f-unit">${d.u === 'sec' ? 'Sekunden' : 'Wiederholungen'}</div></div>
@@ -2677,7 +2691,7 @@ function recDetail(k) {
     const d = recDef(k); if (!d) return;
     const es = recWalk(k), b = recBest(k), first = es[0], g = recGoal(k);
     const imp = b && first && es.length > 1 ? r2(b.val - first.val) : null;
-    openSheet(`<div class="sheet-h"><div style="display:flex;gap:12px;align-items:center">${recTile(d)}<div><h3>${esc(d.n)}</h3><p>${es.length} ${es.length === 1 ? 'Eintrag' : 'Einträge'} · ${d.u === 'sec' ? 'Sekunden' : 'Wiederholungen'}</p></div></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div style="display:flex;gap:12px;align-items:center">${recTile(d)}<div><h3>${esc(d.n)}</h3><p>${es.length} ${es.length === 1 ? 'Eintrag' : 'Einträge'} · ${d.u === 'sec' ? 'Sekunden' : 'Wiederholungen'}</p></div></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>
       <div class="kpis" style="margin-bottom:12px">
         <div class="kpi">${ic('trophy')}<b class="disp num">${b ? recParts(b.val, d.u).v : '–'}</b><span>Rekord${b ? ' · ' + fmtDate(b.date) : ''}</span></div>
         <div class="kpi">${ic('trend')}<b class="disp num ${imp > 0 ? 'up' : ''}">${imp == null ? '–' : (imp > 0 ? '+' : '') + fmtVal(imp)}</b><span>seit erstem Eintrag</span></div>
@@ -2701,7 +2715,7 @@ function recDel(k, t, date, val) {
 function recGoalSheet(k) {
     const d = recDef(k), b = recBest(k), st = (REC_UNITS[d.u] || REC_UNITS.reps).step;
     const g0 = recGoal(k) || (b ? Math.ceil((b.val * 1.2) / st) * st : (d.u === 'sec' ? 60 : 20));
-    openSheet(`<div class="sheet-h"><div><h3>Ziel für ${esc(d.n)}</h3><p>${b ? 'Aktueller Rekord: ' + recFmt(b.val, d.u) : 'Noch kein Rekord eingetragen'}</p></div><button class="btn icon" onclick="recDetail('${k}')">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>Ziel für ${esc(d.n)}</h3><p>${b ? 'Aktueller Rekord: ' + recFmt(b.val, d.u) : 'Noch kein Rekord eingetragen'}</p></div><button class="btn icon" onclick="recDetail('${k}')" aria-label="Schließen">${ic('x')}</button></div>
       <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin:8px 0 4px">
         <button class="f-step" onclick="$('#goalIn').value=Math.max(${st},(+$('#goalIn').value||0)-${st})" aria-label="weniger">−</button>
         <div style="text-align:center"><input id="goalIn" class="recin disp num" type="number" min="1" inputmode="numeric" value="${g0}" onfocus="this.select()"><div class="f-unit">${d.u === 'sec' ? 'Sekunden' : 'Wiederholungen'}</div></div>
@@ -3106,8 +3120,11 @@ const CK = {
 function coach(day, id) {
     const b = getBase(day, id); if (!b) return null;
     const act = getActive(day, id), today = todayStr(), step = (UNITS[act.unit] || UNITS.reps).step, n = b.sets;
-    const es = entries(id).filter(e => e.date < today && e.reps?.length && (!b.since || e.date >= b.since));
-    const last = es[es.length - 1], prev = es[es.length - 2];
+    const all = entries(id).filter(e => e.date < today && e.reps?.length && (!b.since || e.date >= b.since));
+    const tot = e => e ? e.reps.reduce((a, x) => a + Number(x), 0) : -1;
+    // V9.1: leichte Tage (Tagesform/Deload) sind keine Basis – außer sie waren gar nicht leichter
+    const full = all.filter(e => !e.ez), es = all.filter(e => !e.ez || tot(e) >= tot(full[full.length - 1]));
+    const last = es[es.length - 1], prev = es[es.length - 2], afterEasy = !!all[all.length - 1]?.ez;
     const lo = act.range?.[0], hi = act.range?.[1];
     const pad = r => Array.from({ length: n }, (_, i) => Number(r[i] ?? r[r.length - 1]) || 0);
     const rnd = v => clamp(Math.round(v / step) * step, step, 9999);
@@ -3119,10 +3136,10 @@ function coach(day, id) {
     const form = formToday();
     // Erholung: schlechte Tagesform oder zweimal in Folge am Limit
     if (form && form <= 2) return mk('easy', `Tagesform „${FORM[form].l}" – heute ca. 20 % weniger, Technik vor Wiederholungen.`, v.map(x => rnd(x * .8)));
-    if (rl >= 9 && rp >= 9) return mk('easy', 'Zwei sehr harte Einheiten in Folge – heute bewusst leichter (Deload).', v.map(x => rnd(x * .8)));
+    if (rl >= 9 && rp >= 9 && !afterEasy) return mk('easy', 'Zwei sehr harte Einheiten in Folge – heute bewusst leichter (Deload).', v.map(x => rnd(x * .8)));
     const allTop = hi != null && last.reps.length >= n && v.every(x => x >= hi);
     const prevTop = allTop && prev && prev.reps.length >= n && pad(prev.reps).every(x => x >= hi);
-    const totals = es.slice(-3).map(e => e.reps.reduce((a, x) => a + Number(x), 0));
+    const totals = es.slice(-3).map(tot);
     const stuck = totals.length === 3 && Math.max(totals[1], totals[2]) <= totals[0];
     const tip = stuck ? ' Seit 3 Einheiten kein Plus – probier langsameres Tempo oder 1 Satz mehr.' : '';
     if (act.max || hi == null) {
@@ -3211,7 +3228,7 @@ function planLadderHits() {
 }
 function openLadders(focusK) {
     const hits = planLadderHits(), order = [...LADDERS].sort((a, b) => (hits[b.k] ? 1 : 0) - (hits[a.k] ? 1 : 0));
-    openSheet(`<div class="sheet-h"><div><h3>Progressionspfade</h3><p>Vom Einstieg bis zum Skill – deine Übungen sind markiert</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>Progressionspfade</h3><p>Vom Einstieg bis zum Skill – deine Übungen sind markiert</p></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>
       ${order.map(l => {
           const h = hits[l.k] || [], cur = new Set(h.map(x => x.i)), top = h.length ? Math.max(...h.map(x => x.i)) : -1, low = h.length ? Math.min(...h.map(x => x.i)) : -1;
           return `<div class="lad ${focusK === l.k ? 'hl' : ''}" id="lad-${l.k}"><div class="lad-h"><b>${l.n}</b><span>${h.length ? `Stufe ${top + 1}/${l.steps.length}` : 'nicht im Plan'}</span></div>
@@ -3224,7 +3241,7 @@ function openLadders(focusK) {
 }
 function ladStep(k, i) {
     const l = LADDERS.find(x => x.k === k), s = l.steps[i], h = (planLadderHits()[k] || []);
-    openSheet(`<div class="sheet-h"><div><h3>${esc(s.n)}</h3><p>${l.n} · Stufe ${i + 1} von ${l.steps.length}</p></div><button class="btn icon" onclick="openLadders('${k}')">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>${esc(s.n)}</h3><p>${l.n} · Stufe ${i + 1} von ${l.steps.length}</p></div><button class="btn icon" onclick="openLadders('${k}')" aria-label="Schließen">${ic('x')}</button></div>
       <div class="card" style="margin-bottom:12px"><div class="lbl">Ziel dieser Stufe</div><b style="font-size:20px;display:block;margin-top:4px" class="disp">${fmtVal(s.r[0])}–${fmtVal(s.r[1])} ${unitShort(s.u)}${s.side ? '/' + s.side : ''}</b>
         <p class="sm muted" style="margin-top:8px;line-height:1.5">${esc(s.cue)}</p></div>
       ${h.length ? `<div class="lbl" style="margin:14px 2px 8px">Übung auf diese Stufe setzen</div>${h.map(x => `<button class="opt dayopt ${x.i === i ? 'on' : ''}" style="--c:${x.d.c}" ${x.i === i ? 'disabled' : `onclick="closeSheet();setStep('${x.d.id}','${x.e.id}','${k}',${i})"`}><i></i><span><b>${esc(x.e.name)}</b><span>${esc(x.d.short)} · ${x.i === i ? 'aktuelle Stufe' : x.i < i ? 'aufsteigen' : 'zurückstufen'}</span></span></button>`).join('')}`
@@ -3257,10 +3274,16 @@ async function snapPut(reason) {
         const data = stateJSON(), t = Date.now(), sessions = stats().sessions;
         await idbDo('readwrite', st => {
             st.put({ t, reason, size: data.length, sessions, v: APP_VERSION, data });
-            const r = st.getAllKeys(); r.onsuccess = () => { const ks = r.result.sort((a, b) => a - b); ks.slice(0, Math.max(0, ks.length - SNAP_MAX)).forEach(k => st.delete(k)); };
+            const r = st.getAllKeys(); r.onsuccess = () => snapDrop(r.result).forEach(k => st.delete(k));
         });
         appMeta.lastSnap = t; save(); return true;
     } catch (e) { console.warn('[Sicherung]', e); return false; }
+}
+// Aufbewahrung: die 8 neuesten + je die neueste aus jeder älteren Woche (max. 14) → reicht ~6 Wochen zurück
+function snapDrop(keys) {
+    const ks = [...keys].sort((a, b) => b - a), keep = new Set(ks.slice(0, 8)), wk = new Set();
+    ks.slice(8).forEach(k => { const w = mondayOf(dstr(new Date(k))); if (keep.size < SNAP_MAX && !wk.has(w)) { wk.add(w); keep.add(k); } });
+    return ks.filter(k => !keep.has(k));
 }
 async function snapList() {
     try { return (await idbDo('readonly', (st, out) => { const r = st.getAll(); r.onsuccess = () => out(r.result.map(({ data, ...m }) => m).sort((a, b) => b.t - a.t)); })) || []; }
@@ -3320,12 +3343,12 @@ function applyState(s) { userState = s.userState; history = s.history; appMeta =
 
 // ---------- Automatische Sicherungen (Sheet) ----------
 async function openSnaps() {
-    openSheet(`<div class="sheet-h"><div><h3>Automatische Sicherungen</h3><p>Wird geladen …</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>`);
+    openSheet(`<div class="sheet-h"><div><h3>Automatische Sicherungen</h3><p>Wird geladen …</p></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>`);
     const list = await snapList();
     const rows = list == null ? '<p class="sm muted">Dieser Browser erlaubt keine automatischen Sicherungen.</p>'
         : !list.length ? '<p class="sm muted" style="padding:4px 2px 10px">Noch keine Sicherung. Die erste entsteht nach deinem nächsten Training.</p>'
         : list.map(s => `<div class="plrow"><div class="nm"><b>${new Date(s.t).toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit' })} · ${new Date(s.t).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}</b><span>${esc(s.reason)} · ${s.sessions} Trainings · ${Math.max(1, Math.round(s.size / 1024))} KB</span></div><div class="acts"><button class="btn sm" onclick="snapRestore(${s.t})">Laden</button></div></div>`).join('');
-    openSheet(`<div class="sheet-h"><div><h3>Automatische Sicherungen</h3><p>Die letzten ${SNAP_MAX} Stände – täglich und nach jedem Training</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>Automatische Sicherungen</h3><p>Täglich und nach jedem Training · reicht ca. 6 Wochen zurück</p></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>
       ${rows}
       <button class="btn block" style="margin-top:8px" onclick="snapPut('Manuell').then(ok=>{toast(ok?'Sicherung erstellt ✓':'Sicherung nicht möglich');openSnaps()})">${ic('save', 's')} Jetzt sichern</button>
       <p class="sm dim" style="margin-top:12px;line-height:1.45">Die Sicherungen liegen in einem eigenen Speicher dieser App – sie schützen vor Fehlbedienung (falscher Import, versehentlich gelöscht). Gegen Handy-Verlust hilft nur „Backup teilen" (z. B. in Google Drive).</p>`);
@@ -3409,7 +3432,7 @@ function openReport(k) {
     if (k) repK = k;
     const r = reportMd(repK), A = r.A, B = r.B;
     const kp = (v, l, x, y) => `<div><b class="disp num">${v}</b><span>${l}</span><em class="${x > y ? 'up' : x < y ? 'down' : ''}">${pct(x, y)}</em></div>`;
-    openSheet(`<div class="sheet-h"><div><h3>Trainingsbericht</h3><p>Als Markdown – passt direkt in deinen Obsidian-Vault</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>Trainingsbericht</h3><p>Als Markdown – passt direkt in deinen Obsidian-Vault</p></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>
       <div class="seg" style="margin-bottom:12px">${[['w0', 'Diese Woche'], ['w1', 'Letzte Woche'], ['m0', 'Monat'], ['m1', 'Letzter M.']].map(([x, l]) => `<button class="${repK === x ? 'on' : ''}" onclick="openReport('${x}')">${l}</button>`).join('')}</div>
       <div class="card" style="margin-bottom:12px"><div class="row-h" style="margin-bottom:0"><span class="lbl">${esc(r.P.title)}</span><span class="dim sm">${fmtDate(r.P.a)}–${fmtDate(r.P.b)}</span></div>
         <div class="wkgrid">${kp(A.n, 'Trainings', A.n, B.n)}${kp(fmtNum(A.reps), 'Wdh.', A.reps, B.reps)}${kp(A.sets, 'Sätze', A.sets, B.sets)}${kp(A.mins, 'Min. aktiv', A.mins, B.mins)}</div>
@@ -3434,7 +3457,7 @@ function openIcs() {
     const P = activePlan(), days = P.days.filter(d => d.wd?.length);
     if (!days.length) { toast('Erst Wochentage zuordnen'); return; }
     const tm = setting('icsTime', '17:00'), al = setting('icsAlarm', 30);
-    openSheet(`<div class="sheet-h"><div><h3>In den Kalender</h3><p>Deine Trainingstage als wiederkehrende Termine – mit Erinnerung</p></div><button class="btn icon" onclick="closeSheet()">${ic('x')}</button></div>
+    openSheet(`<div class="sheet-h"><div><h3>In den Kalender</h3><p>Deine Trainingstage als wiederkehrende Termine – mit Erinnerung</p></div><button class="btn icon" onclick="closeSheet()" aria-label="Schließen">${ic('x')}</button></div>
       <div class="card" style="margin-bottom:12px">${days.map(d => `<div class="rec"><span class="dot" style="background:${d.c}"></span><div class="nm"><b>${esc(d.short)}</b><span>${d.wd.slice().sort().map(i => WD[i]).join(', ')} · ~${dayEst(d)} Min.</span></div></div>`).join('')}</div>
       <div class="fld" style="margin-top:0"><label>Uhrzeit</label><input class="inp datein" type="time" id="icsT" value="${tm}" onchange="setSetting('icsTime',this.value||'17:00')"></div>
       <div class="fld"><label>Erinnerung vorher</label><div class="seg">${[0, 15, 30, 60].map(v => `<button class="${al === v ? 'on' : ''}" onclick="setSetting('icsAlarm',${v});openIcs()">${v ? v + ' Min.' : 'Keine'}</button>`).join('')}</div></div>
@@ -3452,7 +3475,7 @@ function icsMake() {
         let k = 0; while ((parseD(addDays(t, k)).getDay() + 6) % 7 !== w) k++;
         const ds = addDays(t, k).replace(/-/g, ''), st = new Date(+ds.slice(0, 4), +ds.slice(4, 6) - 1, +ds.slice(6), +tm[0] || 17, +tm[1] || 0);
         const en = new Date(st.getTime() + dayEst(d) * 60000), f = x => x.getFullYear() + pad(x.getMonth() + 1) + pad(x.getDate()) + 'T' + pad(x.getHours()) + pad(x.getMinutes()) + '00';
-        L.push('BEGIN:VEVENT', `UID:${d.id}-${w}-${stamp}@calisthenics-pro`, `DTSTAMP:${stamp}`, `DTSTART:${f(st)}`, `DTEND:${f(en)}`, `RRULE:FREQ=WEEKLY;BYDAY=${BY[w]}`,
+        L.push('BEGIN:VEVENT', `UID:${d.id}-${w}@calisthenics-pro`, `DTSTAMP:${stamp}`, `DTSTART:${f(st)}`, `DTEND:${f(en)}`, `RRULE:FREQ=WEEKLY;BYDAY=${BY[w]}`,
             `SUMMARY:${escI('Training · ' + d.short)}`, `DESCRIPTION:${escI(d.exercises.map(e => '• ' + e.name + ' – ' + genTarget(e)).join('\n'))}`);
         if (al) L.push('BEGIN:VALARM', 'ACTION:DISPLAY', `DESCRIPTION:${escI(d.short + ' in ' + al + ' Min.')}`, `TRIGGER:-PT${al}M`, 'END:VALARM');
         L.push('END:VEVENT');
@@ -3513,7 +3536,6 @@ function init() {
     load();
     if (appMeta.plan) { try { appMeta.plan = sanitizePlan(appMeta.plan); } catch (e) { console.warn('Plan defekt, Standard wird genutzt', e); delete appMeta.plan; } }
     applyPlan(); migrateV2();
-    delete appMeta.prSeen; // V7: keine automatischen Bestleistungen mehr
     save();
     currentDay = computeSuggestedDay();
     restoreTimer(); seqRestore();
